@@ -1,0 +1,29 @@
+{
+  "name": "appproyectos",
+  "version": "1.0.0",
+  "description": "App estimación de Proyectos",
+  "main": "index.js",
+  "scripts": {
+      "dev": "nodemon src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DMora92/appProyectos.git"
+  },
+  "author": "Daniel Mora",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DMora92/appProyectos/issues"
+  },
+  "homepage": "https://github.com/DMora92/appProyectos#readme",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "pg": "^7.8.2",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.43.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+  }
+}
