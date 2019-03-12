@@ -3,12 +3,17 @@ const router = require('express').Router();
 const appProyectosController = require('../controllers/appProyectosController');
 
 router.get('/', appProyectosController.list);
+router.get('/update/:id', appProyectosController.edit);
+router.post('/updateT/:id', appProyectosController.updateT);
+router.get('/delete/:id', appProyectosController.delete);
+router.get('/add/', appProyectosController.save);
+router.post('/insert/', appProyectosController.insert);
+
 /*
-router.post('/add', customerController.save);
-router.get('/update/:id', customerController.edit);
-router.post('/update/:id', customerController.update);
-router.get('/delete/:id', customerController.delete);
-router.get('/report', customerController.report);
+router.post('/add', appProyectosController.save);
+router.get('/update/:id', appProyectosController.edit);
+router.get('/delete/:id', appProyectosController.delete);
+router.get('/report', appProyectosController.report);
 */
 
 module.exports = router;

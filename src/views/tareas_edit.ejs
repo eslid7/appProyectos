@@ -4,21 +4,40 @@
   <div class="row">
     <div class="col-md-5 offset-md-3 card">
       <div class="card-body">
-        <form action="/update/<%= data.id %>" method="POST">
-          <div class="form-group">
-            <input type="text" name="nombre" value="<%= data.nombre%>" placeholder="Nombre" class="form-control" autofocus>
-          </div>
-          <div class="form-group">
-            <input type="text" name="proyecto" value="<%= data.proyecto%>" placeholder="Proyecto" class="form-control">
-          </div>
-          <div class="form-group">
-            <input type="text" name="horas" value="<%= data.horas%>" placeholder="Horas" class="form-control">
-          </div>
+        <% if (typeof(data) !== 'undefined') { %>
+          <form action="/updateT/<%= data[0].id %>" method="POST">
+            <div class="form-group">
+              <label for="txtNombre">Nombre de Tarea</label>
+              <input type="text" id="txtNombre" name="nombre" value="<%= data[0].nombre%>" placeholder="Nombre" class="form-control" autofocus>
+            </div>
+          <!--  <div class="form-group">
+              <input type="text" name="proyecto" value="<%= data[0].proyecto%>" placeholder="Proyecto" class="form-control">
+            </div>-->
+            <div class="form-group">
+                <label for="txtHoras">Horas de Tarea</label>
+              <input type="text" id="txtHoras" name="horas" value="<%= data[0].horas%>" placeholder="Horas" class="form-control">
+            </div>
 
-          <button type="submit" class="btn btn-primary">
-            Guardar Categoría
-          </button>
-        </form>
+            <button type="submit" class="btn btn-primary">
+              Guardar Tarea
+            </button>
+          </form>
+        <% } else {%>
+          <form action="/insert/" method="POST">
+            <div class="form-group">
+              <label for="txtNombre">Nombre de Tarea</label>
+              <input type="text" id="txtNombre" name="nombre" value="" placeholder="Nombre" class="form-control" autofocus>
+            </div>
+            <div class="form-group">
+                <label for="txtHoras">Horas de Tarea</label>
+              <input type="text" id="txtHoras" name="horas" value="" placeholder="Horas" class="form-control">
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+              Guardar Tarea
+            </button>
+          </form>
+        <%} %>
       </div>
     </div>
   </div>

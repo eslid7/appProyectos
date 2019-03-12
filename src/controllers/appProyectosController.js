@@ -6,13 +6,6 @@ const tModel = require('../models/tareasModel');
 
 
 controller.list = (req, res) => {
-
-  /*  sequelize.query("SELECT * FROM public.tareas",{ raw: true }).then(tareas => {
-      res.send(tareas);
-      res.render('customers', {
-         data: tareas
-      });
-    });*/
     //Se utiliza model de Sequelize
 tModel.findAll()
   .then(tareas => {
@@ -24,49 +17,62 @@ tModel.findAll()
   })
   .catch(err => console.log(err));
 };
-/*
-controller.save = (req, res) => {
-  const data = req.body;
-  console.log(req.body)
-  req.getConnection((err, connection) => {
-    const query = connection.query('INSERT INTO customer set ?', data, (err, customer) => {
-      console.log(customer)
-      res.redirect('/');
-    })
-  })
+
+controller.insert = (req, res) => {
+  const nombre = req.body.nombre;
+  const horas = req.body.horas;
+  const query = 'INSERT INTO tareas (id_recursos, id_proyectos, nombre, horas) VALUES (1,1,'+"'"+nombre+"',"+horas+')';
+  sequelize.query(query).spread((results, metadata) => {
+  res.redirect('/');
+})
+
 };
+
+controller.save = (req, res) => {
+  res.render('tareas_edit');
+};
+
 
 controller.edit = (req, res) => {
-  const { id } = req.params;
-  req.getConnection((err, conn) => {
-    conn.query("SELECT * FROM customer WHERE id = ?", [id], (err, rows) => {
+  const  idE  = req.params.id;
+  tModel.findAll(
+    {
+  where: {
+    id: idE
+  }
+}
+  )
+    .then(tareas => {
+      console.log(tareas);
+      //res.send(tareas[0].nombre)
       res.render('tareas_edit', {
-        data: rows[0]
+        data: tareas
       })
-    });
-  });
+    })
+    .catch(err => console.log(err));
+
 };
 
-controller.update = (req, res) => {
-  const { id } = req.params;
-  const newCustomer = req.body;
-  req.getConnection((err, conn) => {
+controller.updateT = (req, res) => {
+  const  idT  = req.params.id;
+  const nombre = req.body.nombre;
+  const horas =  req.body.horas;
+  const query = 'UPDATE tareas set nombre='+"'"+ nombre +"'"+', horas=' + horas +' where id =' + idT;
 
-  conn.query('UPDATE customer set ? where id = ?', [newCustomer, id], (err, rows) => {
+  //res.send(nombre);
+  sequelize.query(query).spread((results, metadata) => {
     res.redirect('/');
-  });
   });
 };
 
 controller.delete = (req, res) => {
-  const { id } = req.params;
-  req.getConnection((err, connection) => {
-    connection.query('DELETE FROM customer WHERE id = ?', [id], (err, rows) => {
+  const  id  = req.params.id;
+    const query = 'DELETE FROM tareas WHERE id = '+id;
+    sequelize.query(query).spread((results, metadata) => {
       res.redirect('/');
     });
-  });
 };
-
+/*
 controller.report = (req, res) => {
   req.getConnection((err, conn) => {
     conn.query('SELECT * FROM customer', (err, customers) => {
