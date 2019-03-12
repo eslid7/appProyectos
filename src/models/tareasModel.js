@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 
 const rModel = require('./recursosModel');
 const pModel = require('./proyectosModel');
-
+const cModel = require('./categoriasModel');
 
 
 const tModel = db.define('tareas',{
@@ -15,6 +15,17 @@ const tModel = db.define('tareas',{
       model: rModel,
       // This is the column name of the referenced model
       key: 'id_recursos',
+      // This declares when to check the foreign key constraint. PostgreSQL only.
+      deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
+      }
+  },
+  id_categoria: {
+    type: Sequelize.INTEGER,
+    references: {
+      // This is a reference to another model
+      model: cModel,
+      // This is the column name of the referenced model
+      key: 'id_categoria',
       // This declares when to check the foreign key constraint. PostgreSQL only.
       deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
       }

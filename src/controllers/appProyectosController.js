@@ -2,10 +2,28 @@ const controller = {};
 const sequelize = require('../../database/dbConfig');
 
 const tModel = require('../models/tareasModel');
+const cModel = require('../models/categoriasModel');
 
 
 
+
+/*Lista categorias de la tabla*/
 controller.list = (req, res) => {
+    //Se utiliza model de Sequelize
+cModel.findAll()
+  .then(categorias => {
+    console.log(categorias);
+    //res.send(tareas[1].nombre)
+    res.render('index', {
+      data: categorias
+    })
+  })
+  .catch(err => console.log(err));
+};
+
+
+/*Lista body de la tabla*/
+controller.listBody = (req, res) => {
     //Se utiliza model de Sequelize
 tModel.findAll()
   .then(tareas => {
@@ -18,41 +36,74 @@ tModel.findAll()
   .catch(err => console.log(err));
 };
 
+
+
+/*Inserta categorias*/
 controller.insert = (req, res) => {
+  const nombre = req.body.nombre;
+  const horas = req.body.horas;
+  const query = 'INSERT INTO categorias (nombre, horas) VALUES ('+"'"+nombre+"',"+horas+')';
+  sequelize.query(query).spread((results, metadata) => {
+  res.redirect('/');
+  })
+};
+
+
+
+/*Inserta tareas*/
+controller.insertTareas = (req, res) => {
   const nombre = req.body.nombre;
   const horas = req.body.horas;
   const query = 'INSERT INTO tareas (id_recursos, id_proyectos, nombre, horas) VALUES (1,1,'+"'"+nombre+"',"+horas+')';
   sequelize.query(query).spread((results, metadata) => {
   res.redirect('/');
-})
-
+  })
 };
 
+
+
+/*Carga vista para agregar categoria nueva*/
 controller.save = (req, res) => {
   res.render('tareas_edit');
 };
 
-
+/*Carga categorias para vista edit*/
 controller.edit = (req, res) => {
   const  idE  = req.params.id;
-  tModel.findAll(
+  cModel.findAll(
     {
-  where: {
-    id: idE
-  }
-}
+      where: {
+        id_categoria: idE
+      }
+    }
   )
-    .then(tareas => {
-      console.log(tareas);
+    .then(categorias => {
+      console.log(categorias);
       //res.send(tareas[0].nombre)
       res.render('tareas_edit', {
-        data: tareas
+        data: categorias
       })
     })
     .catch(err => console.log(err));
-
 };
 
+/*Update categorias*/
+controller.updateC = (req, res) => {
+  const  idC  = req.params.id;
+  const nombre = req.body.nombre;
+  const horas =  req.body.horas;
+  const query = 'UPDATE categorias set nombre='+"'"+ nombre +"'"+', horas=' + horas +' where id_categoria =' + idC;
+
+  //res.send(nombre);
+  sequelize.query(query).spread((results, metadata) => {
+    res.redirect('/');
+  });
+};
+
+
+
+
+/*Update tareas*/
 controller.updateT = (req, res) => {
   const  idT  = req.params.id;
   const nombre = req.body.nombre;
@@ -65,9 +116,11 @@ controller.updateT = (req, res) => {
   });
 };
 
+
+/*Delete categorias*/
 controller.delete = (req, res) => {
   const  id  = req.params.id;
-    const query = 'DELETE FROM tareas WHERE id = '+id;
+    const query = 'DELETE FROM categorias WHERE id_categoria = '+id;
     sequelize.query(query).spread((results, metadata) => {
       res.redirect('/');
     });

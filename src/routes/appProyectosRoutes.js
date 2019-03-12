@@ -4,7 +4,7 @@ const appProyectosController = require('../controllers/appProyectosController');
 
 router.get('/', appProyectosController.list);
 router.get('/update/:id', appProyectosController.edit);
-router.post('/updateT/:id', appProyectosController.updateT);
+router.post('/updateC/:id', appProyectosController.updateC);
 router.get('/delete/:id', appProyectosController.delete);
 router.get('/add/', appProyectosController.save);
 router.post('/insert/', appProyectosController.insert);
