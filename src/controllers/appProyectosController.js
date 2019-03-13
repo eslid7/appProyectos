@@ -3,19 +3,24 @@ const sequelize = require('../../database/dbConfig');
 
 const tModel = require('../models/tareasModel');
 const cModel = require('../models/categoriasModel');
-
+const rModel = require('../models/recursosModel');
 
 
 
 /*Lista categorias de la tabla*/
 controller.list = (req, res) => {
     //Se utiliza model de Sequelize
-cModel.findAll()
+  cModel.findAll()               //obtenemos CategoríaS
   .then(categorias => {
     console.log(categorias);
     //res.send(tareas[1].nombre)
-    res.render('index', {
-      data: categorias
+      rModel.findAll()          //obtenemos Colaboradores
+      .then(recursos => {
+        //res.send(recursos)
+      res.render('index', {
+        data: categorias,
+        recursos: recursos
+      })
     })
   })
   .catch(err => console.log(err));
@@ -48,8 +53,15 @@ controller.insert = (req, res) => {
   })
 };
 
-
-
+/*Inserta recursos*/
+controller.insertR = (req, res) => {
+  const nombre = req.body.txtNombre;
+  const xhora = req.body.txtCostoHoras;
+  const query = 'INSERT INTO recursos (nombre, porhora) VALUES ('+"'"+nombre+"',"+xhora+')';
+  sequelize.query(query).spread((results, metadata) => {
+  res.redirect('/');
+  })
+};
 /*Inserta tareas*/
 controller.insertTareas = (req, res) => {
   const nombre = req.body.nombre;
@@ -125,6 +137,23 @@ controller.delete = (req, res) => {
       res.redirect('/');
     });
 };
+
+/*Delete recursos*/
+controller.deleteR = (req, res) => {
+  const  id  = req.params.id;
+    const query = 'DELETE FROM recursos WHERE id_recursos = '+id;
+    sequelize.query(query).spread((results, metadata) => {
+      res.redirect('/');
+    });
+};
+
+
+/*Carga vista para agregar categoria nueva*/
+controller.addRecurso = (req, res) => {
+  res.render('recursos_edit');
+};
+
+
 /*
 controller.report = (req, res) => {
   req.getConnection((err, conn) => {

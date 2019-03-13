@@ -38,17 +38,32 @@
                   <% } %>
                 <% } %>
                 <td>
+                  Acciones
+                </td>
+                <td>
                     <a href="/add/" class="glyphicon glyphicon-plus"></a>
                 </td>
               </tr>
             </thead>
             <tbody><!-- Falta hacer loop para llenar datos-->
-              <tr>
-                <td>Daniel</td>
-              </tr>
-              <tr>
-                <td>Jose</td>
-              </tr>
+              <% if (recursos) { %>
+                  <% for(var j = 0; j < recursos.length; j++) { %>
+                    <tr>
+                      <td><%= recursos[j].nombre %></td> <!-- recupera nombres de Colaboradores-->
+                      <% if (data) { %>
+                        <% for(var i = 0; i < data.length; i++) { %>
+                            <td>
+                              <input type="number" id="txtHoras_<%= data[i].id_categoria %>_<%= recursos[j].id_recursos %>" name="horas_<%= data[i].id_categoria %>_<%= recursos[j].id_recursos %>" value="" placeholder="Horas" class="form-control" min="0" max="999999">
+                            </td>
+                        <% } %>
+                            <td>
+                                <a href="/saveT/" class="glyphicon glyphicon-floppy-disk"></a>
+                                <a href="/deleteR/<%= recursos[j].id_recursos %>" class="glyphicon glyphicon-trash"></a>
+                            </td>
+                      <% } %>
+                    </tr>
+                  <% } %>
+              <% } %>
               <tr>
                 <td><a href="/addRecurso/" class="glyphicon glyphicon-plus"></a></td>
               </tr>
