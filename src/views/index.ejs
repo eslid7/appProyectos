@@ -1,7 +1,22 @@
 <% include partials/_header %>
+<!--
+<pre><%= tareas[1].rows[3].id_categoria %></pre>
+<pre><%= data[1].rows[1].id_categoria %></pre>
 
-<div class="container mt-5">
-  <div class="row">
+<pre><%= recursos[1].rows[1].id_recursos %></pre>
+<pre><%= tareas[1].rows[3].id_recursos %></pre>
+ -->
+
+<ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#proyectos">Proyectos</a></li>
+  <li><a data-toggle="tab" href="#categorias">Categorías</a></li>
+  <li><a data-toggle="tab" href="#recursos">Recursos</a></li>
+  <li><a data-toggle="tab" href="#tareas">Tareas</a></li>
+</ul>
+
+<div class="tab-content">
+  <div id="proyectos" class="tab-pane fade in active">
+    <h3>Proyectos</h3>
     <div class="col-md-4">
       <div class="card-body">
          <h5 class="card-title">Proyecto:</h5>
@@ -10,7 +25,7 @@
             <input type="text" name="name" placeholder="Nombre" class="form-control" autofocus maxlength="40" required>
           </div>
           <div class="form-group">
-            <input type="text" name="address" placeholder="Descripción" class="form-control" maxlength="90" required>
+            <input type="text" name="descripcion" placeholder="Descripción" class="form-control" maxlength="90" required>
           </div>
           <div>
             <button type="submit" class="btn btn-primary">
@@ -22,6 +37,128 @@
       </div>
     </div>
     <div class="col-md-8">
+          <div class="card-body">
+             <h5 class="card-title">Proyectos:</h5>
+            <table class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <td>Proyecto</td>
+                  <td>Descripción</td>
+                </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td>Proyecto1</td>
+                <td>Proyecto de Prueba</td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+    </div>
+  </div>
+  <div id="categorias" class="tab-pane fade">
+    <div class="col-md-4">
+      <div class="card-body">
+         <h5 class="card-title">Categoría:</h5>
+           <form action="/insert/" method="POST">
+             <div class="form-group">
+               <label for="txtNombre">Nombre de Categoría</label>
+               <input type="text" id="txtNombre" name="nombre" value="" placeholder="Nombre" class="form-control" autofocus required>
+             </div>
+             <div class="form-group">
+                <label for="txtDescripción">Descripción</label>
+               <input type="text" id="txtDescripción" name="descripcion" value="" placeholder="Descripción" class="form-control" required>
+             </div>
+             <button type="submit" class="btn btn-primary">
+               Guardar Categoría
+             </button>
+           </form>
+      </div>
+    </div>
+    <div class="col-md-8">
+          <div class="card-body">
+             <h5 class="card-title">Categorías:</h5>
+            <table class="table table-bordered table-hover">
+              <thead>
+                  <tr>
+                    <td>Categoría</td>
+                    <td>Descripción</td>
+                    <td>Acciones</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if (categoriasAll) { %>
+                      <% for(var j = 0; j < categoriasAll.length; j++) { %>
+                        <tr>
+                          <td><%= categoriasAll[j].nombre %></td> <!-- recupera nombres de categorias-->
+                          <td><%=categoriasAll[j].descripcion%></td>
+                          <td>
+                            <a href="/delete/<%= categoriasAll[j].id_categoria %>" class="glyphicon glyphicon-trash"></a>
+                          </td>
+                        </tr>
+                        <% } %>
+                  <% } %>
+                </tbody>
+              </table>
+          </div>
+      </div>
+  </div>
+  <div id="recursos" class="tab-pane fade">
+    <h3>Recursos</h3>
+    <div class="col-md-4">
+      <div class="card-body">
+          <form action="/insertR/" method="POST">
+            <div class="form-group">
+              <label for="txtNombre">Nombre de Colaborador</label>
+              <input type="text" id="txtNombre" name="txtNombre" value="" placeholder="Nombre" class="form-control" autofocus required>
+            </div>
+            <div class="form-group">
+              <label for="txtDepartamento">Departamento</label>
+              <input type="text" id="txtDepartamento" name="txtDepartamento" value="" placeholder="Departamento" class="form-control" autofocus required>
+            </div>
+            <div class="form-group">
+                <label for="txtCostoHoras">Costo por Hora</label>
+              <input type="number" id="txtCostoHoras" name="txtCostoHoras" value="" placeholder="Costo" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">
+              Guardar
+            </button>
+          </form>
+      </div>
+    </div>
+    <div class="col-md-8">
+          <div class="card-body">
+             <h5 class="card-title">Recursos:</h5>
+            <table class="table table-bordered table-hover">
+              <thead>
+                  <tr>
+                    <td>Recurso</td>
+                    <td>Departamento</td>
+                    <td>Por Hora</td>
+                    <td>Acciones</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if (recursosAll) { %>
+                      <% for(var j = 0; j < recursosAll.length; j++) { %>
+                        <tr>
+                          <td><%= recursosAll[j].nombre %></td> <!-- recupera nombres de recurso-->
+                          <td><%= recursosAll[j].departamento %></td>
+                          <td><%=recursosAll[j].porhora%></td>
+                          <td>
+                            <a href="/deleteR/<%= recursosAll[j].id_recursos %>" class="glyphicon glyphicon-trash"></a>
+                          </td>
+                        </tr>
+                        <% } %>
+                  <% } %>
+                </tbody>
+            </table>
+          </div>
+      </div>
+  </div>
+  <div id="tareas" class="tab-pane fade">
+    <h3>Tareas</h3>
+    <div class="col-md-12">
         <div class="card-body">
            <h5 class="card-title">Tareas:</h5>
           <table class="table table-bordered table-hover">
@@ -30,10 +167,10 @@
                 <td>Colaborador</td>
                 <% if (data) { %>
                   <% for(var i = 0; i < data.length; i++) { %>
-                      <td><%= data[i].nombre %>
+                      <td><%= data[1].rows[i].nombre %>
 
-                        <a href="/update/<%= data[i].id_categoria %>" class="glyphicon glyphicon-pencil"></a>
-                        <a href="/delete/<%= data[i].id_categoria %>" class="glyphicon glyphicon-trash"></a>
+                        <a href="/update/<%= data[1].rows[i].id_categoria %>" class="glyphicon glyphicon-pencil"></a>
+                        <a href="/delete/<%= data[1].rows[i].id_categoria %>" class="glyphicon glyphicon-trash"></a>
                       </td>
                   <% } %>
                 <% } %>
@@ -47,33 +184,42 @@
             </thead>
             <tbody><!-- Falta hacer loop para llenar datos-->
               <% if (recursos) { %>
+                  <form action="/addTarea" method="POST">
                   <% for(var j = 0; j < recursos.length; j++) { %>
                     <tr>
-                      <td><%= recursos[j].nombre %></td> <!-- recupera nombres de Colaboradores-->
+                      <td><%= recursos[1].rows[j].nombre %></td> <!-- recupera nombres de Colaboradores-->
                       <% if (data) { %>
                         <% for(var i = 0; i < data.length; i++) { %>
                             <td>
-                              <input type="number" id="txtHoras_<%= data[i].id_categoria %>_<%= recursos[j].id_recursos %>" name="horas_<%= data[i].id_categoria %>_<%= recursos[j].id_recursos %>" value="" placeholder="Horas" class="form-control" min="0" max="999999">
+
+                                  <% if (data[1].rows[i].id_categoria == tareas[1].rows[i].id_categoria &&  recursos[1].rows[j].id_recursos == tareas[1].rows[j].id_recursos ) { %>
+
+                                    <input type="number" id="txtHoras_<%= data[1].rows[i].id_categoria %>_<%= recursos[1].rows[j].id_recursos %>" name="horas_<%= data[1].rows[i].id_categoria %>_<%= recursos[1].rows[j].id_recursos %>"
+                                     placeholder="Horas" class="form-control" min="0" max="999999" value="<%=tareas[1].rows[i].horas%>">
+
+                                  <%  } else { %>
+
+                                    <input type="number" id="txtHoras_<%= data[1].rows[i].id_categoria %>_<%= recursos[1].rows[j].id_recursos %>" name="horas_<%= data[1].rows[i].id_categoria %>_<%= recursos[1].rows[j].id_recursos %>"
+                                    placeholder="Horas" class="form-control" min="0" max="999999" value="">
+
+                                   <%  } %>
+
+
                             </td>
+
                         <% } %>
                             <td>
-                                <a href="/saveT/" class="glyphicon glyphicon-floppy-disk"></a>
-                                <a href="/deleteR/<%= recursos[j].id_recursos %>" class="glyphicon glyphicon-trash"></a>
+                                <button type="submit" class="glyphicon glyphicon-floppy-disk"></button>
+                                <a href="/deleteR/<%= recursos[1].rows[j].id_recursos %>" class="glyphicon glyphicon-trash"></a>
                             </td>
                       <% } %>
                     </tr>
                   <% } %>
+                </form>
               <% } %>
               <tr>
                 <td><a href="/addRecurso/" class="glyphicon glyphicon-plus"></a></td>
               </tr>
-            <!--  <% if (data) { %>
-                <% for(var i = 0; i < data.length; i++) { %>
-                  <tr>
-                    <td><%= data[i].name %></td>
-                  </tr>
-                <% } %>
-              <% } %> -->
             </tbody>
           </table>
       </div>

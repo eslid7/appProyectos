@@ -41,7 +41,6 @@ const tModel = db.define('tareas',{
       deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
       }
   },
-  nombre:Sequelize.TEXT,
   horas:Sequelize.FLOAT(4)
 });
 

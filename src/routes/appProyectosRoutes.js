@@ -16,6 +16,8 @@ router.get('/addRecurso/', appProyectosController.addRecurso);
 router.post('/insertR/', appProyectosController.insertR);
 router.get('/deleteR/:id', appProyectosController.deleteR);
 
+//Métodos tareas
+router.post('/addTarea/', appProyectosController.insertTareas);
 
 /*
 router.post('/add', appProyectosController.save);

@@ -5,21 +5,49 @@ const tModel = require('../models/tareasModel');
 const cModel = require('../models/categoriasModel');
 const rModel = require('../models/recursosModel');
 
+//Defino relaciones
+rModel.hasMany(tModel, {foreignKey: 'id_recursos'})
+tModel.belongsTo(rModel, {foreignKey: 'id_recursos'})
+
+cModel.hasMany(tModel, {foreignKey: 'id_categoria'})
+tModel.belongsTo(cModel, {foreignKey: 'id_categoria'})
+
 
 
 /*Lista categorias de la tabla*/
 controller.list = (req, res) => {
     //Se utiliza model de Sequelize
-  cModel.findAll()               //obtenemos CategoríaS
+/*  tModel.findAll({
+    attributes: ['id_categoria'], group: ['id_categoria'],
+    where:{id_proyectos:1}, include: [cModel]})  */
+    const queryCategorias = 'select distinct categorias.nombre, tareas.id_categoria from categorias, tareas where tareas.id_categoria = categorias.id_categoria and tareas.id_proyectos = 1 order by id_categoria';
+    sequelize.query(queryCategorias)               //obtenemos CategoríaS
   .then(categorias => {
-    console.log(categorias);
+  //  console.log(categorias);
     //res.send(tareas[1].nombre)
-      rModel.findAll()          //obtenemos Colaboradores
+      /*tModel.findAll({where:{id_proyectos:1}, include: [rModel]})          //obtenemos Colaboradores
+      */
+      const queryRecursos = 'select distinct recursos.nombre, tareas.id_recursos from recursos, tareas where tareas.id_recursos = recursos.id_recursos and tareas.id_proyectos = 1 order by id_recursos';
+      sequelize.query(queryRecursos)
       .then(recursos => {
-        //res.send(recursos)
-      res.render('index', {
-        data: categorias,
-        recursos: recursos
+        const queryTareas = 'select  recursos.nombre, tareas.id_recursos,  recursos.porhora, categorias.nombre, tareas.id_categoria,  tareas.horas from tareas, recursos, categorias where tareas.id_recursos = recursos.id_recursos and categorias.id_categoria = tareas.id_categoria and tareas.id_proyectos = 1 order by  tareas.id_recursos';
+        sequelize.query(queryTareas)
+        .then(tareas => {
+           cModel.findAll()
+           .then(categoriasAll => {
+             rModel.findAll()
+             .then(recursosAll => {
+               //res.send(tareas)
+            //  console.log(recursos.recurso);
+                res.render('index', {
+                  data: categorias,
+                  recursos: recursos,
+                  tareas: tareas,
+                  categoriasAll: categoriasAll,
+                  recursosAll:recursosAll
+            })
+           })
+        })
       })
     })
   })
@@ -46,30 +74,46 @@ tModel.findAll()
 /*Inserta categorias*/
 controller.insert = (req, res) => {
   const nombre = req.body.nombre;
-  const horas = req.body.horas;
-  const query = 'INSERT INTO categorias (nombre, horas) VALUES ('+"'"+nombre+"',"+horas+')';
+  const descripcion = req.body.descripcion;
+  const query = 'INSERT INTO categorias (nombre, descripcion) VALUES ('+"'"+nombre+"', '"+descripcion+"')";
   sequelize.query(query).spread((results, metadata) => {
-  res.redirect('/');
+  res.redirect('/#categorias');
   })
 };
 
 /*Inserta recursos*/
 controller.insertR = (req, res) => {
   const nombre = req.body.txtNombre;
+  const departamento = req.body.txtDepartamento;
   const xhora = req.body.txtCostoHoras;
-  const query = 'INSERT INTO recursos (nombre, porhora) VALUES ('+"'"+nombre+"',"+xhora+')';
+  const query = 'INSERT INTO recursos (nombre, departamento, porhora) VALUES ('+"'"+nombre+"','"+departamento+"', "+xhora+')';
   sequelize.query(query).spread((results, metadata) => {
   res.redirect('/');
   })
 };
+
 /*Inserta tareas*/
 controller.insertTareas = (req, res) => {
-  const nombre = req.body.nombre;
-  const horas = req.body.horas;
-  const query = 'INSERT INTO tareas (id_recursos, id_proyectos, nombre, horas) VALUES (1,1,'+"'"+nombre+"',"+horas+')';
-  sequelize.query(query).spread((results, metadata) => {
+  var keyNames = Object.keys(req.body); //obtengo array con nombres de los input
+  keyNames.forEach(function (element){ //se analiza cada nombre por separado
+    let nameInput= element;
+    let i = nameInput.search("_") + 1; //indice inicio idCategoria
+    let j = nameInput.indexOf("_", i); //indice fin idCategoria
+    let k = nameInput.length;
+    let idCategoria = nameInput.substring(i, j);
+    let idRecurso = nameInput.substr(j+1, k);
+    let idProyecto = 1;
+    let horasStr = "req.body."+nameInput;
+    let horas = eval(horasStr);
+    if(horas!=""){
+      const query = 'INSERT INTO tareas (id_recursos, id_proyectos, id_categoria, horas) VALUES ('+idRecurso+","+idProyecto+","+idCategoria+","+horas+')';
+      sequelize.query(query).spread((results, metadata) => {
+      });
+    }
+  });
+  //res.send(keyNames);
   res.redirect('/');
-  })
+
 };
 
 
@@ -134,7 +178,7 @@ controller.delete = (req, res) => {
   const  id  = req.params.id;
     const query = 'DELETE FROM categorias WHERE id_categoria = '+id;
     sequelize.query(query).spread((results, metadata) => {
-      res.redirect('/');
+      res.redirect('/#categorias');
     });
 };
 
