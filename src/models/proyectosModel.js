@@ -3,7 +3,8 @@ const Sequelize = require('sequelize');
 
 const pModel = db.define('proyectos',{
   id_proyectos: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
-  nombre:Sequelize.TEXT
+  nombre:Sequelize.TEXT,
+  descripcion:Sequelize.TEXT
 });
 
 module.exports=pModel;

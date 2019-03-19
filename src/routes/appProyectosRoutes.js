@@ -5,6 +5,13 @@ const router = require('express').Router();
 const appProyectosController = require('../controllers/appProyectosController');
 router.get('/', appProyectosController.list);
 /*****************************************************************************************************************************************************************
+                                                                      Rutas de Proyectos
+******************************************************************************************************************************************************************/
+router.get('/updatePe/:id', appProyectosController.editP);
+router.post('/updateP/:id', appProyectosController.updateP);
+router.get('/deleteP/:id', appProyectosController.deleteP);
+router.post('/insertP/', appProyectosController.insertP);
+/*****************************************************************************************************************************************************************
                                                                       Rutas de categorias
 ******************************************************************************************************************************************************************/
 router.get('/update/:id', appProyectosController.edit);

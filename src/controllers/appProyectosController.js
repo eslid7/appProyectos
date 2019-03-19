@@ -4,6 +4,8 @@
 const controller = {};
 const sequelize = require('../../database/dbConfig');
 
+
+const pModel = require('../models/proyectosModel');
 const tModel = require('../models/tareasModel');
 const cModel = require('../models/categoriasModel');
 const rModel = require('../models/recursosModel');
@@ -40,6 +42,8 @@ controller.list = (req, res) => {
            .then(categoriasAll => {
              rModel.findAll()
              .then(recursosAll => {
+               pModel.findAll()
+               .then(proyectosAll => {
                //res.send(tareas)
             //  console.log(recursos.recurso);
                 res.render('index', {
@@ -47,8 +51,10 @@ controller.list = (req, res) => {
                   recursos: recursos,
                   tareas: tareas,
                   categoriasAll: categoriasAll,
-                  recursosAll:recursosAll
-            })
+                  recursosAll:recursosAll,
+                  proyectosAll:proyectosAll
+                  })
+                })
            })
         })
       })
@@ -70,6 +76,17 @@ tModel.findAll()
     })
   })
   .catch(err => console.log(err));
+};
+/*****************************************************************************************************************************************************************
+                                                                      Inserta Proyectos
+/*****************************************************************************************************************************************************************/
+controller.insertP = (req, res) => {
+  const nombre = req.body.nombre;
+  const descripcion = req.body.descripcion;
+  const query = 'INSERT INTO proyectos (nombre, descripcion) VALUES ('+"'"+nombre+"', '"+descripcion+"')";
+  sequelize.query(query).spread((results, metadata) => {
+  res.redirect('/');
+  })
 };
 /*****************************************************************************************************************************************************************
                                                                       Inserta categorias
@@ -160,7 +177,6 @@ controller.updateT = (req, res) => {
   const nombre = req.body.nombre;
   const horas =  req.body.horas;
   const query = 'UPDATE tareas set nombre='+"'"+ nombre +"'"+', horas=' + horas +' where id =' + idT;
-
   //res.send(nombre);
   sequelize.query(query).spread((results, metadata) => {
     res.redirect('/');
@@ -199,6 +215,53 @@ controller.updateR = (req, res) => {
   //res.send(nombre);
   sequelize.query(query).spread((results, metadata) => {
     res.redirect('/');
+  });
+};
+/*****************************************************************************************************************************************************************
+                                                              Carga Proyecto para vista edit
+/*****************************************************************************************************************************************************************/
+controller.editP = (req, res) => {
+  const  idP  = req.params.id;
+  pModel.findAll(
+    {
+      where: {
+        id_proyectos: idP
+      }
+    }
+  )
+    .then(proyectos => {
+    //  console.log(categorias);
+      //res.send(tareas[0].nombre)
+      res.render('proyectos_edit', {
+        data: proyectos
+      })
+    })
+    .catch(err => console.log(err));
+};
+/*****************************************************************************************************************************************************************
+                                                                        Update Proyectos
+/*****************************************************************************************************************************************************************/
+controller.updateP = (req, res) => {
+  const  idP  = req.params.id;
+  const nombre = req.body.nombre;
+  const descripcion =  req.body.descripcion;
+  const query = 'UPDATE proyectos set nombre='+"'"+ nombre +"'"+', descripcion=' + "'"+ descripcion +"'"+' where id_proyectos =' + idP;
+  //res.send(nombre);
+  sequelize.query(query).spread((results, metadata) => {
+    res.redirect('/');
+  });
+};
+/*****************************************************************************************************************************************************************
+                                                                      Delete Proyecto
+/*****************************************************************************************************************************************************************/
+controller.deleteP = (req, res) => {
+  const  id  = req.params.id;
+  const query1 = 'DELETE FROM tareas WHERE id_proyectos = '+id;
+  const query2 = 'DELETE FROM proyectos WHERE id_proyectos = '+id;
+  sequelize.query(query1).spread((results, metadata) => {     //borro tareas asociadas al proyecto
+    sequelize.query(query2).spread((results, metadata) => {  //borro proyecto
+      res.redirect('/');
+    });
   });
 };
 /*****************************************************************************************************************************************************************

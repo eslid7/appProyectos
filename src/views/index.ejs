@@ -13,9 +13,9 @@
     <div class="col-md-4">
       <div class="card-body">
          <h5 class="card-title">Nuevo Proyecto:</h5>
-        <form action="/add" method="POST">
+        <form action="/insertP/" method="POST">
           <div class="form-group">
-            <input type="text" name="name" placeholder="Nombre" class="form-control" autofocus maxlength="40" required>
+            <input type="text" name="nombre" placeholder="Nombre" class="form-control" autofocus maxlength="40" required>
           </div>
           <div class="form-group">
             <input type="text" name="descripcion" placeholder="Descripción" class="form-control" maxlength="90" required>
@@ -37,13 +37,22 @@
                 <tr>
                   <td>Proyecto</td>
                   <td>Descripción</td>
+                  <td>Acciones</td>
                 </tr>
               </thead>
               <tbody>
-              <tr>
-                <td>Proyecto1</td>
-                <td>Proyecto de Prueba</td>
-              </tr>
+                <% if (proyectosAll) { %>
+                    <% for(var j = 0; j < proyectosAll.length; j++) { %>
+                      <tr>
+                        <td><%= proyectosAll[j].nombre %></td> <!-- recupera nombres de categorias-->
+                        <td><%=proyectosAll[j].descripcion%></td>
+                        <td>
+                          <a href="/updatePe/<%= proyectosAll[j].id_proyectos %>" class="glyphicon glyphicon-pencil"></a>
+                          <a href="/deleteP/<%= proyectosAll[j].id_proyectos %>" class="glyphicon glyphicon-trash"></a>
+                        </td>
+                      </tr>
+                      <% } %>
+                <% } %>
             </tbody>
           </table>
       </div>
@@ -157,9 +166,9 @@
           </div>
       </div>
   </div>
-  <!--***************************************************************************************************************************************************************
+<!--***************************************************************************************************************************************************************
                                                                       Sección de Tareas
-  ****************************************************************************************************************************************************************-->
+****************************************************************************************************************************************************************-->
   <div id="tareas" class="tab-pane fade">
     <div class="col-md-12">
         <div class="card-body">
@@ -168,12 +177,12 @@
             <thead>
               <tr>
                 <td>Colaborador</td>
-                <% if (data) { %>
+                <% if (tareas) { %>
                   <% for(var i = 0; i < data.length; i++) { %>
-                      <td><%= data[1].rows[i].nombre %>
+                      <td><%= data[1].nombre %>
 
-                        <a href="/update/<%= data[1].rows[i].id_categoria %>" class="glyphicon glyphicon-pencil"></a>
-                        <a href="/delete/<%= data[1].rows[i].id_categoria %>" class="glyphicon glyphicon-trash"></a>
+                        <a href="/update/<%= data[1].id_categoria %>" class="glyphicon glyphicon-pencil"></a>
+                        <a href="/delete/<%= data[1].id_categoria %>" class="glyphicon glyphicon-trash"></a>
                       </td>
                   <% } %>
                 <% } %>
@@ -190,19 +199,19 @@
                   <form action="/addTarea" method="POST">
                   <% for(var j = 0; j < recursos.length; j++) { %>
                     <tr>
-                      <td><%= recursos[1].rows[j].nombre %></td> <!-- recupera nombres de Colaboradores-->
+                      <td><%= recursos[j].nombre %></td> <!-- recupera nombres de Colaboradores-->
                       <% if (data) { %>
                         <% for(var i = 0; i < data.length; i++) { %>
                             <td>
 
-                                  <% if (data[1].rows[i].id_categoria == tareas[1].rows[i].id_categoria &&  recursos[1].rows[j].id_recursos == tareas[1].rows[j].id_recursos ) { %>
+                                  <% if (data[i].id_categoria == tareas[i].id_categoria &&  recursos[j].id_recursos == tareas[j].id_recursos ) { %>
 
-                                    <input type="number" id="txtHoras_<%= data[1].rows[i].id_categoria %>_<%= recursos[1].rows[j].id_recursos %>" name="horas_<%= data[1].rows[i].id_categoria %>_<%= recursos[1].rows[j].id_recursos %>"
-                                     placeholder="Horas" class="form-control" min="0" max="999999" value="<%=tareas[1].rows[i].horas%>">
+                                    <input type="number" id="txtHoras_<%= data[i].id_categoria %>_<%= recursos[j].id_recursos %>" name="horas_<%= data[i].id_categoria %>_<%= recursos[j].id_recursos %>"
+                                     placeholder="Horas" class="form-control" min="0" max="999999" value="<%=tareas[i].horas%>">
 
                                   <%  } else { %>
 
-                                    <input type="number" id="txtHoras_<%= data[1].rows[i].id_categoria %>_<%= recursos[1].rows[j].id_recursos %>" name="horas_<%= data[1].rows[i].id_categoria %>_<%= recursos[1].rows[j].id_recursos %>"
+                                    <input type="number" id="txtHoras_<%= data[i].id_categoria %>_<%= recursos[j].id_recursos %>" name="horas_<%= data[i].id_categoria %>_<%= recursos[j].id_recursos %>"
                                     placeholder="Horas" class="form-control" min="0" max="999999" value="">
 
                                    <%  } %>
@@ -213,7 +222,7 @@
                         <% } %>
                             <td>
                                 <button type="submit" class="glyphicon glyphicon-floppy-disk"></button>
-                                <a href="/deleteR/<%= recursos[1].rows[j].id_recursos %>" class="glyphicon glyphicon-trash"></a>
+                                <a href="/deleteR/<%= recursos[j].id_recursos %>" class="glyphicon glyphicon-trash"></a>
                             </td>
                       <% } %>
                     </tr>
