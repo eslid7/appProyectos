@@ -1,40 +1,28 @@
 <% include partials/_header %>
-
 <div class="container mt-5">
   <div class="row">
     <div class="col-md-5 offset-md-3 card">
       <div class="card-body">
         <% if (typeof(data) !== 'undefined') { %>
-          <form action="/updateR/<%= data[0].id_categoria %>" method="POST">
+          <form action="/updateR/<%= data[0].id_recursos %>" method="POST">
             <div class="form-group">
               <label for="txtNombre">Nombre de Colaborador</label>
               <input type="text" id="txtNombre" name="nombre" value="<%= data[0].nombre%>" placeholder="Nombre" class="form-control" autofocus required>
             </div>
             <div class="form-group">
-                <label for="txtCostoHoras">Costo por Hora</label>
-              <input type="number" id="txtCostoHoras" name="horas" value="<%= data[0].horas%>" placeholder="Costo" class="form-control" required>
-            </div>
-
-            <button type="submit" class="btn btn-primary">
-              Guardar Colaborador
-            </button>
-          </form>
-        <% } else {%>
-          <form action="/insertR/" method="POST">
-            <div class="form-group">
-              <label for="txtNombre">Nombre de Colaborador</label>
-              <input type="text" id="txtNombre" name="txtNombre" value="" placeholder="Nombre" class="form-control" autofocus required>
+              <label for="txtDepartamento">Departamento</label>
+              <input type="text" id="txtDepartamento" name="txtDepartamento" value="<%= data[0].departamento%>" placeholder="Departamento" class="form-control" autofocus required>
             </div>
             <div class="form-group">
                 <label for="txtCostoHoras">Costo por Hora</label>
-              <input type="number" id="txtCostoHoras" name="txtCostoHoras" value="" placeholder="Costo" class="form-control" required>
+              <input type="number" id="txtCostoHoras" name="horas" value="<%= data[0].porhora%>" placeholder="Costo" class="form-control" required>
             </div>
 
             <button type="submit" class="btn btn-primary">
-              Guardar Colaborador
+              Guardar Recurso
             </button>
           </form>
-        <%} %>
+        <% } %>
       </div>
     </div>
   </div>

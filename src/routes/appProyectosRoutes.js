@@ -1,23 +1,29 @@
+/*****************************************************************************************************************************************************************
+                                              Defino constantes necesarias para las rutas del proyecto
+******************************************************************************************************************************************************************/
 const router = require('express').Router();
-
 const appProyectosController = require('../controllers/appProyectosController');
-
 router.get('/', appProyectosController.list);
-
-//Métodos Categorías
+/*****************************************************************************************************************************************************************
+                                                                      Rutas de categorias
+******************************************************************************************************************************************************************/
 router.get('/update/:id', appProyectosController.edit);
 router.post('/updateC/:id', appProyectosController.updateC);
 router.get('/delete/:id', appProyectosController.delete);
-router.get('/add/', appProyectosController.save);
 router.post('/insert/', appProyectosController.insert);
-
-//Métodos Recursos
-router.get('/addRecurso/', appProyectosController.addRecurso);
+/*****************************************************************************************************************************************************************
+                                                                      Rutas de recursos
+******************************************************************************************************************************************************************/
 router.post('/insertR/', appProyectosController.insertR);
 router.get('/deleteR/:id', appProyectosController.deleteR);
-
-//Métodos tareas
+router.get('/updateRe/:id', appProyectosController.editR);
+router.post('/updateR/:id', appProyectosController.updateR);
+/*****************************************************************************************************************************************************************
+                                                                      Rutas de Tareas
+******************************************************************************************************************************************************************/
 router.post('/addTarea/', appProyectosController.insertTareas);
+//router.get('/add/', appProyectosController.save);
+//router.get('/addRecurso/', appProyectosController.addRecurso);
 
 /*
 router.post('/add', appProyectosController.save);

@@ -1,20 +1,23 @@
+/*****************************************************************************************************************************************************************
+                                              Defino constantes necesarias para el controlador y modelos Sequelize
+******************************************************************************************************************************************************************/
 const controller = {};
 const sequelize = require('../../database/dbConfig');
 
 const tModel = require('../models/tareasModel');
 const cModel = require('../models/categoriasModel');
 const rModel = require('../models/recursosModel');
-
-//Defino relaciones
+/*****************************************************************************************************************************************************************
+                                                              Defino relaciones modelo Sequelize
+******************************************************************************************************************************************************************/
 rModel.hasMany(tModel, {foreignKey: 'id_recursos'})
 tModel.belongsTo(rModel, {foreignKey: 'id_recursos'})
 
 cModel.hasMany(tModel, {foreignKey: 'id_categoria'})
 tModel.belongsTo(cModel, {foreignKey: 'id_categoria'})
-
-
-
-/*Lista categorias de la tabla*/
+/************************************************************************************************************************************************************
+                          Función encargada de cargar los datos necesarios para las Listas a las tablas del index
+*************************************************************************************************************************************************************/
 controller.list = (req, res) => {
     //Se utiliza model de Sequelize
 /*  tModel.findAll({
@@ -53,9 +56,9 @@ controller.list = (req, res) => {
   })
   .catch(err => console.log(err));
 };
-
-
-/*Lista body de la tabla*/
+/*****************************************************************************************************************************************************************
+                                                                  Lista body de la tabla tareas
+/******************************************************************************************************************************************************************/
 controller.listBody = (req, res) => {
     //Se utiliza model de Sequelize
 tModel.findAll()
@@ -68,10 +71,9 @@ tModel.findAll()
   })
   .catch(err => console.log(err));
 };
-
-
-
-/*Inserta categorias*/
+/*****************************************************************************************************************************************************************
+                                                                      Inserta categorias
+/*****************************************************************************************************************************************************************/
 controller.insert = (req, res) => {
   const nombre = req.body.nombre;
   const descripcion = req.body.descripcion;
@@ -80,8 +82,9 @@ controller.insert = (req, res) => {
   res.redirect('/#categorias');
   })
 };
-
-/*Inserta recursos*/
+/*****************************************************************************************************************************************************************
+                                                                      Inserta recursos
+/*****************************************************************************************************************************************************************/
 controller.insertR = (req, res) => {
   const nombre = req.body.txtNombre;
   const departamento = req.body.txtDepartamento;
@@ -91,8 +94,9 @@ controller.insertR = (req, res) => {
   res.redirect('/');
   })
 };
-
-/*Inserta tareas*/
+/*****************************************************************************************************************************************************************
+                                                                        Inserta tareas
+/*****************************************************************************************************************************************************************/
 controller.insertTareas = (req, res) => {
   var keyNames = Object.keys(req.body); //obtengo array con nombres de los input
   keyNames.forEach(function (element){ //se analiza cada nombre por separado
@@ -113,17 +117,10 @@ controller.insertTareas = (req, res) => {
   });
   //res.send(keyNames);
   res.redirect('/');
-
 };
-
-
-
-/*Carga vista para agregar categoria nueva*/
-controller.save = (req, res) => {
-  res.render('tareas_edit');
-};
-
-/*Carga categorias para vista edit*/
+/*****************************************************************************************************************************************************************
+                                                              Carga categorias para vista edit
+/*****************************************************************************************************************************************************************/
 controller.edit = (req, res) => {
   const  idE  = req.params.id;
   cModel.findAll(
@@ -142,24 +139,22 @@ controller.edit = (req, res) => {
     })
     .catch(err => console.log(err));
 };
-
-/*Update categorias*/
+/*****************************************************************************************************************************************************************
+                                                                        Update categorias
+/*****************************************************************************************************************************************************************/
 controller.updateC = (req, res) => {
   const  idC  = req.params.id;
   const nombre = req.body.nombre;
-  const horas =  req.body.horas;
-  const query = 'UPDATE categorias set nombre='+"'"+ nombre +"'"+', horas=' + horas +' where id_categoria =' + idC;
-
+  const descripcion =  req.body.descripcion;
+  const query = 'UPDATE categorias set nombre='+"'"+ nombre +"'"+', descripcion=' + "'"+ descripcion +"'"+' where id_categoria =' + idC;
   //res.send(nombre);
   sequelize.query(query).spread((results, metadata) => {
     res.redirect('/');
   });
 };
-
-
-
-
-/*Update tareas*/
+/*****************************************************************************************************************************************************************
+                                                                          Update tareas
+/*****************************************************************************************************************************************************************/
 controller.updateT = (req, res) => {
   const  idT  = req.params.id;
   const nombre = req.body.nombre;
@@ -171,9 +166,44 @@ controller.updateT = (req, res) => {
     res.redirect('/');
   });
 };
-
-
-/*Delete categorias*/
+/*****************************************************************************************************************************************************************
+                                                                Carga recursos para vista edit
+/*****************************************************************************************************************************************************************/
+controller.editR = (req, res) => {
+  const  idR  = req.params.id;
+  rModel.findAll(
+    {
+      where: {
+        id_recursos: idR
+      }
+    }
+  )
+    .then(recursos => {
+      //console.log(categorias);
+      //res.send(recursos[0].nombre)
+      res.render('recursos_edit', {
+        data: recursos
+      })
+    })
+    .catch(err => console.log(err));
+};
+/*****************************************************************************************************************************************************************
+                                                                        Update recurso
+/*****************************************************************************************************************************************************************/
+controller.updateR = (req, res) => {
+  const  idR  = req.params.id;
+  const nombre = req.body.nombre;
+  const departamento =  req.body.txtDepartamento;
+  const porhora = req.body.horas;
+  const query = 'UPDATE recursos set nombre='+"'"+ nombre +"'"+', departamento=' + "'"+ departamento +"'"+', porhora='+porhora+' where id_recursos =' + idR;
+  //res.send(nombre);
+  sequelize.query(query).spread((results, metadata) => {
+    res.redirect('/');
+  });
+};
+/*****************************************************************************************************************************************************************
+                                                                      Delete categorias
+/*****************************************************************************************************************************************************************/
 controller.delete = (req, res) => {
   const  id  = req.params.id;
     const query = 'DELETE FROM categorias WHERE id_categoria = '+id;
@@ -181,20 +211,15 @@ controller.delete = (req, res) => {
       res.redirect('/#categorias');
     });
 };
-
-/*Delete recursos*/
+/*****************************************************************************************************************************************************************
+                                                                      Delete recursos
+/*****************************************************************************************************************************************************************/
 controller.deleteR = (req, res) => {
   const  id  = req.params.id;
     const query = 'DELETE FROM recursos WHERE id_recursos = '+id;
     sequelize.query(query).spread((results, metadata) => {
       res.redirect('/');
     });
-};
-
-
-/*Carga vista para agregar categoria nueva*/
-controller.addRecurso = (req, res) => {
-  res.render('recursos_edit');
 };
 
 

@@ -1,25 +1,18 @@
 <% include partials/_header %>
-<!--
-<pre><%= tareas[1].rows[3].id_categoria %></pre>
-<pre><%= data[1].rows[1].id_categoria %></pre>
-
-<pre><%= recursos[1].rows[1].id_recursos %></pre>
-<pre><%= tareas[1].rows[3].id_recursos %></pre>
- -->
-
 <ul class="nav nav-tabs">
   <li class="active"><a data-toggle="tab" href="#proyectos">Proyectos</a></li>
   <li><a data-toggle="tab" href="#categorias">Categorías</a></li>
   <li><a data-toggle="tab" href="#recursos">Recursos</a></li>
   <li><a data-toggle="tab" href="#tareas">Tareas</a></li>
 </ul>
-
 <div class="tab-content">
+<!--***************************************************************************************************************************************************************
+                                                                      Sección de Proyectos
+****************************************************************************************************************************************************************-->
   <div id="proyectos" class="tab-pane fade in active">
-    <h3>Proyectos</h3>
     <div class="col-md-4">
       <div class="card-body">
-         <h5 class="card-title">Proyecto:</h5>
+         <h5 class="card-title">Nuevo Proyecto:</h5>
         <form action="/add" method="POST">
           <div class="form-group">
             <input type="text" name="name" placeholder="Nombre" class="form-control" autofocus maxlength="40" required>
@@ -56,10 +49,13 @@
       </div>
     </div>
   </div>
+<!--***************************************************************************************************************************************************************
+                                                                      Sección de Categorías
+****************************************************************************************************************************************************************-->
   <div id="categorias" class="tab-pane fade">
     <div class="col-md-4">
       <div class="card-body">
-         <h5 class="card-title">Categoría:</h5>
+         <h5 class="card-title">Nueva Categoría:</h5>
            <form action="/insert/" method="POST">
              <div class="form-group">
                <label for="txtNombre">Nombre de Categoría</label>
@@ -70,7 +66,7 @@
                <input type="text" id="txtDescripción" name="descripcion" value="" placeholder="Descripción" class="form-control" required>
              </div>
              <button type="submit" class="btn btn-primary">
-               Guardar Categoría
+               Guardar
              </button>
            </form>
       </div>
@@ -93,6 +89,7 @@
                           <td><%= categoriasAll[j].nombre %></td> <!-- recupera nombres de categorias-->
                           <td><%=categoriasAll[j].descripcion%></td>
                           <td>
+                            <a href="/update/<%= categoriasAll[j].id_categoria %>" class="glyphicon glyphicon-pencil"></a>
                             <a href="/delete/<%= categoriasAll[j].id_categoria %>" class="glyphicon glyphicon-trash"></a>
                           </td>
                         </tr>
@@ -103,10 +100,13 @@
           </div>
       </div>
   </div>
+<!--***************************************************************************************************************************************************************
+                                                                      Sección de Recursos
+****************************************************************************************************************************************************************-->
   <div id="recursos" class="tab-pane fade">
-    <h3>Recursos</h3>
     <div class="col-md-4">
       <div class="card-body">
+        <h5 class="card-title">Nuevo Recurso:</h5>
           <form action="/insertR/" method="POST">
             <div class="form-group">
               <label for="txtNombre">Nombre de Colaborador</label>
@@ -146,6 +146,7 @@
                           <td><%= recursosAll[j].departamento %></td>
                           <td><%=recursosAll[j].porhora%></td>
                           <td>
+                            <a href="/updateRe/<%= recursosAll[j].id_recursos %>" class="glyphicon glyphicon-pencil"></a>
                             <a href="/deleteR/<%= recursosAll[j].id_recursos %>" class="glyphicon glyphicon-trash"></a>
                           </td>
                         </tr>
@@ -156,8 +157,10 @@
           </div>
       </div>
   </div>
+  <!--***************************************************************************************************************************************************************
+                                                                      Sección de Tareas
+  ****************************************************************************************************************************************************************-->
   <div id="tareas" class="tab-pane fade">
-    <h3>Tareas</h3>
     <div class="col-md-12">
         <div class="card-body">
            <h5 class="card-title">Tareas:</h5>
@@ -226,5 +229,4 @@
     </div>
   </div>
 </div>
-
 <% include partials/_footer %>
