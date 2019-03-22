@@ -35,7 +35,7 @@ controller.list = (req, res) => {
       const queryRecursos = 'select distinct recursos.nombre, tareas.id_recursos from recursos, tareas where tareas.id_recursos = recursos.id_recursos and tareas.id_proyectos = 1 order by id_recursos';
       sequelize.query(queryRecursos)
       .then(recursos => {
-        const queryTareas = 'select  recursos.nombre, tareas.id_recursos,  recursos.porhora, categorias.nombre, tareas.id_categoria,  tareas.horas from tareas, recursos, categorias where tareas.id_recursos = recursos.id_recursos and categorias.id_categoria = tareas.id_categoria and tareas.id_proyectos = 1 order by  tareas.id_recursos';
+        const queryTareas = 'select  recursos.nombre, tareas.id_recursos,  recursos.porhora, categorias.nombre, tareas.id_categoria,  tareas.horas from tareas, recursos, categorias where tareas.id_recursos = recursos.id_recursos and tareas.id_categoria = categorias.id_categoria and tareas.id_proyectos = 1 order by  tareas.id_recursos';
         sequelize.query(queryTareas)
         .then(tareas => {
            cModel.findAll()
@@ -44,8 +44,8 @@ controller.list = (req, res) => {
              .then(recursosAll => {
                pModel.findAll()
                .then(proyectosAll => {
-               //res.send(tareas)
-            //  console.log(recursos.recurso);
+               //res.send(tareas[1].rows.id)
+             //console.log(tareas[1].rows);
                 res.render('index', {
                   data: categorias,
                   recursos: recursos,

@@ -1,9 +1,12 @@
 /*****************************************************************************************************************************************************************
-                                              Defino constantes necesarias para las rutas del proyecto
+                                              Defino variables y constantes necesarias para las rutas del proyecto
 ******************************************************************************************************************************************************************/
+var passport = require('passport'),
+    signupController = require('../controllers/signupController.js')
+
 const router = require('express').Router();
 const appProyectosController = require('../controllers/appProyectosController');
-router.get('/', appProyectosController.list);
+//router.get('/', appProyectosController.list);
 /*****************************************************************************************************************************************************************
                                                                       Rutas de Proyectos
 ******************************************************************************************************************************************************************/
@@ -31,6 +34,44 @@ router.post('/updateR/:id', appProyectosController.updateR);
 router.post('/addTarea/', appProyectosController.insertTareas);
 //router.get('/add/', appProyectosController.save);
 //router.get('/addRecurso/', appProyectosController.addRecurso);
+
+
+/*****************************************************************************************************************************************************************
+                                                                      Rutas de Login
+******************************************************************************************************************************************************************/
+  var isAuthenticated = function (req, res, next) {
+    if (req.isAuthenticated())
+      return next()
+    req.flash('error', 'You have to be logged in to access the page.')
+    res.redirect('/home')
+  }
+
+  router.get('/signup', signupController.show)
+  router.post('/signup', signupController.signup)
+
+  router.post('/login', passport.authenticate('local', {
+      successRedirect: '/',
+      failureRedirect: '/signup',
+      failureFlash: true})
+    );
+
+  router.get('/home', function(req, res) {
+    res.render('home')
+  })
+
+//  router.get('/dashboard', isAuthenticated, function(req, res) {
+    //res.render('dashboard')
+    router.get('/', isAuthenticated, appProyectosController.list);
+  //})
+
+  router.get('/logout', function(req, res) {
+    req.logout()
+    res.redirect('/home')
+  })
+
+
+
+
 
 /*
 router.post('/add', appProyectosController.save);

@@ -5,6 +5,15 @@ const express = require('express'),
 
 const app = express();
 
+var setupPassport = require('./setupPassport'),
+flash = require('connect-flash'),
+session = require('express-session'),
+bodyParser = require('body-parser'),
+cookieParser = require('cookie-parser'),
+jsonParser = bodyParser.json()
+
+
+
 // importing routes
 const appProyectosRoutes = require('./routes/appProyectosRoutes');
 
@@ -16,6 +25,23 @@ app.set('view engine', 'ejs');
 // middlewares
 
 app.use(express.urlencoded({extended: false}));
+
+app.use(cookieParser())
+app.use(session({ secret: '4564f6s4fdsfdfd', resave: false, saveUninitialized: false }))
+
+app.use(flash())
+app.use(function(req, res, next) {
+    res.locals.errorMessage = req.flash('error')
+    next()
+});
+
+app.use(jsonParser)
+app.use(bodyParser.urlencoded({
+  extended: true
+}))
+
+setupPassport(app)
+
 
 // routes
 app.use('/', appProyectosRoutes);

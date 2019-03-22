@@ -171,16 +171,28 @@
 ****************************************************************************************************************************************************************-->
   <div id="tareas" class="tab-pane fade">
     <div class="col-md-12">
+      <div class="card-body">
+         <h5 class="card-title">Proyecto:</h5>
+          <select>
+              <% if (proyectosAll) { %>
+                <% for(var i = 0; i < proyectosAll.length; i++) { %>
+                    <option value="<%= proyectosAll[i].id_proyectos %>" autofocus><%= proyectosAll[i].nombre %></option>
+                <% } %>
+              <% } else {%>
+                    <option value="0" disabled>Crear Nuevo Proyecto</option>
+            <% } %>
+          </select>
+        </div>
         <div class="card-body">
            <h5 class="card-title">Tareas:</h5>
+           <% if (tareas[1].rows != "") { %>
           <table class="table table-bordered table-hover">
             <thead>
               <tr>
                 <td>Colaborador</td>
-                <% if (tareas) { %>
+                <% if (tareas[1].rows) { %>
                   <% for(var i = 0; i < data.length; i++) { %>
                       <td><%= data[1].nombre %>
-
                         <a href="/update/<%= data[1].id_categoria %>" class="glyphicon glyphicon-pencil"></a>
                         <a href="/delete/<%= data[1].id_categoria %>" class="glyphicon glyphicon-trash"></a>
                       </td>
@@ -234,6 +246,7 @@
               </tr>
             </tbody>
           </table>
+          <% } %>
       </div>
     </div>
   </div>

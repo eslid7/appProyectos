@@ -1,0 +1,56 @@
+<% include partials/_header %>
+<style>
+body {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #eee;
+}
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-signin .form-signin-heading {
+  margin-bottom: 20px;
+}
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+</style>
+
+<div class="container">
+  <form method="POST" action="/login" class="form-signin">
+    <h2 class="form-signin-heading">Inicie Sesión</h2>
+
+    <% if (errorMessage) { %>
+      <div class="alert alert-danger">
+        <% errorMessage %>
+      </div>
+    <% } %>
+
+    <label for="username" class="sr-only">Email</label>
+    <input type="email" pattern="[A-Za-z0-9._%+-]{3,}@[a-zA-Z]{3,}([.]{1}[a-zA-Z]{2,}|[.]{1}[a-zA-Z]{2,}[.]{1}[a-zA-Z]{2,})" maxlength="90" name="username" class="form-control" placeholder="Email" required autofocus>
+    <label for="password" class="sr-only">Contraseña</label>
+    <input type="password"  name="password" class="form-control" placeholder="Contraseña"  maxlength="50" required>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Iniciar Sesión</button>
+    <a href="/signup" class="btn btn-lg btn-primary btn-block">Registrarse</a>
+  </form>
+
+
+</div>
+
+<% include partials/_footer %>

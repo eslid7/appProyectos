@@ -1,0 +1,36 @@
+<% include partials/_header %>
+
+<div class="container">
+  <form method="POST" action="/signup" class="form-signin">
+    <h2 class="form-signin-heading">Crear Cuenta Nueva</h2>
+
+  <!-- <% if (errorMessage) { %>
+      <div class="alert alert-danger">
+        <% errorMessage %>
+      </div>
+  <% } %> -->
+    <div class="form-group">
+      <label for="txtNombre" class="sr-only">Nombre</label>
+      <input type="text" id="txtNombre" name="txtNombre" class="form-control" placeholder="Nombre" maxlength="45" required autofocus>
+    </div>
+    <div class="form-group">
+      <label for="txtApellido" class="sr-only">Apellido</label>
+      <input type="text" id="txtApellido" name="txtApellido" class="form-control" placeholder="Apellido" maxlength="45" required>
+    </div>
+    <div class="form-group">
+      <label for="inputEmail" class="sr-only">Email</label>
+      <input type="email" pattern="[A-Za-z0-9._%+-]{3,}@[a-zA-Z]{3,}([.]{1}[a-zA-Z]{2,}|[.]{1}[a-zA-Z]{2,}[.]{1}[a-zA-Z]{2,})" id="inputEmail" name="userEmail" class="form-control" placeholder="Email" maxlength="90" required>
+    </div>
+    <div class="form-group">
+      <label for="inputPassword" class="sr-only">Contraseña</label>
+      <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Contraseña" maxlength="50" required>
+    </div>
+    <div class="form-group">
+      <label for="inputPassword" class="sr-only">Repita Contraseña</label>
+      <input type="password" id="inputPassword2" name="password2" class="form-control" placeholder="Repita Contraseña" maxlength="50" required>
+    </div>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Registrarse</button>
+  </form>
+</div>
+
+<% include partials/_footer %>
