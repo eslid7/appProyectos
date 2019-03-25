@@ -49,11 +49,21 @@ router.post('/addTarea/', appProyectosController.insertTareas);
   router.get('/signup', signupController.show)
   router.post('/signup', signupController.signup)
 
-  router.post('/login', passport.authenticate('local', {
-      successRedirect: '/',
-      failureRedirect: '/signup',
-      failureFlash: true})
-    );
+  router.post('/login', function(req, res, next) {
+  passport.authenticate('local', function(err, user, info) {
+    if (err) { return next(err) }
+    if (!user) {
+      // *** Display message without using flash option
+      // re-render the login form with a message
+      var mensaje = [info.message];
+      return res.render('home', { errorMessage: mensaje  })
+    }
+    req.logIn(user, function(err) {
+      if (err) { return next(err); }
+      return res.redirect('/');
+    });
+  })(req, res, next);
+});
 
   router.get('/home', function(req, res) {
     res.render('home')

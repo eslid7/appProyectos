@@ -28,13 +28,20 @@ module.exports.signup = function(req, res) {
 
 
   if (!email || !password || !password2 || !txtNombre || !txtApellido) {
-    req.flash('error', "Please, fill in all the fields.")
-    res.render('signup')
+    res.render('signup',{
+     errorMessage : req.flash('errorMessage', "Favor llenar todos los datos")
+   });
+   return false;
   }
 
   if (password !== password2) {
-    req.flash('error', "Please, enter the same password twice.")
-    res.render('signup')
+    var error = ["Favor ingresar la misma Contraseña en ambas casillas"];
+    //res.send(error);
+    res.render('signup',{
+     errorMessage : error
+   });
+   console.log('fallo');
+   return false;
   }
 
   var salt = bcrypt.genSaltSync(10)
@@ -43,10 +50,19 @@ module.exports.signup = function(req, res) {
   const query = 'INSERT INTO usuarios (email, password, firstname, lastname, roll, salt) VALUES ('+"'"+email+"', '"+hashedPassword+"', '"+txtNombre +"','"+txtApellido +"', "+ roll +", '"+salt+"')";
   sequelize.query(query).spread((results, metadata) => {
     console.log('Exitoso');
-  res.redirect('/home')
-  }).catch(function(error) {
-    req.flash('error', "Please, choose a different email.")
+    var mensaje = ["Gracias por Registrarse, ahora puede proceder a ingresar al sistema"]
+    console.log(mensaje);
+    //res.send(error);
+    res.render('home',{
+     errorMessage : mensaje
+  });
+}).catch(function(error) {
+    var error = ["El email ingresado ya se encuentra en uso, favor utilizar uno diferente"]
     console.log(error);
-    res.redirect('/signup')
-  })
+    //res.send(error);
+    res.render('signup',{
+     errorMessage : error
+   });
+   return false;
+ })
 }

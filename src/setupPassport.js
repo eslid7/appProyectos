@@ -15,7 +15,7 @@ var passport = require('passport'),
             }
           }).then(function (user) {
             if (user == null) {
-              return done(null, false, { message: 'Incorrect credentials.' })
+              return done(null, false, { message: 'Usuario incorrecto' })
             }
 
             var hashedPassword = bcrypt.hashSync(password, user.salt)
@@ -24,7 +24,7 @@ var passport = require('passport'),
               return done(null, user)
             }
 
-            return done(null, false, { message: 'Incorrect credentials.' })
+            return done(null, false, { message: 'Contraseña incorrecta' })
           })
         }
       ))
@@ -40,7 +40,7 @@ var passport = require('passport'),
           }
         }).then(function (user) {
           if (user == null) {
-            done(new Error('Wrong user id.'))
+            done(new Error('User id incorrecto.'))
           }
 
           done(null, user)

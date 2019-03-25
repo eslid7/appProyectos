@@ -4,11 +4,11 @@
   <form method="POST" action="/signup" class="form-signin">
     <h2 class="form-signin-heading">Crear Cuenta Nueva</h2>
 
-  <!-- <% if (errorMessage) { %>
+   <%  if ( errorMessage.length > 0 ) { console.log(errorMessage); %>
       <div class="alert alert-danger">
-        <% errorMessage %>
+        <p> <%= errorMessage[0] %> </p>
       </div>
-  <% } %> -->
+  <% } %>
     <div class="form-group">
       <label for="txtNombre" class="sr-only">Nombre</label>
       <input type="text" id="txtNombre" name="txtNombre" class="form-control" placeholder="Nombre" maxlength="45" required autofocus>

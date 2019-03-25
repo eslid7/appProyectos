@@ -36,9 +36,9 @@ body {
   <form method="POST" action="/login" class="form-signin">
     <h2 class="form-signin-heading">Inicie Sesión</h2>
 
-    <% if (errorMessage) { %>
-      <div class="alert alert-danger">
-        <% errorMessage %>
+    <% if ( errorMessage.length > 0 ) { console.log(errorMessage); %>
+      <div class="alert alert-warning">
+          <p> <%= errorMessage[0] %> </p>
       </div>
     <% } %>
 

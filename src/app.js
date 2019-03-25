@@ -31,7 +31,7 @@ app.use(session({ secret: '4564f6s4fdsfdfd', resave: false, saveUninitialized: f
 
 app.use(flash())
 app.use(function(req, res, next) {
-    res.locals.errorMessage = req.flash('error')
+    res.locals.errorMessage = req.flash('errorMessage')
     next()
 });
 
