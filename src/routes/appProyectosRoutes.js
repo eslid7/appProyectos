@@ -32,6 +32,12 @@ router.post('/updateR/:id', appProyectosController.updateR);
                                                                       Rutas de Tareas
 ******************************************************************************************************************************************************************/
 router.post('/addTarea/', appProyectosController.insertTareas);
+router.post('/loadProyecto/', appProyectosController.listBodyTareas);
+router.get('/addcat/:id', appProyectosController.listCategoriasAll);
+router.get('/addcatProyecto/:id/:idProyecto', appProyectosController.insertCatProyecto);
+router.get('/addRecursoP/:id', appProyectosController.listRecursosAll);
+router.get('/addRecProyecto/:id/:idProyecto', appProyectosController.insertRecProyecto);
+
 //router.get('/add/', appProyectosController.save);
 //router.get('/addRecurso/', appProyectosController.addRecurso);
 

@@ -1,0 +1,37 @@
+<% include partials/_header %>
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-5 offset-md-3 card">
+      <div class="card-body">
+        <% if (typeof(recursosAll) !== 'undefined') { %>
+          <h5 class="card-title">Recursos:</h5>
+           <table class="table table-bordered table-hover">
+             <thead>
+                 <tr>
+                   <td>Recurso</td>
+                   <td>Departamento</td>
+                   <td>Por Hora</td>
+                   <td>Acciones</td>
+                 </tr>
+               </thead>
+               <tbody>
+                 <% if (typeof(recursosAll) !== "undefined") { %>
+                     <% for(var j = 0; j < recursosAll.length; j++) { %>
+                       <tr>
+                         <td><%= recursosAll[j].nombre %></td> <!-- recupera nombres de recurso-->
+                         <td><%= recursosAll[j].departamento %></td>
+                         <td><%=recursosAll[j].porhora%></td>
+                         <td>
+                           <a href="/addRecProyecto/<%= recursosAll[j].id_recursos %>/<%= proyectoid %>" class="glyphicon glyphicon-plus" title="Agregar Recurso"></a>
+                         </td>
+                       </tr>
+                       <% } %>
+                 <% } %>
+               </tbody>
+           </table>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+<% include partials/_footer %>

@@ -1,0 +1,35 @@
+<% include partials/_header %>
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-5 offset-md-3 card">
+      <div class="card-body">
+        <% if (typeof(categoriasAll) !== 'undefined') { %>
+          <h5 class="card-title">Categorías:</h5>
+         <table class="table table-bordered table-hover">
+           <thead>
+               <tr>
+                 <td>Categoría</td>
+                 <td>Descripción</td>
+                 <td>Acciones</td>
+               </tr>
+             </thead>
+             <tbody>
+               <% if (typeof(categoriasAll) !== "undefined") { %>
+                   <% for(var j = 0; j < categoriasAll.length; j++) { %>
+                     <tr>
+                       <td><%= categoriasAll[j].nombre %></td> <!-- recupera nombres de categorias-->
+                       <td><%=categoriasAll[j].descripcion%></td>
+                       <td>
+                        <a href="/addcatProyecto/<%= categoriasAll[j].id_categoria %>/<%= proyectoid %>" class="glyphicon glyphicon-plus" title="Agregar Categoría"></a>
+                       </td>
+                     </tr>
+                     <% } %>
+               <% } %>
+             </tbody>
+           </table>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+<% include partials/_footer %>

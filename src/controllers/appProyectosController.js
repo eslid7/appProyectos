@@ -21,23 +21,6 @@ tModel.belongsTo(cModel, {foreignKey: 'id_categoria'})
                           Función encargada de cargar los datos necesarios para las Listas a las tablas del index
 *************************************************************************************************************************************************************/
 controller.list = (req, res) => {
-    //Se utiliza model de Sequelize
-/*  tModel.findAll({
-    attributes: ['id_categoria'], group: ['id_categoria'],
-    where:{id_proyectos:1}, include: [cModel]})  */
-    const queryCategorias = 'select distinct categorias.nombre, tareas.id_categoria from categorias, tareas where tareas.id_categoria = categorias.id_categoria and tareas.id_proyectos = 1 order by id_categoria';
-    sequelize.query(queryCategorias)               //obtenemos CategoríaS
-  .then(categorias => {
-  //  console.log(categorias);
-    //res.send(tareas[1].nombre)
-      /*tModel.findAll({where:{id_proyectos:1}, include: [rModel]})          //obtenemos Colaboradores
-      */
-      const queryRecursos = 'select distinct recursos.nombre, tareas.id_recursos from recursos, tareas where tareas.id_recursos = recursos.id_recursos and tareas.id_proyectos = 1 order by id_recursos';
-      sequelize.query(queryRecursos)
-      .then(recursos => {
-        const queryTareas = 'select  recursos.nombre, tareas.id_recursos,  recursos.porhora, categorias.nombre, tareas.id_categoria,  tareas.horas from tareas, recursos, categorias where tareas.id_recursos = recursos.id_recursos and tareas.id_categoria = categorias.id_categoria and tareas.id_proyectos = 1 order by  tareas.id_recursos';
-        sequelize.query(queryTareas)
-        .then(tareas => {
            cModel.findAll()
            .then(categoriasAll => {
              rModel.findAll()
@@ -47,35 +30,99 @@ controller.list = (req, res) => {
                //res.send(tareas[1].rows.id)
              //console.log(tareas[1].rows);
                 res.render('index', {
-                  data: categorias,
-                  recursos: recursos,
-                  tareas: tareas,
                   categoriasAll: categoriasAll,
                   recursosAll:recursosAll,
                   proyectosAll:proyectosAll
                   })
                 })
-           })
-        })
-      })
+
     })
   })
   .catch(err => console.log(err));
 };
 /*****************************************************************************************************************************************************************
-                                                                  Lista body de la tabla tareas
+                                                            Lista body de la tabla tareas y datos de tabs
 /******************************************************************************************************************************************************************/
-controller.listBody = (req, res) => {
-    //Se utiliza model de Sequelize
-tModel.findAll()
-  .then(tareas => {
-    console.log(tareas);
-    //res.send(tareas[1].nombre)
-    res.render('index', {
-      data: tareas
+controller.listBodyTareas = (req, res) => {
+  const idProyecto = req.body.selectedProyect;
+  const queryCategorias = 'select distinct categorias.nombre, tareas.id_categoria from categorias, tareas where tareas.id_categoria = categorias.id_categoria and tareas.id_proyectos = '+ idProyecto + ' order by id_categoria';
+  sequelize.query(queryCategorias) //obtenemos Categorías de tabla tareas
+  .then(categorias => {
+    const queryRecursos = 'select distinct recursos.nombre, tareas.id_recursos from recursos, tareas where tareas.id_recursos = recursos.id_recursos and tareas.id_proyectos = '+ idProyecto +' order by id_recursos';
+    sequelize.query(queryRecursos) //obtenemos Colaboradores de tabla tareas
+    .then(recursos => {
+      const queryTareas = 'select  recursos.nombre, tareas.id_recursos,  recursos.porhora, categorias.nombre, tareas.id_categoria,  tareas.horas from tareas, recursos, categorias where tareas.id_recursos = recursos.id_recursos and tareas.id_categoria = categorias.id_categoria and tareas.id_proyectos = '+ idProyecto +' order by  tareas.id_recursos';
+      sequelize.query(queryTareas) //obtenemos Tareas de tabla tareas
+      .then(tareas => {
+        cModel.findAll()          //se obtienen todos los recuros, categorías y proyectos guardados
+        .then(categoriasAll => {
+          rModel.findAll()
+          .then(recursosAll => {
+            pModel.findAll()
+            .then(proyectosAll => {
+            //  res.send(tareas[1].rows)
+              res.render('index', {
+                categorias: categorias,
+                recursos: recursos,
+                tareas: tareas,
+                idProyecto:idProyecto,
+                categoriasAll: categoriasAll,
+                recursosAll:recursosAll,
+                proyectosAll:proyectosAll
+                })
+              })
+            })
+          })
+        })
+      })
+    })
+  .catch(err => console.log(err));
+};
+/*****************************************************************************************************************************************************************
+                                                                      Lista Categorías
+/*****************************************************************************************************************************************************************/
+controller.listCategoriasAll = (req, res) => {
+  cModel.findAll()
+  .then(categoriasAll => {
+    res.render('addCategoriaP', {
+      categoriasAll: categoriasAll,
+      proyectoid: req.params.id
     })
   })
-  .catch(err => console.log(err));
+}
+/*****************************************************************************************************************************************************************
+                                                            Inserta categorías en Proyectos (tabla tareas)
+/*****************************************************************************************************************************************************************/
+controller.insertCatProyecto = (req, res) => {
+  const idCategoria = req.params.id;
+  const idProyecto = req.params.idProyecto;
+  const query = 'INSERT INTO tareas (id_categoria, id_proyectos) VALUES ('+idCategoria+", "+idProyecto+")";
+  sequelize.query(query).spread((results, metadata) => {
+  res.redirect('/');
+  })
+};
+/*****************************************************************************************************************************************************************
+                                                                      Lista Recursos
+/*****************************************************************************************************************************************************************/
+controller.listRecursosAll = (req, res) => {
+  rModel.findAll()
+  .then(recursosAll => {
+    res.render('addRecursoP', {
+      recursosAll: recursosAll,
+      proyectoid: req.params.id
+    })
+  })
+}
+/*****************************************************************************************************************************************************************
+                                                            Inserta Recursos en Proyectos  (tabla tareas)
+/*****************************************************************************************************************************************************************/
+controller.insertRecProyecto = (req, res) => {
+  const idRecurso = req.params.id;
+  const idProyecto = req.params.idProyecto;
+  const query = 'INSERT INTO tareas (id_recursos, id_proyectos) VALUES ('+idRecurso+", "+idProyecto+")";
+  sequelize.query(query).spread((results, metadata) => {
+  res.redirect('/');
+  })
 };
 /*****************************************************************************************************************************************************************
                                                                       Inserta Proyectos

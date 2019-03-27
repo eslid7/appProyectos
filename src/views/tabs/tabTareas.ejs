@@ -1,0 +1,83 @@
+<div class="col-md-12">
+  <div class="card-body">
+     <h5 class="card-title">Proyecto:</h5>
+     <form action="/loadProyecto/" method="POST">
+        <select name="selectedProyect" onchange='this.form.submit()'>
+            <option value="" selected hidden >Selecciona un Proyecto</option>
+            <% if (typeof(proyectosAll) !== "undefined") { %>
+              <% for(var i = 0; i < proyectosAll.length; i++) { %>
+                <% if (typeof(idProyecto) !== "undefined" && idProyecto === proyectosAll[i].id_proyectos) { %>
+                  <option value="<%= proyectosAll[i].id_proyectos %>" autofocus selected><%= proyectosAll[i].nombre %></option>
+                <% } else {%>
+                  <option value="<%= proyectosAll[i].id_proyectos %>" autofocus><%= proyectosAll[i].nombre %></option>
+                <% } %>
+            <% } %>
+            <% } else {%>
+                  <option value="0" disabled>Crear Nuevo Proyecto</option>
+          <% } %>
+        </select>
+      </form>
+    </div>
+    <div class="card-body">
+      <% if (typeof(tareas) !== "undefined") { %>
+       <h5 class="card-title">Tareas:</h5>
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <td>Colaborador</td>
+            <!-- Se pintan las categorias de la tabla --->
+            <% if (typeof(categorias[1].rows)!== "undefined") { %>
+              <% for(var i = 0; i < categorias[1].rows.length; i++) { %>
+                  <td><%= categorias[1].rows[i].nombre %>
+                    <a href="/delete/<%= categorias[1].rows[i].id_categoria %>" class="glyphicon glyphicon-trash"></a>
+                  </td>
+              <% } %>
+            <% } %>
+            <td>
+              Acciones
+            </td>
+            <td>
+                <a href="/addcat/<%= idProyecto %>" class="glyphicon glyphicon-plus" title="Agregar Categoría"></a>
+            </td>
+          </tr>
+        </thead>
+        <tbody><!-- Falta hacer loop para llenar datos-->
+          <% if (typeof(recursos[1].rows) !== "undefined") { %>
+              <form action="/addTarea" method="POST">
+              <% for(var j = 0; j < recursos[1].rows.length; j++) { %>
+                <tr>
+                  <td><%= recursos[1].rows[j].nombre %></td> <!-- recupera nombres de Colaboradores-->
+                  <% if (typeof(categorias[1].rows[1]) !== "undefined") { %>
+                    <% for(var i = 0; i < categorias[1].rows.length; i++) { %>
+                        <td>
+                              <% if ( typeof(tareas[1].rows[1]) !== "undefined"){ %>
+                                <% if (categorias[1].rows[i].id_categoria == tareas[1].rows[i].id_categoria &&  recursos[1].rows[j].id_recursos == tareas[1].rows[j].id_recursos ) { %>
+                                  <input type="number" id="txtHoras_<%= categorias[1].rows[i].id_categoria %>_<%= recursos[1].rows[j].id_recursos %>" name="horas_<%= categorias[1].rows[i].id_categoria %>_<%= recursos[1].rows[j].id_recursos %>"
+                                  placeholder="Horas" class="form-control" min="0" max="999999" value="<%=tareas[i].horas%>">
+                                <% } %>
+                            <% } else { %>
+                                <input type="number" id="txtHoras_<%= categorias[1].rows[i].id_categoria %>_<%= recursos[1].rows[j].id_recursos %>" name="horas_<%= categorias[1].rows[i].id_categoria %>_<%= recursos[1].rows[j].id_recursos %>"
+                                placeholder="Horas" class="form-control" min="0" max="999999" value="">
+                               <% } %>
+                        </td>
+                    <% } %>
+                        <td>
+                            <a href="/deleteR/<%= recursos[1].rows[j].id_recursos %>" class="glyphicon glyphicon-trash"></a>
+                        </td>
+                  <% } %>
+                </tr>
+              <% } %>
+
+          <% } %>
+          <tr>
+            <td><a href="/addRecursoP/<%= idProyecto %>" class="glyphicon glyphicon-plus" title="Agregar Recurso"></a></td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="width:100%; text-align:center; ">
+        <button type="submit" class="btn btn-primary"> Guardar</button>
+      </div>
+      </form>
+      <% } %>
+  </div>
+</div>

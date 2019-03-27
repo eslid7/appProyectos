@@ -1,0 +1,52 @@
+<div class="col-md-4">
+  <div class="card-body">
+    <h5 class="card-title">Nuevo Recurso:</h5>
+      <form action="/insertR/" method="POST">
+        <div class="form-group">
+          <label for="txtNombre">Nombre de Colaborador</label>
+          <input type="text" id="txtNombre" name="txtNombre" value="" placeholder="Nombre" class="form-control" autofocus required>
+        </div>
+        <div class="form-group">
+          <label for="txtDepartamento">Departamento</label>
+          <input type="text" id="txtDepartamento" name="txtDepartamento" value="" placeholder="Departamento" class="form-control" autofocus required>
+        </div>
+        <div class="form-group">
+            <label for="txtCostoHoras">Costo por Hora</label>
+          <input type="number" id="txtCostoHoras" name="txtCostoHoras" value="" placeholder="Costo" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">
+          Guardar
+        </button>
+      </form>
+  </div>
+</div>
+<div class="col-md-8">
+      <div class="card-body">
+       <h5 class="card-title">Recursos:</h5>
+        <table class="table table-bordered table-hover">
+          <thead>
+              <tr>
+                <td>Recurso</td>
+                <td>Departamento</td>
+                <td>Por Hora</td>
+                <td>Acciones</td>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (typeof(recursosAll) !== "undefined") { %>
+                  <% for(var j = 0; j < recursosAll.length; j++) { %>
+                    <tr>
+                      <td><%= recursosAll[j].nombre %></td> <!-- recupera nombres de recurso-->
+                      <td><%= recursosAll[j].departamento %></td>
+                      <td><%=recursosAll[j].porhora%></td>
+                      <td>
+                        <a href="/updateRe/<%= recursosAll[j].id_recursos %>" class="glyphicon glyphicon-pencil"></a>
+                        <a href="/deleteR/<%= recursosAll[j].id_recursos %>" class="glyphicon glyphicon-trash"></a>
+                      </td>
+                    </tr>
+                    <% } %>
+              <% } %>
+            </tbody>
+        </table>
+      </div>
+</div>
