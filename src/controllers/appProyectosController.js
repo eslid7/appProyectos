@@ -51,7 +51,7 @@ controller.listBodyTareas = (req, res) => {
     const queryRecursos = 'select distinct recursos.nombre, tareas.id_recursos from recursos, tareas where tareas.id_recursos = recursos.id_recursos and tareas.id_proyectos = '+ idProyecto +' order by id_recursos';
     sequelize.query(queryRecursos) //obtenemos Colaboradores de tabla tareas
     .then(recursos => {
-      const queryTareas = 'select  recursos.nombre, tareas.id_recursos,  recursos.porhora, categorias.nombre, tareas.id_categoria,  tareas.horas from tareas, recursos, categorias where tareas.id_recursos = recursos.id_recursos and tareas.id_categoria = categorias.id_categoria and tareas.id_proyectos = '+ idProyecto +' order by  tareas.id_recursos';
+      const queryTareas = 'select  recursos.nombre, tareas.id_recursos,  recursos.porhora, categorias.nombre, tareas.id_categoria,  tareas.horas from tareas, recursos, categorias where tareas.id_recursos = recursos.id_recursos and tareas.id_categoria = categorias.id_categoria and tareas.id_proyectos = '+ idProyecto +' order by  tareas.id_recursos, tareas.id_categoria';
       sequelize.query(queryTareas) //obtenemos Tareas de tabla tareas
       .then(tareas => {
         cModel.findAll()          //se obtienen todos los recuros, categorías y proyectos guardados
@@ -60,7 +60,8 @@ controller.listBodyTareas = (req, res) => {
           .then(recursosAll => {
             pModel.findAll()
             .then(proyectosAll => {
-            //  res.send(tareas[1].rows)
+              console.log(tareas[1].rowCount);
+              //res.send(tareas[1])
               res.render('index', {
                 categorias: categorias,
                 recursos: recursos,
@@ -170,14 +171,25 @@ controller.insertTareas = (req, res) => {
     let k = nameInput.length;
     let idCategoria = nameInput.substring(i, j);
     let idRecurso = nameInput.substr(j+1, k);
-    let idProyecto = 1;
+    let idProyecto = req.params.idProyecto;
     let horasStr = "req.body."+nameInput;
     let horas = eval(horasStr);
-    if(horas!=""){
-      const query = 'INSERT INTO tareas (id_recursos, id_proyectos, id_categoria, horas) VALUES ('+idRecurso+","+idProyecto+","+idCategoria+","+horas+')';
-      sequelize.query(query).spread((results, metadata) => {
-      });
-    }
+
+    tModel.count({ where: {'id_categoria': idCategoria, 'id_recursos': idRecurso, 'id_proyectos':idProyecto} }).then(result => {
+      if(result>0 && horas!=""){
+        console.log("entra if");
+        const query = 'UPDATE tareas SET horas='+horas+' WHERE id_recursos='+idRecurso+' AND id_proyectos='+idProyecto+' AND id_categoria='+idCategoria;
+        sequelize.query(query).spread((results, metadata) => {
+        });
+      }
+      else if(result === 0 && horas!=""){
+        console.log("entra else");
+        const query = 'INSERT INTO tareas (id_recursos, id_proyectos, id_categoria, horas) VALUES ('+idRecurso+","+idProyecto+","+idCategoria+","+horas+')';
+        sequelize.query(query).spread((results, metadata) => {
+        });
+      }
+    });
+
   });
   //res.send(keyNames);
   res.redirect('/');
@@ -316,20 +328,48 @@ controller.deleteP = (req, res) => {
 /*****************************************************************************************************************************************************************/
 controller.delete = (req, res) => {
   const  id  = req.params.id;
-    const query = 'DELETE FROM categorias WHERE id_categoria = '+id;
-    sequelize.query(query).spread((results, metadata) => {
-      res.redirect('/#categorias');
+  const query1 = 'DELETE FROM tareas WHERE id_categoria = '+id;
+  const query2 = 'DELETE FROM categorias WHERE id_categoria = '+id;
+  sequelize.query(query1).spread((results, metadata) => {     //borro categorias asociadas al proyecto
+    sequelize.query(query2).spread((results, metadata) => {  //borro categorias
+      res.redirect('/');
     });
+  });
 };
 /*****************************************************************************************************************************************************************
                                                                       Delete recursos
 /*****************************************************************************************************************************************************************/
 controller.deleteR = (req, res) => {
   const  id  = req.params.id;
-    const query = 'DELETE FROM recursos WHERE id_recursos = '+id;
-    sequelize.query(query).spread((results, metadata) => {
+  const query1 = 'DELETE FROM tareas WHERE id_recursos = '+id;
+  const query2 = 'DELETE FROM recursos WHERE id_recursos = '+id;
+  sequelize.query(query1).spread((results, metadata) => {     //borro recursos asociados al proyecto
+    sequelize.query(query2).spread((results, metadata) => {  //borro recursos
       res.redirect('/');
     });
+  });
+};
+/*****************************************************************************************************************************************************************
+                                                              Delete categorias del Proyecto
+/*****************************************************************************************************************************************************************/
+controller.deleteCatP = (req, res) => {
+  const  id  = req.params.id;
+  const  idP  = req.params.idProyecto;
+  const query1 = 'DELETE FROM tareas WHERE id_categoria = '+id +' and id_proyectos='+idP;
+  sequelize.query(query1).spread((results, metadata) => {     //borro categorias asociadas al proyecto
+      res.redirect('/');
+  });
+};
+/*****************************************************************************************************************************************************************
+                                                                Delete recursos del Proyecto
+/*****************************************************************************************************************************************************************/
+controller.deleteRecP = (req, res) => {
+  const  id  = req.params.id;
+  const  idP  = req.params.idProyecto;
+  const query1 = 'DELETE FROM tareas WHERE id_recursos = '+id+' and id_proyectos='+idP;
+  sequelize.query(query1).spread((results, metadata) => {     //borro recursos asociados al proyecto
+      res.redirect('/');
+  });
 };
 
 
