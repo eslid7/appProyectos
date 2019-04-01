@@ -3,101 +3,159 @@ CREATE DATABASE appproyectos;
 
 -- to use database
 use appproyectos;
+	-- SEQUENCE: public.categorias_categoria_id_seq
 
-drop table CATEGORIAS;
+-- DROP SEQUENCE public.categorias_categoria_id_seq;
 
-drop table PROYECTOS;
+CREATE SEQUENCE public.categorias_categoria_id_seq;
 
-drop table RECURSOS;
+ALTER SEQUENCE public.categorias_categoria_id_seq
+    OWNER TO postgres;
+	
+	-- SEQUENCE: public.idtarea_a_seq
 
-drop table TAREAS;
+-- DROP SEQUENCE public.idtarea_a_seq;
 
-/*==============================================================*/
-/* Table: CATEGORIAS                                            */
-/*==============================================================*/
-create table CATEGORIAS (
-   ID_CATEGORIA         NUMERIC              not null,
-   NOMBRE               VARCHAR(50)          null,
-   HORAS                FLOAT4               null,
-   constraint PK_CATEGORIAS primary key (ID_CATEGORIA)
-);
+CREATE SEQUENCE public.idtarea_a_seq;
 
-/*==============================================================*/
-/* Table: PROYECTOS                                             */
-/*==============================================================*/
-create table PROYECTOS (
-   ID_PROYECTOS         NUMERIC              not null,
-   NOMBRE               VARCHAR(50)          null,
-   constraint PK_PROYECTOS primary key (ID_PROYECTOS)
-);
+ALTER SEQUENCE public.idtarea_a_seq
+    OWNER TO postgres;
+	
+-- SEQUENCE: public.proyectos_proyectos_id_seq
 
-/*==============================================================*/
-/* Table: RECURSOS                                              */
-/*==============================================================*/
-create table RECURSOS (
-   ID_RECURSOS          NUMERIC              not null,
-   NOMBRE               VARCHAR(50)          null,
-   PORHORA              FLOAT4               null,
-   constraint PK_RECURSOS primary key (ID_RECURSOS)
-);
+-- DROP SEQUENCE public.proyectos_proyectos_id_seq;
 
-/*==============================================================*/
-/* Table: TAREAS                                                */
-/*==============================================================*/
-create table TAREAS (
-   ID                   NUMERIC              not null,
-   ID_RECURSOS          NUMERIC              null,
-   ID_PROYECTOS         NUMERIC              null,
-   ID_CATEGORIA         NUMERIC              null,
-   HORAS                FLOAT4               null,
-   constraint PK_TAREAS primary key (ID)
-);
+CREATE SEQUENCE public.proyectos_proyectos_id_seq;
 
-alter table TAREAS
-   add constraint FK_TAREAS_REFERENCE_RECURSOS foreign key (ID_RECURSOS)
-      references RECURSOS (ID_RECURSOS)
-      on delete restrict on update restrict;
+ALTER SEQUENCE public.proyectos_proyectos_id_seq
+    OWNER TO postgres;
 
-alter table TAREAS
-   add constraint FK_TAREAS_REFERENCE_PROYECTO foreign key (ID_PROYECTOS)
-      references PROYECTOS (ID_PROYECTOS)
-      on delete restrict on update restrict;
+-- SEQUENCE: public.recursos_recursos_id_seq
 
-alter table TAREAS
-   add constraint FK_TAREAS_REFERENCE_CATEGORI foreign key (ID_CATEGORIA)
-      references CATEGORIAS (ID_CATEGORIA)
-      on delete restrict on update restrict;
-	  
-	  
+-- DROP SEQUENCE public.recursos_recursos_id_seq;
 
-/*Secuencia de tabla de categorias*/
-create sequence categorias_categoria_id_seq
-   owned by categorias.ID_CATEGORIA;
+CREATE SEQUENCE public.recursos_recursos_id_seq;
 
-alter table categorias
-   alter column ID_CATEGORIA set default nextval('categorias_categoria_id_seq');
-   
-/*Secuencia de tabla de recursos*/   
-create sequence recursos_recursos_id_seq
-   owned by recursos.ID_RECURSOS;
+ALTER SEQUENCE public.recursos_recursos_id_seq
+    OWNER TO postgres;
 
-alter table recursos
-   alter column ID_RECURSOS set default nextval('recursos_recursos_id_seq');
-   
-/*Secuencia de tabla de proyectos*/   
-create sequence proyectos_proyectos_id_seq
-   owned by proyectos.ID_PROYECTOS;
+-- SEQUENCE: public.usuarios_id_seq
 
-alter table proyectos
-   alter column ID_PROYECTOS set default nextval('proyectos_proyectos_id_seq');   
+-- DROP SEQUENCE public.usuarios_id_seq;
 
+CREATE SEQUENCE public.usuarios_id_seq;
 
-/*Secuencia de tabla de TAREAS*/   
-create sequence tareas_tareas_id_seq
-   owned by tareas.ID;
+ALTER SEQUENCE public.usuarios_id_seq
+    OWNER TO postgres;	
+	
+-- Table: public.categorias
 
-alter table tareas
-   alter column ID set default nextval('tareas_tareas_id_seq');   
-   
+-- DROP TABLE public.categorias;
 
-	  
+CREATE TABLE public.categorias
+(
+    id_categoria numeric NOT NULL DEFAULT nextval('categorias_categoria_id_seq'::regclass),
+    nombre character varying(50) COLLATE pg_catalog."default",
+    descripcion character varying(150) COLLATE pg_catalog."default",
+    CONSTRAINT pk_categorias PRIMARY KEY (id_categoria)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.categorias
+    OWNER to postgres;	
+	
+	
+-- Table: public.proyectos
+
+-- DROP TABLE public.proyectos;
+
+CREATE TABLE public.proyectos
+(
+    id_proyectos numeric NOT NULL DEFAULT nextval('proyectos_proyectos_id_seq'::regclass),
+    nombre character varying(50) COLLATE pg_catalog."default",
+    colaboradores character varying(100) COLLATE pg_catalog."default",
+    descripcion character varying(100) COLLATE pg_catalog."default",
+    CONSTRAINT pk_proyectos PRIMARY KEY (id_proyectos)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.proyectos
+    OWNER to postgres;
+
+-- Table: public.recursos
+
+-- DROP TABLE public.recursos;
+
+CREATE TABLE public.recursos
+(
+    id_recursos numeric NOT NULL DEFAULT nextval('recursos_recursos_id_seq'::regclass),
+    nombre character varying(50) COLLATE pg_catalog."default",
+    porhora real,
+    departamento character varying(150) COLLATE pg_catalog."default",
+    CONSTRAINT pk_recursos PRIMARY KEY (id_recursos)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.recursos
+    OWNER to postgres;
+
+-- Table: public.tareas
+
+-- DROP TABLE public.tareas;
+
+CREATE TABLE public.tareas
+(
+    id numeric NOT NULL DEFAULT nextval('idtarea_a_seq'::regclass),
+    id_recursos numeric,
+    id_proyectos numeric,
+    horas real,
+    id_categoria numeric,
+    CONSTRAINT pk_tareas PRIMARY KEY (id),
+    CONSTRAINT fk_tareas_reference_proyecto FOREIGN KEY (id_proyectos)
+        REFERENCES public.proyectos (id_proyectos) MATCH SIMPLE
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT,
+    CONSTRAINT fk_tareas_reference_recursos FOREIGN KEY (id_recursos)
+        REFERENCES public.recursos (id_recursos) MATCH SIMPLE
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.tareas
+    OWNER to postgres;
+
+-- Table: public.usuarios
+
+-- DROP TABLE public.usuarios;
+
+CREATE TABLE public.usuarios
+(
+    email character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    firstname character varying(50) COLLATE pg_catalog."default",
+    lastname character varying(50) COLLATE pg_catalog."default",
+    password character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    salt character varying(90) COLLATE pg_catalog."default",
+    id integer DEFAULT nextval('usuarios_id_seq'::regclass),
+    roll integer,
+    CONSTRAINT "pkEmail" PRIMARY KEY (email)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.usuarios
+    OWNER to postgres;	
