@@ -1,3 +1,9 @@
+<style>
+  button{
+    margin: 3px;
+  }
+</style>
+</style>
 <div class="col-md-12">
   <div class="card-body">
      <h5 class="card-title">Proyecto:</h5>
@@ -19,7 +25,7 @@
       </form>
     </div>
     <div class="card-body">
-      <% if (typeof(tareas) !== "undefined") { %>
+      <% if (typeof(tareas) !== "undefined") {   %>
        <h5 class="card-title">Tareas:</h5>
       <table class="table table-bordered table-hover">
         <thead>
@@ -86,8 +92,77 @@
       </table>
       <div style="width:100%; text-align:center; ">
         <button type="submit" class="btn btn-primary"> Guardar</button>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+          Exportar
+        </button>
       </div>
       </form>
       <% } %>
+  </div>
+</div>
+<!-- Modal exportar tabla -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">¿Desea exportar la tabla?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered table-hover" id="tableTareas" name="tableTareas" style="text-align: center;">
+          <thead>
+            <tr>
+              <td>Colaborador</td>
+              <!-- Se pintan las categorias de la tabla --->
+              <% if (typeof(categorias[1].rows)!== "undefined") { %>
+                <% for(var i = 0; i < categorias[1].rows.length; i++) { %>
+                    <td><%= categorias[1].rows[i].nombre %> </td>
+                <% } %>
+              <% } %>
+            </tr>
+          </thead>
+          <tbody><!-- Falta hacer loop para llenar datos-->
+            <% if (typeof(recursos[1].rows) !== "undefined") { %>
+                <% for(var j = 0; j < recursos[1].rows.length; j++) { %>
+                  <tr>
+                    <td><%= recursos[1].rows[j].nombre %></td> <!-- recupera nombres de Colaboradores-->
+                    <% if (typeof(categorias[1].rows) !== "undefined") { %>
+                      <% for(var i = 0; i < categorias[1].rows.length; i++) { %>
+
+                          <td>
+                            <% if (tareas[1].rowCount > 0){ var setCasilla=0; %>
+                              <% for(var k = 0; k < tareas[1].rows.length; k++) { %>
+                                <% if ( typeof(tareas[1].rows[k]) !== "undefined"){ %>
+                                  <% if (categorias[1].rows[i].id_categoria == tareas[1].rows[k].id_categoria &&  recursos[1].rows[j].id_recursos == tareas[1].rows[k].id_recursos ) { %>
+                                  <%=tareas[1].rows[k].horas%>
+                                  <%  setCasilla=1; }  %>
+                              <% } %>
+                            <% } %>
+                              <% if (setCasilla === 0 ){ %>
+                              -
+                              <% } %>
+                            <% } else { %>
+                              -
+                              <% } %>
+                          </td>
+                      <% } %>
+                    <% } %>
+                  </tr>
+                <% } %>
+            <% } %>
+          </tbody>
+        </table>
+        <script type="text/javaScript">
+          $('#tableTareas').tableExport({bootstrap: false , position: 'bottom',});
+          $("button").addClass("btn btn-primary");
+        </script>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
   </div>
 </div>
