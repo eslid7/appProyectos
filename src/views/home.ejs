@@ -1,56 +1,87 @@
-<% include partials/_header %>
-<style>
-body {
-  padding-top: 40px;
-  padding-bottom: 40px;
-  background-color: #eee;
-}
-.form-signin {
-  max-width: 330px;
-  padding: 15px;
-  margin: 0 auto;
-}
-.form-signin .form-signin-heading {
-  margin-bottom: 20px;
-}
-.form-signin .form-control {
-  position: relative;
-  height: auto;
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
-  padding: 10px;
-  font-size: 16px;
-}
-.form-signin .form-control:focus {
-  z-index: 2;
-}
-.form-signin input {
-  margin-bottom: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
-</style>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>App Proyectos</title>
+    <!-- NAVIGATION -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script  src="https://cdn.rawgit.com/clarketm/FileSaver.js/master/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.2/xlsx.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/TableExport/5.2.0/js/tableexport.min.js"></script>
 
-<div class="container">
-  <form method="POST" action="/login" class="form-signin">
-    <h2 class="form-signin-heading">Inicie Sesión</h2>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+            localStorage.setItem('activeTab', $(e.target).attr('href'));
+        });
+        var activeTab = localStorage.getItem('activeTab');
+        if(activeTab){
+            $('#myTab a[href="' + activeTab + '"]').tab('show');
+        }
+    });
+    </script>
+  </head>
+  <body>
 
-    <% if ( errorMessage.length > 0 ) { console.log(errorMessage); %>
-      <div class="alert alert-warning">
-          <p> <%= errorMessage[0] %> </p>
-      </div>
-    <% } %>
-
-    <label for="username" class="sr-only">Email</label>
-    <input type="email" pattern="[A-Za-z0-9._%+-]{3,}@[a-zA-Z]{3,}([.]{1}[a-zA-Z]{2,}|[.]{1}[a-zA-Z]{2,}[.]{1}[a-zA-Z]{2,})" maxlength="90" name="username" class="form-control" placeholder="Email" required autofocus>
-    <label for="password" class="sr-only">Contraseña</label>
-    <input type="password"  name="password" class="form-control" placeholder="Contraseña"  maxlength="50" required>
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Iniciar Sesión</button>
-    <a href="/signup" class="btn btn-lg btn-primary btn-block">Registrarse</a>
-  </form>
+<div class="loginContainer">
 
 
-</div>
+            <div class="row">
+                <div class="col-md-6">
+                  <div class="col-md-12">
+                      <div class="form-group">
+                        <img src="images/Taskr_Logo.png" style="margin-bottom: 10%; margin-top: 5%;  ">
+                      </div>
+                  </div>
+                  <div class="col-md-12">
+                      <h3 style="margin-bottom: 8%;">Iniciar Sesión</h3>
+                  </div>
+                    <form method="POST" action="/login">
+                      <% if ( errorMessage.length > 0 ) { console.log(errorMessage); %>
+                        <div class="alert alert-warning">
+                            <p> <%= errorMessage[0] %> </p>
+                        </div>
+                      <% } %>
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="username">Correo electrónico</label>
+                            <input type="email" pattern="[A-Za-z0-9._%+-]{3,}@[a-zA-Z]{3,}([.]{1}[a-zA-Z]{2,}|[.]{1}[a-zA-Z]{2,}[.]{1}[a-zA-Z]{2,})" maxlength="90" name="username" class="form-control" required autofocus>
+                          </div>
+                        </div>
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="password">Contraseña</label>
+                            <input type="password"  name="password" class="form-control"  maxlength="50" required>
+                          </div>
+                        </div>
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <a href="#" class="ForgetPwd">Olvidé mi contraseña</a>
+                          </div>
+                        </div>
+                        <div class="row" style="margin-top: 8%;">
+                          <div class="col-md-4" style="margin-top: 4%; padding-left: 4%;">
+                              <label class="containerchk">Recordar contraseña
+                                <input type="checkbox" checked="checked" style="margin-left: 1%;">
+                                <span class="checkmark"></span>
+                              </label>
+                          </div>
+                          <div class="col-md-8">
+                            <button class="button" type="submit"><span>Iniciar Sesión </span></button>
+                          </div>
+                        </div>
+                        <div class="form-group" style="margin-top: 10%;  padding-left: 4%;">
+                          <p><b>Si todavía no tienes una cuenta </b></p>
+                            <p><b>  puedes darle</b> <a href="/signup" class="">click aquí</a> <b>para registrarte</b></p>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-6 background">
+                </div>
+            </div>
+        </div>
 
 <% include partials/_footer %>
