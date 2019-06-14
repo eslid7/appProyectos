@@ -3,15 +3,114 @@
   --secundaryColor: teal;
   --letra: "Arial Black", Gadget, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 300; line-height: 16.4px;
 }
+$dark1: #000000;
+$dark2: #212121;
+$dark3: #303030;
+$dark4: #424242;
+.shadow {
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  &:hover {
+    box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);
+  }
+}
 
+.shadow-nohover {
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.box {
+  border-radius: 0.5rem;
+  height: 10rem;
+  width: 10rem;
+}
+
+ul.timeline {
+    list-style-type: none;
+    position: relative;
+}
+ul.timeline:before {
+    content: ' ';
+    background: #d4d9df;
+    display: inline-block;
+    position: absolute;
+    left: 29px;
+    width: 2px;
+    height: 100%;
+    z-index: 400;
+}
+ul.timeline > li {
+    margin: 20px 0;
+    padding-left: 20px;
+}
+ul.timeline > li:before {
+    content: ' ';
+    background: white;
+    display: inline-block;
+    position: absolute;
+    border-radius: 50%;
+    border: 3px solid #22c0e8;
+    left: 20px;
+    width: 20px;
+    height: 20px;
+    z-index: 400;
+}
+.card {
+  border: 0px;
+  border-radius: 0.5rem;
+  width: 100%;
+}
+
+.card-header {
+  &::before {
+    content: '';
+    position: absolute;
+    right: 100%;
+    border: 1rem solid transparent;
+    border-right: 1.25rem solid #212121;
+  }
+}
+
+.containerNotificacion{
+  width: 300px;
+  margin: 15px;
+}
+.marginLeft{
+  margin-left: 10%;
+}
+.grid-divider {
+       position: relative;
+       padding: 0;
+   }
+   .grid-divider>[class*='col-'] {
+       position: static;
+   }
+   .grid-divider>[class*='col-']:nth-child(n+2):before {
+       content: "";
+       border-left: 1px solid #DDD;
+       position: absolute;
+       top: 0;
+       bottom: 0;
+   }
+   .col-padding {
+       padding: 0 15px;
+   }
+}
 .background{
   background: var(--primaryColor);
 }
 .loginContainer{
-  margin-left: 1%;
+  margin-left: 3%;
   height: 100%;
   width: 100%;
-  font-family: var(--letra);
+  /*font-family: var(--letra);*/
+}
+.Container{
+  margin-left: 3%;
+  height: 100%;
+  width: 100%;
+  /*font-family: var(--letra);*/
 }
 
 input[type=text] {

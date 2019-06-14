@@ -1,10 +1,59 @@
 <% include partials/_header %>
+<div class="container">
+  <div class="card-group">
+                      <div class="card box shadow">
+                          <h4 class="card-header">Vista general de proyectos</h4>
+                          <div class="card-body">
+                              <div class="row grid-divider">
+                                  <div class="col-md-4">
+                                    <div class="d-flex no-block align-items-center marginLeft">
+                                        <div class="col-padding">
+                                            <h2 class="counter text-primary">23</h2>
+                                        </div>
+                                        <div>
+                                              <h3><i class="icon-screen-desktop"></i></h3>
+                                              <p class="text-muted">Proyectos en total</p>
+                                        </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                    <div class="d-flex no-block align-items-center marginLeft">
+                                        <div class="col-padding">
+                                            <h2 class="counter text-primary">20</h2>
+                                        </div>
+                                        <div>
+                                              <h3><i class="icon-screen-desktop"></i></h3>
+                                              <p class="text-muted">Proyectos activos</p>
+                                        </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                    <div class="d-flex no-block align-items-center marginLeft">
+                                        <div class="col-padding" >
+                                            <h2 class="counter text-primary">3</h2>
+                                        </div>
+                                        <div>
+                                              <h3><i class="icon-screen-desktop"></i></h3>
+                                              <p class="text-muted">Proyectos inactivos</p>
+                                        </div>
+                                    </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+  </div>
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Proyectos</h1>
+  </div>
 
   <ul class="nav nav-tabs" id="myTab">
     <li class="active"><a data-toggle="tab" href="#proyectos">Proyectos</a></li>
     <li><a data-toggle="tab" href="#categorias">Categorías</a></li>
     <li><a data-toggle="tab" href="#recursos">Recursos</a></li>
     <li><a data-toggle="tab" href="#tareas">Tareas</a></li>
+    <li><a data-toggle="tab" href="#activos">Proyectos activos</a></li>
+    <li><a data-toggle="tab" href="#inactivos">Proyectos inactivos</a></li>
+
   </ul>
   <div class="tab-content">
   <!--***************************************************************************************************************************************************************
@@ -29,8 +78,20 @@
                                                                         Sección de Tareas
   ****************************************************************************************************************************************************************-->
     <div id="tareas" class="tab-pane fade">
-      <% include tabs/tabTareas %>
+
+    </div>
+    <!--***************************************************************************************************************************************************************
+                                                                  Sección de Proyectos Activos
+    ****************************************************************************************************************************************************************-->
+    <div id="activos" class="tab-pane fade">
+    </div>
+  <!--***************************************************************************************************************************************************************
+                                                                Sección de Proyectos Inactivos
+  ****************************************************************************************************************************************************************-->
+    <div id="inactivos" class="tab-pane fade">
     </div>
   </div>
+</div>
+
 
 <% include partials/_footer %>
