@@ -5,6 +5,9 @@ const cModel = db.define('categorias',{
   id_categoria: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
   nombre:Sequelize.TEXT,
   descripcion:Sequelize.TEXT
+},
+{
+    timestamps: false
 });
 
 module.exports=cModel;

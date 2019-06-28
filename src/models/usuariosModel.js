@@ -24,6 +24,9 @@ const uModel = db.define('usuarios',{
   },
   id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
   roll: { type: Sequelize.INTEGER}
+},
+{
+    timestamps: false
 });
 
 module.exports=uModel;

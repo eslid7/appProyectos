@@ -9,6 +9,9 @@ const pModel = db.define('proyectos',{
   creador:Sequelize.INTEGER,
   estado:Sequelize.BOOLEAN,
   fecha_creacion:Sequelize.DATE
+},
+{
+    timestamps: false
 });
 
 module.exports=pModel;

@@ -6,6 +6,9 @@ const rModel = db.define('recursos',{
   nombre:Sequelize.TEXT,
   departamento:Sequelize.TEXT,
   porhora:Sequelize.FLOAT(4)
+},
+{
+    timestamps: false
 });
 
 module.exports=rModel;

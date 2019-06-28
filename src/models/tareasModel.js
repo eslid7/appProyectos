@@ -42,6 +42,9 @@ const tModel = db.define('tareas',{
       }
   },
   horas:Sequelize.FLOAT(4)
+},
+{
+    timestamps: false
 });
 
 module.exports=tModel;
