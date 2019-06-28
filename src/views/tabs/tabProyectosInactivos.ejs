@@ -1,0 +1,33 @@
+
+<% if (typeof(proyectosInactivos) !== "undefined") { %>
+        <% for(var j = 0; j < proyectosInactivos.length; j++) { %>
+        <%  if(j === 0 ||	(j % 4 == 0)){ %>
+            <div class="row" style="margin-top: 3%;">
+                <div class="card-deck">
+        <%  } %>
+                <a href="/updatePe/<%= proyectosInactivos[j].id_proyectos %>">
+                  <div class="card" style="background">
+                    <div class="card-body cardstyle">
+                      <h3 class="card-title"><%= proyectosInactivos[j].nombre %></h3>
+                      <div class="row">
+                        <p class="card-text" style="margin-left: 6%;"><small> Creado por: <%= proyectosInactivos[j].firstname %> <%= proyectosInactivos[j].lastname %> </small></p>
+                      </div>
+                      <div class="row">
+                        <p class="card-text" style="margin-left: 6%;"> <small> <%= proyectosInactivos[j].fecha_creacion.toDateString() %> </small></p>
+                      </div>
+                    </div>
+                    <div class="card-footer text-muted">
+                      <div class="col-md-6" style="background-color: white;">
+                        <p class="card-meta"><small ><a class="glyphicon glyphicon-time"></a> Tiempo: 201h</small></p>
+                      </div>
+                      <div class="col-md-6" style="background-color: white;">
+                        <p class="card-meta"><small><a class="glyphicon glyphicon-tasks"></a> Tareas: 22</small></p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+          <%  if(j===proyectosInactivos.length-1 || ((j+1) % 4 == 0)){ %>
+                </div>
+            </div>
+          <% } }%>
+<% } %>

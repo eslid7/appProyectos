@@ -9,6 +9,8 @@ const pModel = require('../models/proyectosModel');
 const tModel = require('../models/tareasModel');
 const cModel = require('../models/categoriasModel');
 const rModel = require('../models/recursosModel');
+const uModel = require('../models/usuariosModel');
+
 /*****************************************************************************************************************************************************************
                                                               Defino relaciones modelo Sequelize
 ******************************************************************************************************************************************************************/
@@ -21,21 +23,32 @@ tModel.belongsTo(cModel, {foreignKey: 'id_categoria'})
                           Función encargada de cargar los datos necesarios para las Listas a las tablas del index
 *************************************************************************************************************************************************************/
 controller.list = (req, res) => {
-           cModel.findAll()
-           .then(categoriasAll => {
-             rModel.findAll()
-             .then(recursosAll => {
-               pModel.findAll()
-               .then(proyectosAll => {
-               //res.send(tareas[1].rows.id)
-             //console.log(tareas[1].rows);
-                res.render('index', {
-                  categoriasAll: categoriasAll,
-                  recursosAll:recursosAll,
-                  proyectosAll:proyectosAll
+          const queryProyectosAll = 'SELECT COUNT("id_proyectos") FROM "proyectos"';
+          sequelize.query(queryProyectosAll) //obtenemos proyectos
+           .then(proyectosAll => {
+             const queryProyectosCountAct = 'SELECT COUNT("id_proyectos") FROM "proyectos"  WHERE estado=true';
+             sequelize.query(queryProyectosCountAct) //obtenemos proyectos
+              .then(proyectosCountAct => {
+               rModel.findAll()
+               .then(recursosAll => {
+                 const queryProyectosActivos = 'select proyectos.*, usuarios.firstname, usuarios.lastname from proyectos, usuarios where proyectos.creador = usuarios.id and proyectos.estado=true order by id_proyectos';
+                 sequelize.query(queryProyectosActivos) //obtenemos proyectos
+                 .then(proyectosActivos => {
+                   const queryProyectosInactivos = 'select proyectos.*, usuarios.firstname, usuarios.lastname from proyectos, usuarios where proyectos.creador = usuarios.id and proyectos.estado=false order by id_proyectos';
+                   sequelize.query(queryProyectosInactivos) //obtenemos proyectos
+                    .then(proyectosInactivos => {
+                 //res.send(proyectosAll[1].rows[0].count)
+                // console.log(proyectosAll);
+                  res.render('index', {
+                    proyectosAll: proyectosAll[1].rows[0],
+                    proyectosCountAct: proyectosCountAct[1].rows[0],
+                    recursosAll:recursosAll,
+                    proyectosActivos:proyectosActivos[1].rows,
+                    proyectosInactivos:proyectosInactivos[1].rows
+                    })
                   })
                 })
-
+              })
     })
   })
   .catch(err => console.log(err));
