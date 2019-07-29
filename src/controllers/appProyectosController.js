@@ -38,7 +38,6 @@ controller.list = (req, res) => {
                    sequelize.query(queryProyectosInactivos) //obtenemos proyectos
                     .then(proyectosInactivos => {
                  //res.send(proyectosAll[1].rows[0].count)
-                // console.log(proyectosAll);
                   res.render('index', {
                     proyectosAll: proyectosAll[1].rows[0],
                     proyectosCountAct: proyectosCountAct[1].rows[0],
@@ -49,8 +48,8 @@ controller.list = (req, res) => {
                   })
                 })
               })
+            })
     })
-  })
   .catch(err => console.log(err));
 };
 /*****************************************************************************************************************************************************************
@@ -58,38 +57,40 @@ controller.list = (req, res) => {
 /******************************************************************************************************************************************************************/
 controller.listBodyTareas = (req, res) => {
   const idProyecto = req.body.selectedProyect;
-  const queryCategorias = 'select distinct categorias.nombre, tareas.id_categoria from categorias, tareas where tareas.id_categoria = categorias.id_categoria and tareas.id_proyectos = '+ idProyecto + ' order by id_categoria';
-  sequelize.query(queryCategorias) //obtenemos Categorías de tabla tareas
-  .then(categorias => {
-    const queryRecursos = 'select distinct recursos.nombre, tareas.id_recursos from recursos, tareas where tareas.id_recursos = recursos.id_recursos and tareas.id_proyectos = '+ idProyecto +' order by id_recursos';
-    sequelize.query(queryRecursos) //obtenemos Colaboradores de tabla tareas
-    .then(recursos => {
-      const queryTareas = 'select  recursos.nombre, tareas.id_recursos,  recursos.porhora, categorias.nombre, tareas.id_categoria,  tareas.horas from tareas, recursos, categorias where tareas.id_recursos = recursos.id_recursos and tareas.id_categoria = categorias.id_categoria and tareas.id_proyectos = '+ idProyecto +' order by  tareas.id_recursos, tareas.id_categoria';
-      sequelize.query(queryTareas) //obtenemos Tareas de tabla tareas
-      .then(tareas => {
-        cModel.findAll()          //se obtienen todos los recuros, categorías y proyectos guardados
-        .then(categoriasAll => {
-          rModel.findAll()
-          .then(recursosAll => {
-            pModel.findAll()
-            .then(proyectosAll => {
-              console.log(tareas[1].rowCount);
-              //res.send(tareas[1])
-              res.render('index', {
-                categorias: categorias,
-                recursos: recursos,
-                tareas: tareas,
-                idProyecto:idProyecto,
-                categoriasAll: categoriasAll,
-                recursosAll:recursosAll,
-                proyectosAll:proyectosAll
+  
+    const queryCategorias = 'select distinct categorias.nombre, tareas.id_categoria from categorias, tareas where tareas.id_categoria = categorias.id_categoria and tareas.id_proyectos = '+ idProyecto + ' order by id_categoria';
+    sequelize.query(queryCategorias) //obtenemos Categorías de tabla tareas
+    .then(categorias => {
+      const queryRecursos = 'select distinct recursos.nombre, tareas.id_recursos from recursos, tareas where tareas.id_recursos = recursos.id_recursos and tareas.id_proyectos = '+ idProyecto +' order by id_recursos';
+      sequelize.query(queryRecursos) //obtenemos Colaboradores de tabla tareas
+      .then(recursos => {
+        const queryTareas = 'select  recursos.nombre, tareas.id_recursos,  recursos.porhora, categorias.nombre, tareas.id_categoria,  tareas.horas from tareas, recursos, categorias where tareas.id_recursos = recursos.id_recursos and tareas.id_categoria = categorias.id_categoria and tareas.id_proyectos = '+ idProyecto +' order by  tareas.id_recursos, tareas.id_categoria';
+        sequelize.query(queryTareas) //obtenemos Tareas de tabla tareas
+        .then(tareas => {
+            cModel.findAll()          //se obtienen todos los recuros, categorías y proyectos guardados
+            .then(categoriasAll => {
+              rModel.findAll()
+              .then(recursosAll => {
+                pModel.findAll()
+                .then(proyectosAll => {
+                  console.log(usersAll[1].rowCount);
+                  //res.send(tareas[1])
+                  res.render('index', {
+                    categorias: categorias,
+                    recursos: recursos,
+                    tareas: tareas,
+                    idProyecto:idProyecto,
+                    categoriasAll: categoriasAll,
+                    recursosAll:recursosAll,
+                    proyectosAll:proyectosAll,
+                    usersAll:usersAll
+                    })
+                  })
                 })
               })
             })
           })
         })
-      })
-    })
   .catch(err => console.log(err));
 };
 /*****************************************************************************************************************************************************************
@@ -142,9 +143,8 @@ controller.insertRecProyecto = (req, res) => {
                                                                       Inserta Proyectos
 /*****************************************************************************************************************************************************************/
 controller.insertP = (req, res) => {
-  const nombre = req.body.nombre;
-  const descripcion = req.body.descripcion;
-  const query = 'INSERT INTO proyectos (nombre, descripcion) VALUES ('+"'"+nombre+"', '"+descripcion+"')";
+  const nombre = req.body.projectName;
+  const query = 'INSERT INTO proyectos (nombre,estado,fecha_creacion,creador) VALUES ('+"'"+nombre+"', "+true+"," + "'" + Date.now() + "'," + 7 + ")";
   sequelize.query(query).spread((results, metadata) => {
   res.redirect('/');
   })
@@ -288,6 +288,18 @@ controller.updateR = (req, res) => {
   sequelize.query(query).spread((results, metadata) => {
     res.redirect('/');
   });
+};
+/*****************************************************************************************************************************************************************
+                                                              Carga Proyecto para vista create
+/*****************************************************************************************************************************************************************/
+controller.createPe = (req, res) => {
+  uModel.findAll()
+    .then(usersAll => {
+      res.render('proyectos_new', {
+        usersAll: usersAll
+      })
+    })
+  .catch(err => console.log(err));
 };
 /*****************************************************************************************************************************************************************
                                                               Carga Proyecto para vista edit
@@ -439,4 +451,5 @@ pdf.create(contenido).toFile('./salida.pdf', function(err, res) {
   });
 };
 */
+
 module.exports = controller;

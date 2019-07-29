@@ -1,0 +1,44 @@
+<% include partials/_header %>
+<div class="container mt-5">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <label class="lblTittle">Crear nuevo proyecto</label>
+      </div>
+
+      <form action="/insertP/" method="POST">
+
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-top: 40px">
+          <label for="projectName">Nombre del proyecto</label>
+          <input type="text" class="formulario" id="projectName" name="projectName">
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-top: 20px">
+            <label for="selectColab">Colaboradores</label>
+            <select class="chosen formulario" multiple="true" style="width: 100%">
+                <% if (typeof(usersAll) !== "undefined") { %>
+                  <% for(var j = 0; j < usersAll.length; j++) { %>
+                      <option><%= usersAll[j].email %></option>
+                    <% } %>
+                <% } %>
+              </select>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-top: 25px; text-align: right;">
+            <button class="btnCancel"  onclick="location.href = '/' " >Cancelar</button>
+            <button class="btnNormal"  type="submit" >Crear proyecto</button>
+        </div>
+
+      </form>
+
+    </div>
+</div>
+
+<script>
+    $(function() {
+      $(".chosen").chosen({
+        display_disabled_options: true
+      });
+    });
+  </script>
+
+<% include partials/_footer %>
+
+

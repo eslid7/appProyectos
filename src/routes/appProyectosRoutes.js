@@ -11,6 +11,7 @@ const appProyectosController = require('../controllers/appProyectosController');
                                                                       Rutas de Proyectos
 ******************************************************************************************************************************************************************/
 router.get('/updatePe/:id', appProyectosController.editP);
+router.get('/createPe/', appProyectosController.createPe);
 router.post('/updateP/:id', appProyectosController.updateP);
 router.get('/deleteP/:id', appProyectosController.deleteP);
 router.post('/insertP/', appProyectosController.insertP);
