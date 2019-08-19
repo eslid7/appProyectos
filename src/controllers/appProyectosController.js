@@ -23,28 +23,32 @@ tModel.belongsTo(cModel, {foreignKey: 'id_categoria'})
                           Función encargada de cargar los datos necesarios para las Listas a las tablas del index
 *************************************************************************************************************************************************************/
 controller.list = (req, res) => {
-          const queryProyectosAll = 'SELECT COUNT("id_proyectos") FROM "proyectos"';
+          const queryProyectosAll = 'SELECT COUNT("id_proyectos") FROM "proyectos" WHERE "creador" ='+ global.User.id +" or colaboradores like '"+ global.User.email+"'";
           sequelize.query(queryProyectosAll) //obtenemos proyectos
            .then(proyectosAll => {
-             const queryProyectosCountAct = 'SELECT COUNT("id_proyectos") FROM "proyectos"  WHERE estado=true';
+             const queryProyectosCountAct = 'SELECT COUNT("id_proyectos") FROM "proyectos"  WHERE estado=true and "creador" ='+ global.User.id +" or colaboradores like '"+ global.User.email+"'";
              sequelize.query(queryProyectosCountAct) //obtenemos proyectos
               .then(proyectosCountAct => {
                rModel.findAll()
                .then(recursosAll => {
-                 const queryProyectosActivos = 'select proyectos.*, usuarios.firstname, usuarios.lastname from proyectos, usuarios where proyectos.creador = usuarios.id and proyectos.estado=true order by id_proyectos';
+                 const queryProyectosActivos = 'select proyectos.*, usuarios.firstname, usuarios.lastname from proyectos, usuarios where proyectos.creador = usuarios.id and proyectos.estado=true and ( creador ='+ global.User.id +" or colaboradores like '"+ global.User.email+"') order by id_proyectos";
                  sequelize.query(queryProyectosActivos) //obtenemos proyectos
                  .then(proyectosActivos => {
-                   const queryProyectosInactivos = 'select proyectos.*, usuarios.firstname, usuarios.lastname from proyectos, usuarios where proyectos.creador = usuarios.id and proyectos.estado=false order by id_proyectos';
+                   const queryProyectosInactivos = 'select proyectos.*, usuarios.firstname, usuarios.lastname from proyectos, usuarios where proyectos.creador = usuarios.id and proyectos.estado=false and ( creador ='+ global.User.id +" or colaboradores like '"+ global.User.email+"') order by id_proyectos";
                    sequelize.query(queryProyectosInactivos) //obtenemos proyectos
                     .then(proyectosInactivos => {
                  //res.send(proyectosAll[1].rows[0].count)
-                  res.render('index', {
-                    proyectosAll: proyectosAll[1].rows[0],
-                    proyectosCountAct: proyectosCountAct[1].rows[0],
-                    recursosAll:recursosAll,
-                    proyectosActivos:proyectosActivos[1].rows,
-                    proyectosInactivos:proyectosInactivos[1].rows
-                    })
+                    uModel.findAll()
+                      .then(usersAll => {
+                          res.render('index', {
+                          proyectosAll: proyectosAll[1].rows[0],
+                          proyectosCountAct: proyectosCountAct[1].rows[0],
+                          recursosAll:recursosAll,
+                          proyectosActivos:proyectosActivos[1].rows,
+                          proyectosInactivos:proyectosInactivos[1].rows,
+                          usersAll: usersAll
+                        })
+                      })
                   })
                 })
               })
@@ -73,7 +77,7 @@ controller.listBodyTareas = (req, res) => {
               .then(recursosAll => {
                 pModel.findAll()
                 .then(proyectosAll => {
-                  console.log(usersAll[1].rowCount);
+                  // console.log(usersAll[1].rowCount);
                   //res.send(tareas[1])
                   res.render('index', {
                     categorias: categorias,
@@ -136,17 +140,32 @@ controller.insertRecProyecto = (req, res) => {
   const idProyecto = req.params.idProyecto;
   const query = 'INSERT INTO tareas (id_recursos, id_proyectos) VALUES ('+idRecurso+", "+idProyecto+")";
   sequelize.query(query).spread((results, metadata) => {
-  res.redirect('/');
+  res.redirect('/');  
   })
+
 };
 /*****************************************************************************************************************************************************************
                                                                       Inserta Proyectos
 /*****************************************************************************************************************************************************************/
 controller.insertP = (req, res) => {
   const nombre = req.body.projectName;
-  const query = 'INSERT INTO proyectos (nombre,estado,fecha_creacion,creador) VALUES ('+"'"+nombre+"', "+true+"," + "'" + Date.now() + "'," + 7 + ")";
+  const cliente = req.body.projectClient;
+  const codigo = req.body.projectCode;
+  const colaboradores = req.body.projectCollaborator;
+  let current_datetime = new Date()
+  let formatted_date = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate() + " " + current_datetime.getHours() + ":" + current_datetime.getMinutes() + ":" + current_datetime.getSeconds() 
+  
+  const query = 'INSERT INTO proyectos (nombre,estado,fecha_creacion,creador,cliente,codigo, colaboradores) VALUES ('+"'"+nombre+"', "+true+"," + "'" + formatted_date + "'," + global.User.id + ",'" + cliente +"','" + codigo +"','" + colaboradores +"' )";
   sequelize.query(query).spread((results, metadata) => {
-  res.redirect('/');
+    res.status(200).json({
+      desc: 'Se ha creado exitosamente.'
+    })
+  }).catch(function (err) {
+    // en caso de error se devuelve el error
+    console.log('ERROR: ' + err)
+    res.status(500).json({
+      desc: err
+    })
   })
 };
 /*****************************************************************************************************************************************************************
@@ -451,5 +470,14 @@ pdf.create(contenido).toFile('./salida.pdf', function(err, res) {
   });
 };
 */
+controller.getCategoriesFromFile = (req, res) => {
+  const fs = require('fs');
+  var path = require('path');
+  let rawdata = fs.readFileSync(path.resolve(__dirname, '../public/js/categorias.json'));
+  let categories = JSON.parse(rawdata);
+  res.status(200).json({
+    categories: categories
+  })
+}
 
 module.exports = controller;

@@ -22,6 +22,8 @@ router.get('/update/:id', appProyectosController.edit);
 router.post('/updateC/:id', appProyectosController.updateC);
 router.get('/delete/:id', appProyectosController.delete);
 router.post('/insert/', appProyectosController.insert);
+router.get('/getCategoriesFromFile/', appProyectosController.getCategoriesFromFile);
+
 /*****************************************************************************************************************************************************************
                                                                       Rutas de recursos
 ******************************************************************************************************************************************************************/

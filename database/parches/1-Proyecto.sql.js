@@ -1,0 +1,5 @@
+ALTER TABLE proyectos 
+ADD COLUMN  cliente  VARCHAR(300) ,
+ADD COLUMN  codigo VARCHAR(200),
+ADD COLUMN  colaboradores VARCHAR(600),
+ADD COLUMN  categoria VARCHAR(100);

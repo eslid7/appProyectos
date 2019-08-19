@@ -8,7 +8,10 @@ const pModel = db.define('proyectos',{
   descripcion:Sequelize.TEXT,
   creador:Sequelize.INTEGER,
   estado:Sequelize.BOOLEAN,
-  fecha_creacion:Sequelize.DATE
+  fecha_creacion:Sequelize.DATE,
+  cliente:Sequelize.TEXT,
+  codigo:Sequelize.TEXT,
+  colaboradores:Sequelize.TEXT
 },
 {
     timestamps: false
