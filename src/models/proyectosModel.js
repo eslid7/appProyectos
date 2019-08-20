@@ -11,7 +11,8 @@ const pModel = db.define('proyectos',{
   fecha_creacion:Sequelize.DATE,
   cliente:Sequelize.TEXT,
   codigo:Sequelize.TEXT,
-  colaboradores:Sequelize.TEXT
+  colaboradores:Sequelize.TEXT,
+  categoria:Sequelize.TEXT
 },
 {
     timestamps: false

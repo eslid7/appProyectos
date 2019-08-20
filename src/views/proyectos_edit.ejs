@@ -1,25 +1,123 @@
 <% include partials/_header %>
+
+  <div class="row">
+    <div class="col-md-2" onclick="location.href='/'" style="cursor:pointer">
+      <span class="glyphicon glyphicon-menu-left lblForm" >  </span> Volver a proyectos
+    </div>
+    <div class="col-md-10">
+    </div>
+  </div>
+  <% if (typeof(data) !== 'undefined') { %>
+  <div class="row">
+    <div class="col-md-12">
+      <br>
+    </div>
+  </div>
+  <div class="row">
+
+    <div class="col-md-3 offset-md-1 lblForm">
+      <span style="font-size: 24px; font-weight: bold; border-right: 1px solid;padding-right: 30px;"> <%= data[0].nombre%> </span> 
+      <i class="glyphicon glyphicon-record" style="padding-left: 30px;"></i> <span style="font-size: 18px; font-weight: bold;">76</span> Horas estimadas <br>
+      Cliente: <%= data[0].cliente%>  Código: <%= data[0].codigo%>
+    </div>
+    <div class="col-md-5">
+      
+     
+    </div>
+    <div class="col-md-3">
+      
+      <button class="btnNormal"  type="button" onClick="exportProject()" ><i class="glyphicon glyphicon-open" style="font-weight"></i> Exportar tabla</button>
+    </div>
+  </div>
+  <div class="row" style="margin-top:10px">
+    <div class="col-md-12 offset-md-1 lblForm">
+      <div style="border:1px solid; width: 11%; text-align: center;">Ver colaboradores</div>
+    </div>
+  </div>
+  <div class="row" style="margin-top:10px">
+    <div class="col-md-12 offset-md-1 lblForm">
+      <span style="font-size: 16px; font-weight: bold; border-right: 1px solid;">
+        Estimación de horas por estapas del proyecto
+      </span>
+    </div>
+  </div>
 <div class="container mt-5">
   <div class="row">
     <div class="col-md-5 offset-md-3 card">
-      <div class="card-body">
-        <% if (typeof(data) !== 'undefined') { %>
+      <div class="card-body">        
           <form action="/updateP/<%= data[0].id_proyectos %>" method="POST">
             <div class="form-group">
-              <label for="txtNombre">Nombre de Proyecto</label>
-              <input type="text" id="txtNombre" name="nombre" value="<%= data[0].nombre%>" placeholder="Nombre" class="form-control" autofocus required>
+              <label for="projectClient" class="lblForm">Cliente</label>
+              <input type="text" id="projectClient" name="projectClient" value="<%= data[0].cliente%>" class="form-control" autofocus required>
             </div>
             <div class="form-group">
-              <label for="txtDescripción">Descripción</label>
-             <input type="text" id="txtDescripción" name="descripcion" value="<%= data[0].descripcion%>" placeholder="Descripción" class="form-control" required>
+              <label for="projectCode" class="lblForm">Código del Proyecto</label>
+                <input type="text" class="form-control formulario" id="projectCode" value="<%= data[0].codigo%>" name="projectCode" required>
             </div>
-            <button type="submit" class="btn btn-primary">
+            <div class="form-group">
+              <label for="projectName" class="lblForm">Nombre del proyecto</label>
+              <input type="text" class="form-control formulario" id="projectName" name="projectName" value="<%= data[0].nombre%>" required>
+            </div>
+            <div class="form-group">
+              <label for="projectCollaborator" class="lblForm">Colaboradores</label>
+              <select class="chosen formulario " multiple="true" style="width: 100%" name="projectCollaborator" id="projectCollaborator" required>
+                <% if (typeof(usersAll) !== "undefined") { %>
+                  <% for(var j = 0; j < usersAll.length; j++) { %>
+                      <option><%= usersAll[j].email %></option>
+                    <% } %>
+                <% } %>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="projectCategory" class="lblForm">Categorias</label>
+                <select class="formulario select2" style="width: 100%" name="projectCategory" id="projectCategory" required>                  
+                </select>
+            </div>
+            <button type="submit" class="btnNormal">
               Guardar Proyecto
             </button>
           </form>
-        <% } %>
+       
       </div>
     </div>
   </div>
 </div>
-<% include partials/_footer %>
+
+<script>
+    $(function() {
+      $(".chosen").chosen({
+        display_disabled_options: true
+      });
+    });
+    jQuery(document).ready(function() {
+      $("#projectCollaborator_chosen").css("width","100%");
+      $("#projectCategory_chosen").css("width","100%");
+      $.ajax({
+          type: "GET",
+          url: "/getCategoriesFromFile/",          
+          async:true
+      }).done(function (data, textStatus) {                        
+        $.each(data.categories, function(i, item) {
+          var x = document.getElementById("projectCategory");
+          var option = document.createElement("option");
+          option.text = item.Typo;
+          x.add(option);
+        });
+        $('#projectCategory').trigger('change', true);       
+      })
+      setTimeout(function() { 
+        $('#projectCategory').val('<%= data[0].categoria%>'); 
+        $('#projectCategory').trigger("chosen:updated");  
+      }, 400);
+      colaboradores = '<%= data[0].colaboradores%>';
+      var colaboradoresArray = colaboradores.split(',');
+
+      for(i = 0; i< colaboradoresArray.length; i++){  
+        $('#projectCollaborator').val(colaboradoresArray[i]);
+        $('#projectCollaborator').trigger("chosen:updated");
+      }
+      
+    });
+</script>
+ <% } %>
+ <% include partials/_footer %>

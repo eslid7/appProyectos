@@ -148,14 +148,15 @@ controller.insertRecProyecto = (req, res) => {
                                                                       Inserta Proyectos
 /*****************************************************************************************************************************************************************/
 controller.insertP = (req, res) => {
-  const nombre = req.body.projectName;
-  const cliente = req.body.projectClient;
-  const codigo = req.body.projectCode;
-  const colaboradores = req.body.projectCollaborator;
+  let nombre = req.body.projectName;
+  let cliente = req.body.projectClient;
+  let codigo = req.body.projectCode;
+  let colaboradores = req.body.projectCollaborator;
+  let categoria = req.body.projectCategory;
   let current_datetime = new Date()
   let formatted_date = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate() + " " + current_datetime.getHours() + ":" + current_datetime.getMinutes() + ":" + current_datetime.getSeconds() 
   
-  const query = 'INSERT INTO proyectos (nombre,estado,fecha_creacion,creador,cliente,codigo, colaboradores) VALUES ('+"'"+nombre+"', "+true+"," + "'" + formatted_date + "'," + global.User.id + ",'" + cliente +"','" + codigo +"','" + colaboradores +"' )";
+  const query = 'INSERT INTO proyectos (nombre,estado,fecha_creacion,creador,cliente,codigo, colaboradores, categoria) VALUES ('+"'"+nombre+"', "+true+"," + "'" + formatted_date + "'," + global.User.id + ",'" + cliente +"','" + codigo +"','" + colaboradores +"','" + categoria +"' )";
   sequelize.query(query).spread((results, metadata) => {
     res.status(200).json({
       desc: 'Se ha creado exitosamente.'
@@ -241,6 +242,9 @@ controller.edit = (req, res) => {
     .then(categorias => {
       console.log(categorias);
       //res.send(tareas[0].nombre)
+
+
+                          usersAll: usersAll
       res.render('tareas_edit', {
         data: categorias
       })
@@ -335,8 +339,12 @@ controller.editP = (req, res) => {
     .then(proyectos => {
     //  console.log(categorias);
       //res.send(tareas[0].nombre)
-      res.render('proyectos_edit', {
-        data: proyectos
+      uModel.findAll()
+        .then(usersAll => { 
+          res.render('proyectos_edit', {
+          data: proyectos,
+          usersAll :usersAll
+        })
       })
     })
     .catch(err => console.log(err));
@@ -345,10 +353,14 @@ controller.editP = (req, res) => {
                                                                         Update Proyectos
 /*****************************************************************************************************************************************************************/
 controller.updateP = (req, res) => {
-  const  idP  = req.params.id;
-  const nombre = req.body.nombre;
-  const descripcion =  req.body.descripcion;
-  const query = 'UPDATE proyectos set nombre='+"'"+ nombre +"'"+', descripcion=' + "'"+ descripcion +"'"+' where id_proyectos =' + idP;
+  let idP  = req.params.id;
+  let nombre = req.body.projectName;
+  let cliente = req.body.projectClient;
+  let codigo = req.body.projectCode;
+  let colaboradores = req.body.projectCollaborator;
+  let categoria = req.body.projectCategory;
+  
+  const query = 'UPDATE proyectos set nombre='+"'"+ nombre +"'"+', cliente=' + "'"+ cliente +"'"+', codigo=' + "'"+ codigo +"'"+', colaboradores=' + "'"+ colaboradores +"'"+', categoria=' + "'"+ categoria +"'"+' where id_proyectos =' + idP;
   //res.send(nombre);
   sequelize.query(query).spread((results, metadata) => {
     res.redirect('/');

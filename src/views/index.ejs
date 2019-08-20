@@ -116,9 +116,9 @@
               </div>
             </div>
             <div class="form-row paddingTop">
-              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <label for="projectCategory" class="lblForm">Categorias</label>
-                <select class="chosen formulario " style="width: 100%" name="projectCategory" id="projectCategory" required>                  
+                <select class="formulario select2" style="width: 100%" name="projectCategory" id="projectCategory" required>                  
                 </select>
               </div>
             </div>
@@ -184,9 +184,15 @@
           type: "GET",
           url: "/getCategoriesFromFile/",          
           async:true
-        }).done(function (data, textStatus) {              
-          console.log(data)
-          
+        }).done(function (data, textStatus) {                        
+          $.each(data.categories, function(i, item) {
+            var x = document.getElementById("projectCategory");
+            var option = document.createElement("option");
+            option.text = item.Typo;
+            x.add(option);
+          });
+          $('#projectCategory').trigger('change', true);
+         
         })
       };
       handleValidation();
@@ -214,6 +220,7 @@
             }
             if (textStatus == 'success') {
               fnOpenCorrectDialog(data.desc);
+              setTimeout(function() { location.reload(); }, 1000);
             }
           }).fail(function (jqXHR, textStatus, errorThrown) {
             hideIsLoading();
