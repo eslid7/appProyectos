@@ -12,6 +12,7 @@ module.exports.signup = function(req, res) {
    password2 = req.body.password2,
    txtNombre = req.body.txtNombre,
    txtApellido = req.body.txtApellido,
+   departamento = req.body.departamento,
    roll = 3;
 /* roll= 1 = admin,  roll = 2 = Editor,  roll = 3 = Visor*/
 
@@ -47,7 +48,7 @@ module.exports.signup = function(req, res) {
   var salt = bcrypt.genSaltSync(10)
   var hashedPassword = bcrypt.hashSync(password, salt)
 
-  const query = 'INSERT INTO usuarios (email, password, firstname, lastname, roll, salt) VALUES ('+"'"+email+"', '"+hashedPassword+"', '"+txtNombre +"','"+txtApellido +"', "+ roll +", '"+salt+"')";
+  const query = 'INSERT INTO usuarios (email, password, firstname, lastname, roll, salt, departamento) VALUES ('+"'"+email+"', '"+hashedPassword+"', '"+txtNombre +"','"+txtApellido +"', "+ roll +", '"+salt+"', '"+departamento+"')";
   sequelize.query(query).spread((results, metadata) => {
     console.log('Exitoso');
     var mensaje = ["Gracias por Registrarse, ahora puede proceder a ingresar al sistema"]

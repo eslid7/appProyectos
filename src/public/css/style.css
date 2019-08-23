@@ -436,3 +436,8 @@ button:hover {
   font-size: 40px;
   font-weight: 1000;
 }
+
+body{
+  background-color: #F2F2F2 !important;
+}
+

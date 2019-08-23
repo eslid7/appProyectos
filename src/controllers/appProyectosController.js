@@ -227,6 +227,26 @@ controller.insertTareas = (req, res) => {
   //res.send(keyNames);
   res.redirect('/');
 };
+
+controller.insertTarea = (req, res) => {
+  let idProyecto = req.params.idProyecto;
+  let idCategoria = req.body.id_categori_selected;
+  let horas = req.body.hours;
+
+  const query = 'INSERT INTO tareas (id_usuario,id_proyectos,id_categoria,horas) VALUES ('+global.User.id+", "+idProyecto+"," + idCategoria + "," + horas +" )";
+  sequelize.query(query).spread((results, metadata) => {
+    console.log(results)
+    res.status(200).json({
+      desc: 'Se ha agregado exitosamente.'
+    })
+  }).catch(function (err) {
+    // en caso de error se devuelve el error
+    console.log('ERROR: ' + err)
+    res.status(500).json({
+      desc: err
+    })
+  })
+};
 /*****************************************************************************************************************************************************************
                                                               Carga categorias para vista edit
 /*****************************************************************************************************************************************************************/
@@ -337,14 +357,30 @@ controller.editP = (req, res) => {
     }
   )
     .then(proyectos => {
-    //  console.log(categorias);
-      //res.send(tareas[0].nombre)
       uModel.findAll()
         .then(usersAll => { 
-          res.render('proyectos_edit', {
-          data: proyectos,
-          usersAll :usersAll
-        })
+          const fs = require('fs');
+          var path = require('path');
+          let rawdata = fs.readFileSync(path.resolve(__dirname, '../public/js/categorias.json'));
+          let categories = JSON.parse(rawdata);
+
+          for(var i = 0; i < categories.length; i++) {
+            if(categories[i].Typo == proyectos[0].categoria){                
+                const query = 'SELECT nombre, id_categoria FROM categorias WHERE codigo IN ('+categories[i].Categorias+' )';
+                sequelize.query(query).then(resultCategorias => {
+                  const query = 'SELECT us.departamento,  us.firstname, us.lastname, t.horas, t.id_categoria, t.id FROM tareas t INNER JOIN usuarios us ON t.id_usuario = us.id WHERE id_proyectos  = '+proyectos[0].id_proyectos;
+                  sequelize.query(query).then(resultTareas => {
+                    // console.log(ResultCategorias);
+                    res.render('proyectos_edit', {
+                      data: proyectos,
+                      usersAll :usersAll,
+                      categoriesSelected : resultCategorias[1].rows,
+                      tareas :resultTareas[1].rows
+                    });
+                  });                  
+                });
+            }
+          }        
       })
     })
     .catch(err => console.log(err));

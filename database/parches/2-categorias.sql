@@ -6,3 +6,6 @@ INSERT INTO CATEGORIAS (NOMBRE, CODIGO)VALUES('Diseño',3);
 INSERT INTO CATEGORIAS (NOMBRE, CODIGO)VALUES('Configuración/Programación',4);
 INSERT INTO CATEGORIAS (NOMBRE, CODIGO)VALUES('Unit Test (Automatización)',5);
 INSERT INTO CATEGORIAS (NOMBRE, CODIGO)VALUES('Bug Fixing',6);
+
+ALTER TABLE usuarios add departamento varchar(200);
+ALTER TABLE tareas add id_usuario integer;
