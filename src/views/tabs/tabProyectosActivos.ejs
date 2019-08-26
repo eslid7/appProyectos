@@ -3,27 +3,44 @@
         <% for(var j = 0; j < proyectosActivos.length; j++) { %>
         <%  if(j === 0 ||	(j % 4 == 0)){ %>
             <div class="row" style="margin-top: 3%;">
-                <div class="card-deck">
+                <div class="card-deck col-md-12">
         <%  } %>
                 <a href="/updatePe/<%= proyectosActivos[j].id_proyectos %>">
-                  <div class="card" style="background">
-                    <div class="card-body cardstyle">
+                  <div class="card" style="padding:0px;max-width: 22.5%;">
+                    <div class="card-body cardstyle" style="padding-top: 45px;">
                       <h3 class="card-title"><%= proyectosActivos[j].nombre %></h3>
                       <div class="row">
                         <p class="card-text" style="margin-left: 6%;"><small> Creado por: <%= proyectosActivos[j].firstname %> <%= proyectosActivos[j].lastname %> </small></p>
                       </div>
+                       <div class="row">
+                        <p class="card-text" style="margin-left: 6%;"><small> Código: <%= proyectosActivos[j].codigo %></small></p>
+                      </div>
                       <div class="row">
                         <p class="card-text" style="margin-left: 6%;"> <small> <%= proyectosActivos[j].fecha_creacion.toDateString() %> </small></p>
                       </div>
-                    </div>
-                    <div class="card-footer text-muted">
-                      <div class="col-md-6" style="background-color: white;">
-                        <p class="card-meta"><small ><a class="glyphicon glyphicon-time"></a> Tiempo: 201h</small></p>
+                    </div>                    
+                    <% ingresa = false; for(var i = 0; i < tareasProyectos.length; i++) { %>
+                      <% if(tareasProyectos[i].id_proyectos == proyectosActivos[j].id_proyectos){%>
+                      <%ingresa = true;%>
+                        <div class="card-footer text-muted">
+                          <div style="background-color: white;width: 50%;display: inline-block;">
+                            <p class="card-meta"><small ><a class="glyphicon glyphicon-time"></a> Tiempo: <%=  tareasProyectos[i].horas %>h</small></p>
+                          </div>
+                          <div style="background-color: white;width: 50%;display: inline-block;float: right;">
+                            <p class="card-meta"><small><a class="glyphicon glyphicon-tasks"></a> Tareas: <%= tareasProyectos[i].tareas%></small></p>
+                          </div>
+                        </div>
+                    <% } }%>
+                    <% if(!ingresa){%>
+                      <div class="card-footer text-muted">
+                        <div style="background-color: white;width: 50%;display: inline-block;">
+                          <p class="card-meta"><small ><a class="glyphicon glyphicon-time"></a> Tiempo: 0 h</small></p>
+                        </div>
+                        <div style="background-color: white;width: 50%;display: inline-block;float: right;">
+                          <p class="card-meta"><small><a class="glyphicon glyphicon-tasks"></a> Tareas: 0 </small></p>
+                        </div>
                       </div>
-                      <div class="col-md-6" style="background-color: white;">
-                        <p class="card-meta"><small><a class="glyphicon glyphicon-tasks"></a> Tareas: 22</small></p>
-                      </div>
-                    </div>
+                    <% } %>
                   </div>
                 </a>  
 

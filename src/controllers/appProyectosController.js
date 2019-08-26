@@ -40,15 +40,20 @@ controller.list = (req, res) => {
                  //res.send(proyectosAll[1].rows[0].count)
                     uModel.findAll()
                       .then(usersAll => {
+                      const queryTareasProyectos = 'select SUM(t.horas) AS horas, t.id_proyectos, count(t.id_proyectos) AS tareas from tareas t inner join proyectos pr on t.id_proyectos = pr.id_proyectos where pr.estado=true and ( pr.creador ='+ global.User.id +" or pr.colaboradores like '"+ global.User.email+"') GROUP BY t.id_proyectos";
+                      sequelize.query(queryTareasProyectos) //obtenemos proyectos
+                      .then(tareasProyectos => {
                           res.render('index', {
                           proyectosAll: proyectosAll[1].rows[0],
                           proyectosCountAct: proyectosCountAct[1].rows[0],
                           recursosAll:recursosAll,
                           proyectosActivos:proyectosActivos[1].rows,
                           proyectosInactivos:proyectosInactivos[1].rows,
-                          usersAll: usersAll
+                          usersAll: usersAll,
+                          tareasProyectos:tareasProyectos[1].rows
                         })
                       })
+                    })
                   })
                 })
               })
@@ -371,11 +376,16 @@ controller.editP = (req, res) => {
                   const query = 'SELECT us.departamento,  us.firstname, us.lastname, t.horas, t.id_categoria, t.id FROM tareas t INNER JOIN usuarios us ON t.id_usuario = us.id WHERE id_proyectos  = '+proyectos[0].id_proyectos;
                   sequelize.query(query).then(resultTareas => {
                     // console.log(ResultCategorias);
+                    totalHoras =0;
+                    for(var i = 0; i < resultTareas[1].rows.length; i++) {
+                      totalHoras = totalHoras + resultTareas[1].rows[i].horas;
+                    }
                     res.render('proyectos_edit', {
                       data: proyectos,
                       usersAll :usersAll,
                       categoriesSelected : resultCategorias[1].rows,
-                      tareas :resultTareas[1].rows
+                      tareas :resultTareas[1].rows,
+                      totalHoras: totalHoras
                     });
                   });                  
                 });
