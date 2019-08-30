@@ -23,27 +23,36 @@ tModel.belongsTo(cModel, {foreignKey: 'id_categoria'})
                           Función encargada de cargar los datos necesarios para las Listas a las tablas del index
 *************************************************************************************************************************************************************/
 controller.list = (req, res) => {
-          const queryProyectosAll = 'SELECT COUNT("id_proyectos") FROM "proyectos"';
+          const queryProyectosAll = 'SELECT COUNT("id_proyectos") FROM "proyectos" WHERE "creador" ='+ global.User.id +" or colaboradores like '"+ global.User.email+"'";
           sequelize.query(queryProyectosAll) //obtenemos proyectos
            .then(proyectosAll => {
-             const queryProyectosCountAct = 'SELECT COUNT("id_proyectos") FROM "proyectos"  WHERE estado=true';
+             const queryProyectosCountAct = 'SELECT COUNT("id_proyectos") FROM "proyectos"  WHERE estado=true and "creador" ='+ global.User.id +" or colaboradores like '"+ global.User.email+"'";
              sequelize.query(queryProyectosCountAct) //obtenemos proyectos
               .then(proyectosCountAct => {
                rModel.findAll()
                .then(recursosAll => {
-                 const queryProyectosActivos = 'select proyectos.*, usuarios.firstname, usuarios.lastname from proyectos, usuarios where proyectos.creador = usuarios.id and proyectos.estado=true order by id_proyectos';
+                 const queryProyectosActivos = 'select proyectos.*, usuarios.firstname, usuarios.lastname from proyectos, usuarios where proyectos.creador = usuarios.id and proyectos.estado=true and ( creador ='+ global.User.id +" or colaboradores like '"+ global.User.email+"') order by id_proyectos";
                  sequelize.query(queryProyectosActivos) //obtenemos proyectos
                  .then(proyectosActivos => {
-                   const queryProyectosInactivos = 'select proyectos.*, usuarios.firstname, usuarios.lastname from proyectos, usuarios where proyectos.creador = usuarios.id and proyectos.estado=false order by id_proyectos';
+                   const queryProyectosInactivos = 'select proyectos.*, usuarios.firstname, usuarios.lastname from proyectos, usuarios where proyectos.creador = usuarios.id and proyectos.estado=false and ( creador ='+ global.User.id +" or colaboradores like '"+ global.User.email+"') order by id_proyectos";
                    sequelize.query(queryProyectosInactivos) //obtenemos proyectos
                     .then(proyectosInactivos => {
                  //res.send(proyectosAll[1].rows[0].count)
-                  res.render('index', {
-                    proyectosAll: proyectosAll[1].rows[0],
-                    proyectosCountAct: proyectosCountAct[1].rows[0],
-                    recursosAll:recursosAll,
-                    proyectosActivos:proyectosActivos[1].rows,
-                    proyectosInactivos:proyectosInactivos[1].rows
+                    uModel.findAll()
+                      .then(usersAll => {
+                      const queryTareasProyectos = 'select SUM(t.horas) AS horas, t.id_proyectos, count(t.id_proyectos) AS tareas from tareas t inner join proyectos pr on t.id_proyectos = pr.id_proyectos where pr.estado=true and ( pr.creador ='+ global.User.id +" or pr.colaboradores like '"+ global.User.email+"') GROUP BY t.id_proyectos";
+                      sequelize.query(queryTareasProyectos) //obtenemos proyectos
+                      .then(tareasProyectos => {
+                          res.render('index', {
+                          proyectosAll: proyectosAll[1].rows[0],
+                          proyectosCountAct: proyectosCountAct[1].rows[0],
+                          recursosAll:recursosAll,
+                          proyectosActivos:proyectosActivos[1].rows,
+                          proyectosInactivos:proyectosInactivos[1].rows,
+                          usersAll: usersAll,
+                          tareasProyectos:tareasProyectos[1].rows
+                        })
+                      })
                     })
                   })
                 })
@@ -73,7 +82,7 @@ controller.listBodyTareas = (req, res) => {
               .then(recursosAll => {
                 pModel.findAll()
                 .then(proyectosAll => {
-                  console.log(usersAll[1].rowCount);
+                  // console.log(usersAll[1].rowCount);
                   //res.send(tareas[1])
                   res.render('index', {
                     categorias: categorias,
@@ -136,17 +145,33 @@ controller.insertRecProyecto = (req, res) => {
   const idProyecto = req.params.idProyecto;
   const query = 'INSERT INTO tareas (id_recursos, id_proyectos) VALUES ('+idRecurso+", "+idProyecto+")";
   sequelize.query(query).spread((results, metadata) => {
-  res.redirect('/');
+  res.redirect('/');  
   })
+
 };
 /*****************************************************************************************************************************************************************
                                                                       Inserta Proyectos
 /*****************************************************************************************************************************************************************/
 controller.insertP = (req, res) => {
-  const nombre = req.body.projectName;
-  const query = 'INSERT INTO proyectos (nombre,estado,fecha_creacion,creador) VALUES ('+"'"+nombre+"', "+true+"," + "'" + Date.now() + "'," + 7 + ")";
+  let nombre = req.body.projectName;
+  let cliente = req.body.projectClient;
+  let codigo = req.body.projectCode;
+  let colaboradores = req.body.projectCollaborator;
+  let categoria = req.body.projectCategory;
+  let current_datetime = new Date()
+  let formatted_date = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate() + " " + current_datetime.getHours() + ":" + current_datetime.getMinutes() + ":" + current_datetime.getSeconds() 
+  
+  const query = 'INSERT INTO proyectos (nombre,estado,fecha_creacion,creador,cliente,codigo, colaboradores, categoria) VALUES ('+"'"+nombre+"', "+true+"," + "'" + formatted_date + "'," + global.User.id + ",'" + cliente +"','" + codigo +"','" + colaboradores +"','" + categoria +"' )";
   sequelize.query(query).spread((results, metadata) => {
-  res.redirect('/');
+    res.status(200).json({
+      desc: 'Se ha creado exitosamente.'
+    })
+  }).catch(function (err) {
+    // en caso de error se devuelve el error
+    console.log('ERROR: ' + err)
+    res.status(500).json({
+      desc: err
+    })
   })
 };
 /*****************************************************************************************************************************************************************
@@ -207,6 +232,26 @@ controller.insertTareas = (req, res) => {
   //res.send(keyNames);
   res.redirect('/');
 };
+
+controller.insertTarea = (req, res) => {
+  let idProyecto = req.params.idProyecto;
+  let idCategoria = req.body.id_categori_selected;
+  let horas = req.body.hours;
+
+  const query = 'INSERT INTO tareas (id_usuario,id_proyectos,id_categoria,horas) VALUES ('+global.User.id+", "+idProyecto+"," + idCategoria + "," + horas +" )";
+  sequelize.query(query).spread((results, metadata) => {
+    console.log(results)
+    res.status(200).json({
+      desc: 'Se ha agregado exitosamente.'
+    })
+  }).catch(function (err) {
+    // en caso de error se devuelve el error
+    console.log('ERROR: ' + err)
+    res.status(500).json({
+      desc: err
+    })
+  })
+};
 /*****************************************************************************************************************************************************************
                                                               Carga categorias para vista edit
 /*****************************************************************************************************************************************************************/
@@ -222,6 +267,9 @@ controller.edit = (req, res) => {
     .then(categorias => {
       console.log(categorias);
       //res.send(tareas[0].nombre)
+
+
+                          usersAll: usersAll
       res.render('tareas_edit', {
         data: categorias
       })
@@ -314,10 +362,35 @@ controller.editP = (req, res) => {
     }
   )
     .then(proyectos => {
-    //  console.log(categorias);
-      //res.send(tareas[0].nombre)
-      res.render('proyectos_edit', {
-        data: proyectos
+      uModel.findAll()
+        .then(usersAll => { 
+          const fs = require('fs');
+          var path = require('path');
+          let rawdata = fs.readFileSync(path.resolve(__dirname, '../public/js/categorias.json'));
+          let categories = JSON.parse(rawdata);
+
+          for(var i = 0; i < categories.length; i++) {
+            if(categories[i].Typo == proyectos[0].categoria){                
+                const query = 'SELECT nombre, id_categoria FROM categorias WHERE codigo IN ('+categories[i].Categorias+' )';
+                sequelize.query(query).then(resultCategorias => {
+                  const query = 'SELECT us.departamento,  us.firstname, us.lastname, t.horas, t.id_categoria, t.id FROM tareas t INNER JOIN usuarios us ON t.id_usuario = us.id WHERE id_proyectos  = '+proyectos[0].id_proyectos;
+                  sequelize.query(query).then(resultTareas => {
+                    // console.log(ResultCategorias);
+                    totalHoras =0;
+                    for(var i = 0; i < resultTareas[1].rows.length; i++) {
+                      totalHoras = totalHoras + resultTareas[1].rows[i].horas;
+                    }
+                    res.render('proyectos_edit', {
+                      data: proyectos,
+                      usersAll :usersAll,
+                      categoriesSelected : resultCategorias[1].rows,
+                      tareas :resultTareas[1].rows,
+                      totalHoras: totalHoras
+                    });
+                  });                  
+                });
+            }
+          }        
       })
     })
     .catch(err => console.log(err));
@@ -326,10 +399,14 @@ controller.editP = (req, res) => {
                                                                         Update Proyectos
 /*****************************************************************************************************************************************************************/
 controller.updateP = (req, res) => {
-  const  idP  = req.params.id;
-  const nombre = req.body.nombre;
-  const descripcion =  req.body.descripcion;
-  const query = 'UPDATE proyectos set nombre='+"'"+ nombre +"'"+', descripcion=' + "'"+ descripcion +"'"+' where id_proyectos =' + idP;
+  let idP  = req.params.id;
+  let nombre = req.body.projectName;
+  let cliente = req.body.projectClient;
+  let codigo = req.body.projectCode;
+  let colaboradores = req.body.projectCollaborator;
+  let categoria = req.body.projectCategory;
+  
+  const query = 'UPDATE proyectos set nombre='+"'"+ nombre +"'"+', cliente=' + "'"+ cliente +"'"+', codigo=' + "'"+ codigo +"'"+', colaboradores=' + "'"+ colaboradores +"'"+', categoria=' + "'"+ categoria +"'"+' where id_proyectos =' + idP;
   //res.send(nombre);
   sequelize.query(query).spread((results, metadata) => {
     res.redirect('/');
@@ -451,5 +528,14 @@ pdf.create(contenido).toFile('./salida.pdf', function(err, res) {
   });
 };
 */
+controller.getCategoriesFromFile = (req, res) => {
+  const fs = require('fs');
+  var path = require('path');
+  let rawdata = fs.readFileSync(path.resolve(__dirname, '../public/js/categorias.json'));
+  let categories = JSON.parse(rawdata);
+  res.status(200).json({
+    categories: categories
+  })
+}
 
 module.exports = controller;

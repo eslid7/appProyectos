@@ -8,7 +8,7 @@
                                   <div class="col-md-4">
                                     <div class="d-flex no-block align-items-center marginLeft">
                                         <div class="col-padding">
-                                            <h2 class="counter text-primary"><a class="glyphicon glyphicon-inbox"></a> <%= proyectosAll.count %></h2>
+                                            <h2 class="counter text-box-home"><a class="glyphicon glyphicon-inbox"></a> <%= proyectosAll.count %></h2>
                                         </div>
                                         <div>
                                               <h3><i class="icon-screen-desktop"></i></h3>
@@ -19,7 +19,7 @@
                                   <div class="col-md-4">
                                     <div class="d-flex no-block align-items-center marginLeft">
                                         <div class="col-padding">
-                                            <h2 class="counter text-primary"><a class="glyphicon glyphicon-eye-open"></a> <%= proyectosCountAct.count %></h2>
+                                            <h2 class="counter text-box-home"><a class="glyphicon glyphicon-eye-open"></a> <%= proyectosCountAct.count %></h2>
                                         </div>
                                         <div>
                                               <h3><i class="icon-screen-desktop"></i></h3>
@@ -30,7 +30,7 @@
                                   <div class="col-md-4">
                                     <div class="d-flex no-block align-items-center marginLeft">
                                         <div class="col-padding" >
-                                            <h2 class="counter text-primary"><a class="glyphicon glyphicon-eye-close"></a> <%= proyectosAll.count - proyectosCountAct.count %></h2>
+                                            <h2 class="counter text-box-home"><a class="glyphicon glyphicon-eye-close"></a> <%= proyectosAll.count - proyectosCountAct.count %></h2>
                                         </div>
                                         <div>
                                               <h3><i class="icon-screen-desktop"></i></h3>
@@ -43,9 +43,12 @@
                       </div>
   </div>
   <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Proyectos</h1>
-     <button class="btnNormal" style="margin-top:20px" onclick="location.href = '/createPe/' " ><img src="images/Add.png" ><span style="padding-left: 10px;">Crear nuevo proyecto</span></button>
+    <h1 class="h3 mb-0 text-gray-800 ">Proyectos</h1>            
+     <button class="btnNormal" style="margin-top:20px; min-width: 230px;" data-toggle="modal" data-target="#myModalProject">
+      <img src="images/Add.png" ><span style="padding-left: 10px;">Crear nuevo proyecto</span>
+     </button>
   </div>
+
 <div class="tab" role="tabpanel">
   <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li role="presentation" class="active"><a data-toggle="tab" href="#activos">Proyectos activos</a></li>
@@ -68,5 +71,164 @@
   </div>
 </div>
 
+<!-- The Modal -->
+  <div class="modal fade" id="myModalProject">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content" >
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+         <label class="lblTittle">Crear nuevo proyecto</label>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <form id="proyect">
+             <div class="form-row">
+              <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <label for="projectClient" class="lblForm">Cliente</label>
+                <input type="text" class="form-control formulario" id="projectClient" name="projectClient" required>
+              </div>
+            </div>
+            <div class="form-row paddingTop">
+              <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <label for="projectCode" class="lblForm">Código del Proyecto</label>
+                <input type="text" class="form-control formulario" id="projectCode" name="projectCode" required>
+              </div>
+            </div>
+            <div class="form-row paddingTop">
+              <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <label for="projectName" class="lblForm">Nombre del proyecto</label>
+                <input type="text" class="form-control formulario" id="projectName" name="projectName" required>
+              </div>
+            </div>
+            <div class="form-row paddingTop">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label for="projectCollaborator" class="lblForm">Colaboradores</label>
+                <select class="chosen formulario " multiple="true" style="width: 100%" name="projectCollaborator" id="projectCollaborator" required>
+                    <% if (typeof(usersAll) !== "undefined") { %>
+                      <% for(var j = 0; j < usersAll.length; j++) { %>
+                          <option><%= usersAll[j].email %></option>
+                        <% } %>
+                    <% } %>
+                  </select>
+              </div>
+            </div>
+            <div class="form-row paddingTop">
+              <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <label for="projectCategory" class="lblForm">Categorias</label>
+                <select class="formulario select2" style="width: 100%" name="projectCategory" id="projectCategory" required>                  
+                </select>
+              </div>
+            </div>
+          </form>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">         
+          <button class="btnCancel" type="button"  data-dismiss="modal" >Cancelar</button>
+          <button class="btnNormal"  type="button" onClick="saveProject()" >Crear proyecto</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+<script>
+    $(function() {
+      $(".chosen").chosen({
+        display_disabled_options: true
+      });
+    });
+    jQuery(document).ready(function() {
+      $("#projectCollaborator_chosen").css("width","100%");
+      $("#projectCategory_chosen").css("width","100%");
+        
+      var handleValidation = function() {
+        var message = "No puedes dejar este campo en blanco.";
+        var message2 = "Debe seleccionar una opci&oacute;n.";
+        $('#proyect').validate({
+          errorElement: 'label', //default input error message container
+          errorClass: 'help-inline', // default input error message class
+          focusInvalid: false, // do not focus the last invalid input
+          ignore: "",
+          rules: {
+            projectClient: { required: true }, //hace al campo requerido
+            projectCode: { required: true }, //hace al campo requerido
+            projectName: { required: true }, //hace al campo requerido
+            projectCollaborator: { required: true}
+          },
+          messages: { // en caso de error estos son los mensajes que se muestran            
+            projectClient: { required: message }, 
+            projectCode: { required: message }, 
+            projectName: { required: message }, 
+            projectCollaborator: { required: message2 }
+          },
+          highlight: function (element) { // hightlight error inputs
+            $(element).closest('.control-group').addClass('error'); // set error class to the control group
+          },
+          success: function (label) {
+            label.closest('.control-group').removeClass('error');
+            label.remove();
+          },
+          errorPlacement: function (error, element) {
+             error.addClass('help-small no-left-padding').insertAfter(element);          
+          },
+          submitHandler: function (form) {
+            form.submit();
+          }
+        });
 
+        
+        $.ajax({
+          type: "GET",
+          url: "/getCategoriesFromFile/",          
+          async:true
+        }).done(function (data, textStatus) {                        
+          $.each(data.categories, function(i, item) {
+            var x = document.getElementById("projectCategory");
+            var option = document.createElement("option");
+            option.text = item.Typo;
+            x.add(option);
+          });
+          $('#projectCategory').trigger('change', true);
+         
+        })
+      };
+      handleValidation();
+
+        $("#collaborator").change(function(){
+          $('#collaborator').valid();
+        });
+      });
+
+      function saveProject(){
+        if ($('#proyect').valid()) {
+          $.ajax({
+            type: "POST",
+            url: "/insertP/",
+            data: $('#proyect').serialize() ,
+            async:true,
+            beforeSend: function(){ //se muestra una imagen mientras el ajax se ejecuta
+              showIsLoading("Procesando...");
+            }
+          }).done(function (data, textStatus) {              
+            hideIsLoading();
+            $('#myModalProject').modal('hide');
+            if (textStatus != 'success') {
+              fnOpenErrorDialog(data.desc);
+            }
+            if (textStatus == 'success') {
+              fnOpenCorrectDialog(data.desc);
+              setTimeout(function() { location.reload(); }, 1000);
+            }
+          }).fail(function (jqXHR, textStatus, errorThrown) {
+            hideIsLoading();
+            $('#myModalProject').modal('hide');
+            fnOpenErrorDialog(errorThrown);
+          });
+
+        }
+      }
+  </script>
 <% include partials/_footer %>

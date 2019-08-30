@@ -32,6 +32,7 @@
     "tableexport": "^5.2.0"
   },
   "devDependencies": {
+    "cypress": "^3.4.1",
     "nodemon": "^1.18.10"
   }
 }

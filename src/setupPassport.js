@@ -29,7 +29,7 @@ var passport = require('passport'),
         }
       ))
 
-      passport.serializeUser(function(user, done) {
+      passport.serializeUser(function(user, done) {  
         done(null, user.id)
       })
 
@@ -42,7 +42,8 @@ var passport = require('passport'),
           if (user == null) {
             done(new Error('User id incorrecto.'))
           }
-
+          
+          global.User = user;
           done(null, user)
         })
       })
