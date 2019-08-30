@@ -22,6 +22,8 @@ router.get('/update/:id', appProyectosController.edit);
 router.post('/updateC/:id', appProyectosController.updateC);
 router.get('/delete/:id', appProyectosController.delete);
 router.post('/insert/', appProyectosController.insert);
+router.get('/getCategoriesFromFile/', appProyectosController.getCategoriesFromFile);
+
 /*****************************************************************************************************************************************************************
                                                                       Rutas de recursos
 ******************************************************************************************************************************************************************/
@@ -32,7 +34,7 @@ router.post('/updateR/:id', appProyectosController.updateR);
 /*****************************************************************************************************************************************************************
                                                                       Rutas de Tareas
 ******************************************************************************************************************************************************************/
-router.post('/addTarea/:idProyecto', appProyectosController.insertTareas);
+router.post('/addTarea/:idProyecto', appProyectosController.insertTarea);
 router.post('/loadProyecto/', appProyectosController.listBodyTareas);
 router.get('/addcat/:id', appProyectosController.listCategoriasAll);
 router.get('/addcatProyecto/:id/:idProyecto', appProyectosController.insertCatProyecto);
