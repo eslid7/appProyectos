@@ -49,3 +49,22 @@
             </div>
           <% } }%>
 <% } %>
+
+<script type="text/javascript">
+  const forms = document.forms;
+  // Search projects
+  const listP = document.querySelector('#activos');
+  const searchBarP = forms['search-projects'].querySelector('input');
+  searchBarP.addEventListener('keyup', (e) => {
+    const term = e.target.value.toLowerCase();
+    const projects = listP.getElementsByClassName('card-title');
+    Array.from(projects).forEach((project) => {
+      const title = project.textContent;
+      if(title.toLowerCase().indexOf(e.target.value) != -1){
+        project.parentElement.parentElement.parentElement.style.display = 'block';
+      } else {
+        project.parentElement.parentElement.parentElement.style.display = 'none';
+      }
+    });
+  });
+</script>

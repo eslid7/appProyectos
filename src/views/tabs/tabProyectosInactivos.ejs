@@ -31,3 +31,22 @@
             </div>
           <% } }%>
 <% } %>
+
+<script type="text/javascript">
+  const formsI = document.forms;
+  // Search inactive projects
+  const listPI = document.querySelector('#inactivos');
+  const searchBarPI = formsI['search-projects'].querySelector('input');
+  searchBarPI.addEventListener('keyup', (e) => {
+    const term = e.target.value.toLowerCase();
+    const projects = listPI.getElementsByClassName('card-title');
+    Array.from(projects).forEach((project) => {
+      const title = project.textContent;
+      if(title.toLowerCase().indexOf(e.target.value) != -1){
+        project.parentElement.parentElement.parentElement.style.display = 'block';
+      } else {
+        project.parentElement.parentElement.parentElement.style.display = 'none';
+      }
+    });
+  });
+</script>
