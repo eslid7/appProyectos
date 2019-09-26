@@ -577,4 +577,25 @@ controller.getCategoriesFromFile = (req, res) => {
   })
 }
 
+controller.createExcelFile = (req, res) =>{
+  const json2csvParser = new Json2csvParser({ fields })
+  const csvData = json2csvParser.parse(rows)
+  res.setHeader('Content-Type', 'application/vnd.ms-excel')
+  res.setHeader(
+    'Content-Disposition',
+    `attachment;filename=analisis_${Date.now()}.csv`
+  )
+  res.end(csvData, 'binary')
+
+  let query = ''
+  Object.keys(dataToSend).forEach((item, index) => {
+    query += index > 0 && dataToSend[item] ? '&' : ''
+    query += dataToSend[item] ? `${item}=${dataToSend[item]}` : ''
+  })
+  query += `&lng=${currentLanguage[0]}`
+  window.location.href = `${PATH}/api/v1/reports/${reporType}?${encodeURI(
+    query
+  )}`
+}
+
 module.exports = controller;
