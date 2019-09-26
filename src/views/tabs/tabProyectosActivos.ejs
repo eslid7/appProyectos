@@ -5,44 +5,44 @@
             <div class="row" style="margin-top: 3%;">
                 <div class="card-deck col-md-12">
         <%  } %>
-                <a href="/updatePe/<%= proyectosActivos[j].id_proyectos %>">
-                  <div class="card" style="padding:0px;max-width: 22.5%;">
-                    <div class="card-body cardstyle" style="padding-top: 45px;">
-                      <h3 class="card-title"><%= proyectosActivos[j].nombre %></h3>
-                      <div class="row">
-                        <p class="card-text" style="margin-left: 6%;"><small> Creado por: <%= proyectosActivos[j].firstname %> <%= proyectosActivos[j].lastname %> </small></p>
-                      </div>
-                       <div class="row">
-                        <p class="card-text" style="margin-left: 6%;"><small> Código: <%= proyectosActivos[j].codigo %></small></p>
-                      </div>
-                      <div class="row">
-                        <p class="card-text" style="margin-left: 6%;"> <small> <%= proyectosActivos[j].fecha_creacion.toDateString() %> </small></p>
-                      </div>
-                    </div>                    
-                    <% ingresa = false; for(var i = 0; i < tareasProyectos.length; i++) { %>
-                      <% if(tareasProyectos[i].id_proyectos == proyectosActivos[j].id_proyectos){%>
-                      <%ingresa = true;%>
-                        <div class="card-footer text-muted">
-                          <div style="background-color: white;width: 50%;display: inline-block;">
-                            <p class="card-meta"><small ><a class="glyphicon glyphicon-time"></a> Tiempo: <%=  tareasProyectos[i].horas %>h</small></p>
-                          </div>
-                          <div style="background-color: white;width: 50%;display: inline-block;float: right;">
-                            <p class="card-meta"><small><a class="glyphicon glyphicon-tasks"></a> Tareas: <%= tareasProyectos[i].tareas%></small></p>
-                          </div>
-                        </div>
-                    <% } }%>
-                    <% if(!ingresa){%>
-                      <div class="card-footer text-muted">
-                        <div style="background-color: white;width: 50%;display: inline-block;">
-                          <p class="card-meta"><small ><a class="glyphicon glyphicon-time"></a> Tiempo: 0 h</small></p>
-                        </div>
-                        <div style="background-color: white;width: 50%;display: inline-block;float: right;">
-                          <p class="card-meta"><small><a class="glyphicon glyphicon-tasks"></a> Tareas: 0 </small></p>
-                        </div>
-                      </div>
-                    <% } %>
+              <div class="card card-proyect" style="padding:0px;max-width: 22.5%;" onclick="location.href='/updatePe/<%= proyectosActivos[j].id_proyectos %>'">
+                <div class="card-body cardstyle" >
+                  <div class="card-header-proyect"></div>
+                  <div class="text-activo-card"><div class="redondeado"></div> Activo </div>
+                  <div class="card-title" style="padding-top: 65px;"><%= proyectosActivos[j].nombre %></div>
+                  <div class="row card-text">
+                    Creado por: <%= proyectosActivos[j].firstname %> <%= proyectosActivos[j].lastname %>
                   </div>
-                </a>  
+                   <div class="row card-text-detail">
+                    Código: <%= proyectosActivos[j].codigo %> 
+                  </div>
+                  <div class="row card-text-detail">
+                    <%= proyectosActivos[j].fecha_creacion.toLocaleDateString() %> 
+                  </div>
+                </div>                    
+                <% ingresa = false; for(var i = 0; i < tareasProyectos.length; i++) { %>
+                  <% if(tareasProyectos[i].id_proyectos == proyectosActivos[j].id_proyectos){%>
+                  <%ingresa = true;%>
+                    <div class="cardproyect-footer">
+                      <div style="width: 50%;display: inline-block;padding-left:15px;">
+                      <small ><i class="icon-clock" style="position: absolute;margin-top: 4px;font-size: 15px;margin-left: -20px;"></i> Tiempo: <%=  tareasProyectos[i].horas %>h</small>
+                      </div>
+                      <div style="width: 50%;display: inline-block;float: right;">
+                        <small><a class="glyphicon glyphicon-tasks"></a> Tareas: <%= tareasProyectos[i].tareas%></small>
+                      </div>
+                    </div>
+                <% } }%>
+                <% if(!ingresa){%>
+                  <div class="cardproyect-footer">
+                    <div style="width: 50%;display: inline-block; padding-left:15px;">
+                      <small ><i class="icon-clock" style="position: absolute;margin-top: 4px;font-size: 15px;margin-left: -20px;"></i> Tiempo: 0 h</small>
+                    </div>
+                    <div style="width: 50%;display: inline-block;float: right;">
+                     <small><a class="glyphicon glyphicon-tasks"></a> Tareas: 0 </small>
+                    </div>
+                  </div>
+                <% } %>
+              </div>
 
           <%  if(j===proyectosActivos.length-1 || ((j+1) % 4 == 0)){ %>
                 </div>

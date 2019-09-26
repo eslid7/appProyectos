@@ -23,24 +23,24 @@ tModel.belongsTo(cModel, {foreignKey: 'id_categoria'})
                           Función encargada de cargar los datos necesarios para las Listas a las tablas del index
 *************************************************************************************************************************************************************/
 controller.list = (req, res) => {
-          const queryProyectosAll = 'SELECT COUNT("id_proyectos") FROM "proyectos" WHERE "creador" ='+ global.User.id +" or colaboradores like '"+ global.User.email+"'";
+          const queryProyectosAll = 'SELECT COUNT("id_proyectos") FROM "proyectos" WHERE "creador" ='+ global.User.id +" or colaboradores like '%"+ global.User.email+"%' ";
           sequelize.query(queryProyectosAll) //obtenemos proyectos
            .then(proyectosAll => {
-             const queryProyectosCountAct = 'SELECT COUNT("id_proyectos") FROM "proyectos"  WHERE estado=true and "creador" ='+ global.User.id +" or colaboradores like '"+ global.User.email+"'";
+             const queryProyectosCountAct = 'SELECT COUNT("id_proyectos") FROM "proyectos"  WHERE estado=true and "creador" ='+ global.User.id +" or colaboradores like '%"+ global.User.email+"%'";
              sequelize.query(queryProyectosCountAct) //obtenemos proyectos
               .then(proyectosCountAct => {
                rModel.findAll()
                .then(recursosAll => {
-                 const queryProyectosActivos = 'select proyectos.*, usuarios.firstname, usuarios.lastname from proyectos, usuarios where proyectos.creador = usuarios.id and proyectos.estado=true and ( creador ='+ global.User.id +" or colaboradores like '"+ global.User.email+"') order by id_proyectos";
+                 const queryProyectosActivos = 'select proyectos.*, usuarios.firstname, usuarios.lastname from proyectos, usuarios where proyectos.creador = usuarios.id and proyectos.estado=true and ( creador ='+ global.User.id +" or colaboradores like '%"+ global.User.email+"%') order by id_proyectos";
                  sequelize.query(queryProyectosActivos) //obtenemos proyectos
                  .then(proyectosActivos => {
-                   const queryProyectosInactivos = 'select proyectos.*, usuarios.firstname, usuarios.lastname from proyectos, usuarios where proyectos.creador = usuarios.id and proyectos.estado=false and ( creador ='+ global.User.id +" or colaboradores like '"+ global.User.email+"') order by id_proyectos";
+                   const queryProyectosInactivos = 'select proyectos.*, usuarios.firstname, usuarios.lastname from proyectos, usuarios where proyectos.creador = usuarios.id and proyectos.estado=false and ( creador ='+ global.User.id +" or colaboradores like '%"+ global.User.email+"%') order by id_proyectos";
                    sequelize.query(queryProyectosInactivos) //obtenemos proyectos
                     .then(proyectosInactivos => {
                  //res.send(proyectosAll[1].rows[0].count)
                     uModel.findAll()
                       .then(usersAll => {
-                      const queryTareasProyectos = 'select SUM(t.horas) AS horas, t.id_proyectos, count(t.id_proyectos) AS tareas from tareas t inner join proyectos pr on t.id_proyectos = pr.id_proyectos where pr.estado=true and ( pr.creador ='+ global.User.id +" or pr.colaboradores like '"+ global.User.email+"') GROUP BY t.id_proyectos";
+                      const queryTareasProyectos = 'select SUM(t.horas) AS horas, t.id_proyectos, count(t.id_proyectos) AS tareas from tareas t inner join proyectos pr on t.id_proyectos = pr.id_proyectos where pr.estado=true and ( pr.creador ='+ global.User.id +" or pr.colaboradores like '%"+ global.User.email+"%') GROUP BY t.id_proyectos";
                       sequelize.query(queryTareasProyectos) //obtenemos proyectos
                       .then(tareasProyectos => {
                           res.render('index', {
@@ -474,6 +474,45 @@ controller.deleteRecP = (req, res) => {
   });
 };
 
+
+
+/*****************************************************************************************************************************************************************
+                                                                Delete Tarea
+/*****************************************************************************************************************************************************************/
+controller.deleteTarea = (req, res) => {
+  const  idTarea  = req.params.idTarea;
+  // const  soyCreadorProyecto  = req.params.idTarea;
+  const query1 = 'DELETE FROM tareas WHERE id = '+idTarea;
+  const consult = 'SELECT pr.id_proyectos FROM proyectos pr INNER JOIN tareas tar ON tar.id_proyectos = pr.id_proyectos WHERE tar.id ='+idTarea+' AND ( pr.creador ='+ global.User.id +' OR tar.id_usuario ='+ global.User.id +') ';
+  sequelize.query(consult).then(resultsData => {
+      console.log(resultsData[1].rows[0])
+    if(resultsData[1].rows[0]){
+      sequelize.query(query1).spread((results, metadata) => {     //borro recursos asociados al proyecto
+        res.status(200).json({
+          desc: 'Se ha eliminado exitosamente.'
+        })
+      }).catch(function (err) {
+        // en caso de error se devuelve el error
+        console.log('ERROR: ' + err)
+        res.status(500).json({
+          desc: err
+        })
+      })
+    }
+    else{
+       res.status(500).json({
+        desc: "El registro no se puede eliminar, porque no es el dueño o administrador de la tarea."
+      })
+    }
+    
+  }).catch(function (err) {
+    // en caso de error se devuelve el error
+    console.log('ERROR: ' + err)
+    res.status(500).json({
+      desc: err
+    })
+  })
+};
 
 /*
 controller.report = (req, res) => {

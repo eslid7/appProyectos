@@ -1,14 +1,19 @@
 <% include partials/_header %>
+  
+  <img  src="/images/header_background.png" style="position:absolute; margin-top:-22px; width:50%; margin-left:50%;z-index:-1;">
 <div class="container">
   <div class="card-group">
-                      <div class="card">
-                          <h4 class="card-header">Vista general de proyectos</h4>
+                      <div class="card" style="margin-top:20px;">
+                          <h4 class="card-header text-color" style="background-color: white;">Vista general de proyectos</h4>
+
                           <div class="card-body">
-                              <div class="row grid-divider">
+                              <div class="row grid-divider" style="min-height: 85px;">
                                   <div class="col-md-4">
                                     <div class="d-flex no-block align-items-center marginLeft">
                                         <div class="col-padding">
-                                            <h2 class="counter text-box-home"><a class="glyphicon glyphicon-inbox"></a> <%= proyectosAll.count %></h2>
+                                            <h2 class="counter text-box-home" style="color:#34CED0;">
+                                            <img  src="/images/VectorTodos.png" width="30px;">
+                                             <%= proyectosAll.count %></h2>
                                         </div>
                                         <div>
                                               <h3><i class="icon-screen-desktop"></i></h3>
@@ -19,7 +24,9 @@
                                   <div class="col-md-4">
                                     <div class="d-flex no-block align-items-center marginLeft">
                                         <div class="col-padding">
-                                            <h2 class="counter text-box-home"><a class="glyphicon glyphicon-eye-open"></a> <%= proyectosCountAct.count %></h2>
+                                            <h2 class="counter text-box-home" style="color:#2B35EC;">
+                                            <img  src="/images/VectorActivos.png" width="30px;">
+                                             <%= proyectosCountAct.count %></h2>
                                         </div>
                                         <div>
                                               <h3><i class="icon-screen-desktop"></i></h3>
@@ -29,21 +36,23 @@
                                   </div>
                                   <div class="col-md-4">
                                     <div class="d-flex no-block align-items-center marginLeft">
-                                        <div class="col-padding" >
-                                            <h2 class="counter text-box-home"><a class="glyphicon glyphicon-eye-close"></a> <%= proyectosAll.count - proyectosCountAct.count %></h2>
+                                        <div class="col-padding"  >
+                                            <h2 class="counter text-box-home" style="color: #2B35EC; opacity: 0.5;">
+                                            <img  src="/images/VectorInactivos.png" width="30px;"> <%= proyectosAll.count - proyectosCountAct.count %></h2>
                                         </div>
                                         <div>
                                               <h3><i class="icon-screen-desktop"></i></h3>
                                               <p class="text-muted">Proyectos inactivos</p>
                                         </div>
+                                        <img src="images/taskrcrcl.png" class="class-taskrcrcl-index">
                                     </div>
                                   </div>
                               </div>
                           </div>
                       </div>
   </div>
-  <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800 ">Proyectos</h1>            
+  <div class="d-sm-flex align-items-center justify-content-between mb-4" style="margin-top:85px;">
+    <h1 class="h3 mb-0 text-color">Proyectos</h1>            
      <button class="btnNormal" style="margin-top:20px; min-width: 230px;" data-toggle="modal" data-target="#myModalProject">
       <img src="images/Add.png" ><span style="padding-left: 10px;">Crear nuevo proyecto</span>
      </button>
