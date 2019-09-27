@@ -485,7 +485,6 @@ controller.deleteTarea = (req, res) => {
   const query1 = 'DELETE FROM tareas WHERE id = '+idTarea;
   const consult = 'SELECT pr.id_proyectos FROM proyectos pr INNER JOIN tareas tar ON tar.id_proyectos = pr.id_proyectos WHERE tar.id ='+idTarea+' AND ( pr.creador ='+ global.User.id +' OR tar.id_usuario ='+ global.User.id +') ';
   sequelize.query(consult).then(resultsData => {
-      console.log(resultsData[1].rows[0])
     if(resultsData[1].rows[0]){
       sequelize.query(query1).spread((results, metadata) => {     //borro recursos asociados al proyecto
         res.status(200).json({
@@ -513,6 +512,78 @@ controller.deleteTarea = (req, res) => {
     })
   })
 };
+
+/*****************************************************************************************************************************************************************
+                                                                Inactivar Proyecto
+/*****************************************************************************************************************************************************************/
+controller.inactiveProyect = (req, res) => {
+  const  idProyecto  = req.params.id;
+  // const  soyCreadorProyecto  = req.params.idTarea;
+  const query = 'UPDATE proyectos SET estado = false WHERE id_proyectos = '+idProyecto;
+  const consult = 'SELECT id_proyectos FROM proyectos WHERE id_proyectos = '+idProyecto+' AND creador ='+ global.User.id ;
+  sequelize.query(consult).then(resultsData => {
+    if(resultsData[1].rows[0]){
+      sequelize.query(query).spread((results, metadata) => {     //borro recursos asociados al proyecto
+        res.status(200).json({
+          desc: 'Se ha inactivado exitosamente.'
+        })
+      }).catch(function (err) {
+        // en caso de error se devuelve el error
+        console.log('ERROR: ' + err)
+        res.status(500).json({
+          desc: err
+        })
+      })
+    }
+    else{
+       res.status(500).json({
+        desc: "El proyecto no se puede inactivar, porque no es el administrador del proyecto."
+      })
+    }    
+  }).catch(function (err) {
+    // en caso de error se devuelve el error
+    console.log('ERROR: ' + err)
+    res.status(500).json({
+      desc: err
+    })
+  })
+}
+
+/*****************************************************************************************************************************************************************
+                                                                Inactivar Proyecto
+/*****************************************************************************************************************************************************************/
+controller.activeProyect = (req, res) => {
+  const  idProyecto  = req.params.id;
+  // const  soyCreadorProyecto  = req.params.idTarea;
+  const query = 'UPDATE proyectos SET estado = true WHERE id_proyectos = '+idProyecto;
+  const consult = 'SELECT id_proyectos FROM proyectos WHERE id_proyectos = '+idProyecto+' AND creador ='+ global.User.id ;
+  sequelize.query(consult).then(resultsData => {
+    if(resultsData[1].rows[0]){
+      sequelize.query(query).spread((results, metadata) => {     //borro recursos asociados al proyecto
+        res.status(200).json({
+          desc: 'Se ha activado exitosamente.'
+        })
+      }).catch(function (err) {
+        // en caso de error se devuelve el error
+        console.log('ERROR: ' + err)
+        res.status(500).json({
+          desc: err
+        })
+      })
+    }
+    else{
+       res.status(500).json({
+        desc: "El proyecto no se puede activar, porque no es el administrador del proyecto."
+      })
+    }    
+  }).catch(function (err) {
+    // en caso de error se devuelve el error
+    console.log('ERROR: ' + err)
+    res.status(500).json({
+      desc: err
+    })
+  })
+}
 
 /*
 controller.report = (req, res) => {
@@ -578,8 +649,10 @@ controller.getCategoriesFromFile = (req, res) => {
 }
 
 controller.createExcelFile = (req, res) =>{
+  fields ='[{"Analisis"},{""},{""}]';
   const json2csvParser = new Json2csvParser({ fields })
   const csvData = json2csvParser.parse(rows)
+
   res.setHeader('Content-Type', 'application/vnd.ms-excel')
   res.setHeader(
     'Content-Disposition',
@@ -587,15 +660,15 @@ controller.createExcelFile = (req, res) =>{
   )
   res.end(csvData, 'binary')
 
-  let query = ''
-  Object.keys(dataToSend).forEach((item, index) => {
-    query += index > 0 && dataToSend[item] ? '&' : ''
-    query += dataToSend[item] ? `${item}=${dataToSend[item]}` : ''
-  })
-  query += `&lng=${currentLanguage[0]}`
-  window.location.href = `${PATH}/api/v1/reports/${reporType}?${encodeURI(
-    query
-  )}`
+  // let query = ''
+  // Object.keys(dataToSend).forEach((item, index) => {
+  //   query += index > 0 && dataToSend[item] ? '&' : ''
+  //   query += dataToSend[item] ? `${item}=${dataToSend[item]}` : ''
+  // })
+  // query += `&lng=${currentLanguage[0]}`
+  // window.location.href = `${PATH}/api/v1/reports/${reporType}?${encodeURI(
+  //   query
+  // )}`
 }
 
 module.exports = controller;
