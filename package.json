@@ -4,7 +4,8 @@
   "description": "App estimación de Proyectos",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/app.js"
+    "dev": "nodemon src/app.js",
+    "start": "node src/app.js"
   },
   "repository": {
     "type": "git",
@@ -33,7 +34,6 @@
     "tableexport": "^5.2.0"
   },
   "devDependencies": {
-    "cypress": "^3.4.1",
     "nodemon": "^1.18.10"
   }
 }
