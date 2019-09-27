@@ -78,7 +78,7 @@ ul.timeline > li:before {
 .loginContainer{
   margin-left: 3%;
   height: 100%;
-  width: 100%;
+  /*width: 100%;*/
   /*font-family: var(--letra);*/
 }
 .Container{
@@ -234,21 +234,73 @@ a{
 }
 
 .cardstyle{
-  background-color: var(--primaryColor) !important;
-  color: white !important;
+  /*color: #333333;*/
+  font-family: var(--letra) !important;
+  font-size:20px;
+}
+
+.card-header-proyect{
+  height: 11px;
+  background-color: #2B35EC;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  margin-top: -13px;
+  width: 111.5%;
+  margin-left: -12.3px;
+}
+
+.text-activo-card{
+  font-family: var(--letra) !important;
+  color: white;
+  font-size: 9px;
+  background-color: #2B35EC;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  width: 60px;
+  float: right;
+  margin-top: -4px;
+  text-align: center;
+  height: 17px;
+  padding-left: 8px;
+  padding-top: 1px;
+}
+.card-title{
+  margin-bottom: 0px;
 }
 
 .card-text{
-    color: white;
-    margin-bottom: 0;
+  /*color: #333333;*/
+  font-family: var(--letra) !important;
+  font-weight: 500;
+  font-size: 11px;  
 }
+
+.card-text-detail{
+/*    color: #4F4F4F;*/
+    font-family: var(--letra) !important;
+    margin-bottom: 0;
+    font-size:11px;
+
+}
+
+.redondeado{
+  background: white;
+  position: absolute;
+  height: 7px;
+  width: 7px;
+  border-radius: 50%;
+  margin-top: 2px;
+}
+
 
 .row{
   margin-left: 0px !important;
   margin-right: 0px !important;
 }
-.card-footer{
-  background-color: white
+.cardproyect-footer{
+  padding: .75rem 1.25rem;
+  /*background-color: #FAFAFA;*/
+  padding-bottom: 17px;
 }
 .card {
   border: 0px;
@@ -269,8 +321,15 @@ a{
 }
 
 /* On mouse-over, add a deeper shadow */
+.card-proyect:hover {
+  text-decoration: none !important;
+  color: white !important;
+  background-color: #2B35EC !important;
+}
+
 .card:hover {
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.5);
+  cursor: pointer;
 }
 
 .container {
@@ -282,12 +341,26 @@ a{
   height: 50px;
   left: calc(50% - 224px/2 + 425px);
   top: 313px;
-  background: #4F4F4F;
+  background: #ED4A71;
 /*  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.24), 0px 0px 2px rgba(0, 0, 0, 0.12);*/
   border: 0px;
   color: #FFFFFF;
   font-size: 16px;
   text-align: center;
+}
+
+.btnAzul{
+  width: 100%;
+  height: 50px;
+  left: calc(50% - 224px/2 + 425px);
+  top: 313px;
+  background: #2B35EC;
+/*  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.24), 0px 0px 2px rgba(0, 0, 0, 0.12);*/
+  border: 0px;
+  color: #FFFFFF;
+  font-size: 16px;
+  text-align: center;
+  border-radius: 10px;
 }
 
 .btnCancel{
@@ -327,25 +400,24 @@ input.formulario{
   height: 50px;
   left: calc(50% - 368px/2 - 215.5px);
   top: 128px;
-  background: #F3F3F3;
+  background: rgb(43,53,236, 0.05);
   border-radius: 3px;
   padding: 10px;
   font-family: var(--letra);
 }
 
 select.formulario{
-  height: 59px;
   left: calc(50% - 790px/2 - 4.5px);
   top: 223px;
-  background: #F3F3F3;
+  background: rgb(43,53,236, 0.05);
   border-radius: 3px;
 }
 
 ul.chosen-choices{
   background-image: none !important;
-  background-color: #F3F3F3 !important;
+  background: rgb(43,53,236, 0.05) !important;
   border: none !important;
-  height: 50px !important;
+  min-height: 50px !important;
 }
 
 button:hover {
@@ -416,15 +488,18 @@ button:hover {
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
   background-color: white;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
 }
 .content-home-right{
-  background-color: var(--primaryColor);
+  background-color: white;
   -webkit-border-top-right-radius: 20px;
-  -webkit-border-bottom-right-radius: 20px;
   -moz-border-radius-topright: 20px;
-  -moz-border-radius-bottomright: 20px;
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
+  border-top-right-radius: 0px;
+  background-image: url('/images/card_background.png');
+  background-repeat: no-repeat;
+  background-size: 122%;
+  box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.25);
+
 }
 
 .navbar {
@@ -438,6 +513,109 @@ button:hover {
 }
 
 body{
-  background-color: #F2F2F2 !important;
+  background-color: #FBFBFB !important;
+  font-family: var(--letra) !important;
 }
 
+.text-color{
+  color:#4F4F4F !important;
+}
+
+.body-login{
+  background-color: #FFFFFF !important;
+  background-image: url('/images/login_background.png');
+  background-size: 1063px;
+  background-repeat: no-repeat;
+  background-position-x: 194px;
+  background-position-y: 4px;
+  width: 1280px;
+}
+
+.class-taskrcrcl{
+  z-index: 100;
+  position: fixed;
+  margin-left: 1008px;
+  transform: rotate(-133deg);
+}
+.class-taskrcrcl-index{
+  z-index: 100;
+  position: absolute;
+  margin-left: 25.8%;
+  width: 90px;
+  top: -94px;
+}
+
+.class-triangulo{
+  z-index: 100;position: fixed;margin-left: 968px;margin-top: 434px;width: 170px;
+}
+
+.logo{
+  margin-bottom: 5%; 
+  margin-top: 3%; 
+  width: 145px; 
+  height: 32px;
+}
+
+.relog{
+   background-image: url('/images/relog.png');
+}
+
+.div-footer{
+  border-top: 1px solid;
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 10px;
+  width: 95%;
+  position: relative;
+  margin-left: 2.5%;
+  color: #828282;
+  margin-top: 40px;
+}
+
+.modal-content{
+  padding: 20px
+}
+
+@font-face {
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?ads0is');
+  src:  url('fonts/icomoon.eot?ads0is#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?ads0is') format('truetype'),
+    url('fonts/icomoon.woff?ads0is') format('woff'),
+    url('fonts/icomoon.svg?ads0is#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-clock:before {
+  content: "\e94e";
+}
+.icon-search:before {
+  content: "\e986";
+}
+.icon-zoom-in:before {
+  content: "\e987";
+}
+.icon-cancel-circle:before {
+  content: "\ea0d";
+}
+
+.search-choice a{
+  padding-left: 10px;
+}
