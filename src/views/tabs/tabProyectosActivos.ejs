@@ -14,12 +14,12 @@
                     Creado por: <%= proyectosActivos[j].firstname %> <%= proyectosActivos[j].lastname %>
                   </div>
                    <div class="row card-text-detail">
-                    Código: <%= proyectosActivos[j].codigo %> 
+                    Código: <%= proyectosActivos[j].codigo %>
                   </div>
                   <div class="row card-text-detail">
-                    <%= proyectosActivos[j].fecha_creacion.toLocaleDateString() %> 
+                    <%= proyectosActivos[j].fecha_creacion.toLocaleDateString() %>
                   </div>
-                </div>                    
+                </div>
                 <% ingresa = false; for(var i = 0; i < tareasProyectos.length; i++) { %>
                   <% if(tareasProyectos[i].id_proyectos == proyectosActivos[j].id_proyectos){%>
                   <%ingresa = true;%>
@@ -61,9 +61,9 @@
     Array.from(projects).forEach((project) => {
       const title = project.textContent;
       if(title.toLowerCase().indexOf(e.target.value) != -1){
-        project.parentElement.parentElement.parentElement.style.display = 'block';
+        project.parentElement.parentElement.style.display = 'block';
       } else {
-        project.parentElement.parentElement.parentElement.style.display = 'none';
+        project.parentElement.parentElement.style.display = 'none';
       }
     });
   });
