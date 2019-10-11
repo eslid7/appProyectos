@@ -49,7 +49,7 @@ var footer_functions = function () {
 				modal: true,
 				buttons: [
 					{
-						'class' : 'btn',
+						'class' : 'btnCancel',
 						"text" : "Cancelar",
 						'id' : 'pp_confirm_cancel_btn',
 						click: function() {
@@ -57,7 +57,7 @@ var footer_functions = function () {
 						}
 					},
 					{
-						'class' : 'btn blue',
+						'class' : 'btnNormal',
 						"text" : "Aceptar",
 						'id' : 'pp_confirm_accept_btn',
 						click: function() {
@@ -85,8 +85,10 @@ function fnOpenCorrectDialog(msn) {
 	$(".correct_dialog").dialog("open"); //si se actualiza correctamente muestra un mensaje
 }
 
-function fnOpenConfirmDialog(msn) {
+function fnOpenConfirmDialog(title, msn, aceptarNameButton) {
+	$("#ui-id-4").html(title)
 	$("#confirm_message").html(msn);
+	$('#pp_confirm_accept_btn').text(aceptarNameButton)
 	$(".confirm_dialog").dialog("open");//llama a un modal de confirm
 }
 

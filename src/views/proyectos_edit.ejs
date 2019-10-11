@@ -15,8 +15,8 @@
   </div>
   <div class="row">
     <div class="col-md-5 offset-md-1 lblForm">
-      <span style="font-size: 24px; font-weight: bold; border-right:2px solid #E0E0E0;padding-right: 30px;margin-right: 30px;"> <%= data[0].nombre%> </span> 
-      <span style="font-size: 18px; font-weight: bold; color: #ED4A71; margin-right:10px;"><%=totalHoras%> </span> <span style="font-size:11px">Horas estimadas</span> <br>
+      <span class="nameProyectActive"> <%= data[0].nombre%> </span> 
+      <span class="hoursProyect"><%=totalHoras%> </span> <span style="font-size:11px">Horas estimadas</span> <br>
       Cliente: <%= data[0].cliente%>  &nbsp &nbsp Código: <%= data[0].codigo%>
     </div>
     <div class="col-md-3">     
@@ -29,15 +29,15 @@
     <div class="col-md-11 offset-md-1 lblForm" style="display: inherit;">
       <div style="border:1px solid; width: 165px; text-align: center; color: #2B35EC; margin-right: 10px; cursor:pointer;height: 30px;padding-top: 4px;" onclick="fnColaboradores()">Ver colaboradores</div>
       <% if (data[0].estado) { %>
-        <div style="border:1px solid; width: 159px; text-align: center; color: #2B35EC; cursor:pointer;padding-top: 4px;" onclick="InactivarProyecto()">Inactivar Proyecto</div>
+        <div style="border:1px solid; width: 159px; text-align: center; color: #2B35EC; cursor:pointer;padding-top: 4px;" onclick="CallConfirmInactivarProyecto('<%= data[0].nombre%>')">Inactivar Proyecto</div>
       <% } else {%>
-        <div style="border:1px solid; width: 159px; text-align: center; background-color: #2B35EC; cursor:pointer; color: white;padding-top: 4px;" onclick="ActivarProyecto()">Activar Proyecto</div>
+        <div style="border:1px solid; width: 159px; text-align: center; background-color: #2B35EC; cursor:pointer; color: white;padding-top: 4px;" onclick="CallConfirmActivarProyecto('<%= data[0].nombre%>')">Activar Proyecto</div>
       <%} %>
     </div>
   </div>
   <div class="row" style="margin-top:20px;margin-bottom:10px;">
     <div class="col-md-8 offset-md-1 lblForm">
-      <span style="font-size: 16px; font-weight: bold;">
+      <span class="subTitleEstimate">
         Estimación de horas por estapas del proyecto
       </span>
     </div>
@@ -56,14 +56,14 @@
     <div class="row" style="margin-top:10px;">
       <div class="col-md-10 offset-md-1 lblForm" style="background-color: #FFFFFF; border-radius:9px; padding: 15px;box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.24), 0px 0px 2px rgba(0, 0, 0, 0.12);">
         <div class="col-md-10" style="border-bottom:1px solid #C4C4C4;min-height: 30px;">
-          <span class="lblForm" style="font-size: 16px; font-weight: bold;"><%= categoriesSelected[i].nombre %></span>
+          <span class="lblForm titleCategories"><%= categoriesSelected[i].nombre %></span>
         </div>
         <% if (data[0].estado) { %>
-          <div class="col-md-2" style="border-bottom:1px solid #C4C4C4;min-height: 30px; cursor:pointer" onClick="agregarEstimacion(<%= categoriesSelected[i].id_categoria %>)">
+          <div class="col-md-2" style="border-bottom:1px solid #C4C4C4;min-height: 31px; cursor:pointer" onClick="agregarEstimacion(<%= categoriesSelected[i].id_categoria %>)">
           <img src="/images/add_hours.png" style="width:14px;"> <span style="padding-left: 5px; font-size:12px; color:#ED4A71;">Agregar estimación</span>
           </div>
         <% } else {%>
-          <div class="col-md-2" style="border-bottom:1px solid #C4C4C4;min-height: 30px;"">
+          <div class="col-md-2" style="border-bottom:1px solid #C4C4C4;min-height: 31px;"">
           </div>
         <%} %>
         <div class="col-md-12" style="min-height: 30px;padding-top: 15px; text-align: center">
@@ -112,18 +112,17 @@
       <div class="modal-content" >
       
         <!-- Modal Header -->
-        <div class="modal-header">
-         <label class="lblTittle">Agregar Estimación</label>
-          <button type="button" class="close" data-dismiss="modal" onClick="cleanForm()">&times;</button>
+        <div class="form-row">
+         <label class="lblTittle">Agregar Estimación</label>                   
         </div>        
         <!-- Modal body -->
         <div class="modal-body">
-          <form id="formTareas">
+          <form id="formTareas" name="formTareas">
             <input type="hidden" id="id_categori_selected" name="id_categori_selected">
-            <div class="form-row paddingTop">
+            <div class="form-row">
               <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                <label for="projectCode" class="lblForm">Horas estimadas</label>
-                <input type="text" class="form-control formulario" id="hours" name="hours" placeholder="Ingrese su estimación de horas" required>
+                <label for="projectCode" class="lblForm">Ingrese el número de horas estimadas:</label>
+                <input type="text" class="form-control formulario" id="hoursTasks" name="hoursTasks" placeholder="Ingrese el número de horas a estimar">
               </div>
             </div>
           </form>
@@ -141,9 +140,8 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content" >      
         <!-- Modal Header -->
-        <div class="modal-header">
-         <label class="lblTittle">Colaboradores</label>
-          <button type="button" class="close" data-dismiss="modal" onClick="cleanForm()">&times;</button>
+        <div class="form-row">
+         <label class="lblTittle">Colaboradores</label>          
         </div>        
         <!-- Modal body -->
         <div class="modal-body">
@@ -171,6 +169,59 @@
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="inactivarProyecto">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content" >      
+        <!-- Modal Header -->        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <label class="lblTittle">Inactivar proyecto</label>  
+          <div id="textInactive"></div>    
+        </div>        
+        <!-- Modal footer -->
+        <div class="modal-footer">         
+          <button class="btnCancel" type="button"  data-dismiss="modal">Cancelar</button>
+          <button class="btnNormal"  type="button" onClick="InactivarProyecto()" >Inactivar</button>
+        </div>        
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="activarProyecto">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content" >      
+        <!-- Modal Header -->        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <label class="lblTittle">Activar proyecto</label>  
+          <div id="textActive"></div>    
+        </div>        
+        <!-- Modal footer -->
+        <div class="modal-footer">         
+          <button class="btnCancel" type="button"  data-dismiss="modal">Cancelar</button>
+          <button class="btnNormal"  type="button" onClick="ActivarProyecto()" >Activar</button>
+        </div>        
+      </div>
+    </div>
+  </div>
+
+   <div class="modal fade" id="errorMessageModal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content" >      
+        <!-- Modal Header -->        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <label class="lblTittle">No es posible inactivar el proyecto</label>  
+          <div id="textErrorMessage"></div>    
+        </div>        
+        <!-- Modal footer -->
+        <div class="modal-footer">         
+          <button class="btnNormal"  type="button"data-dismiss="modal" >Aceptar</button>
+        </div>        
+      </div>
+    </div>
+  </div>
 <script>
   $(function() {
     $(".chosen").chosen({
@@ -181,7 +232,7 @@
     $("#projectCollaborator_chosen").css("width","100%");
     $(".chosen-choices").css("height","120px");
     var handleValidation = function() {
-      var message = "No puedes dejar este campo en blanco.";
+      var message = "Debe completar este campo.";
       var message2 = "Debe seleccionar una opci&oacute;n.";
       $('#formTareas').validate({
         errorElement: 'label', //default input error message container
@@ -189,10 +240,10 @@
         focusInvalid: false, // do not focus the last invalid input
         ignore: "",
         rules: {
-          hours: { required: true } 
+          hoursTasks: { required: true } 
         },
         messages: { // en caso de error estos son los mensajes que se muestran            
-          hours: { required: message } 
+          hoursTasks: { required: message }
         },
         highlight: function (element) { // hightlight error inputs
           $(element).closest('.control-group').addClass('error'); // set error class to the control group
@@ -209,7 +260,7 @@
         }
       });
     }
-
+      handleValidation();
       colaboradores = '<%= data[0].colaboradores%>';
       var colaboradoresArray = colaboradores.split(',');
       $('#projectCollaborator').val(colaboradoresArray);
@@ -217,6 +268,7 @@
 
   });
   function agregarEstimacion(id_categoria){
+    cleanForm();
     $('#id_categori_selected').val(id_categoria);
     $('#myModalHours').modal('show');
   }
@@ -243,6 +295,7 @@
         }
         if (textStatus == 'success') {
           fnOpenCorrectDialog(data.desc);
+
           cleanForm();
           setTimeout(function() { location.reload(); }, 1000);
         }
@@ -256,7 +309,7 @@
   }
   function cleanForm(){
     $('#id_categori_selected').val("");
-    $('#hours').val("");
+    $('#hoursTasks').val("");
   }
 
   function deleteEstimacion(idTarea){
@@ -293,68 +346,77 @@
   }
 
   function InactivarProyecto(){
-    fnOpenConfirmDialog('¿Desea inactivar el proyecto?');
-    $('#pp_confirm_accept_btn').on("click", function(){
-      $.ajax({
-          type: "POST",
-          url: "/inactiveProyect/<%= data[0].id_proyectos%>",
-          async:true,
-          beforeSend: function(){ //se muestra una imagen mientras el ajax se ejecuta
-            showIsLoading("Procesando...");
-          }
-        }).done(function (data, textStatus) {              
-          hideIsLoading();
-          if (textStatus != 'success') {
-            fnOpenErrorDialog(data.desc);
-          }
-          if (textStatus == 'success') {
-            cleanForm();
-            setTimeout(function() { location.reload(); }, 1000);
-          }
-        }).fail(function (data, textStatus, errorThrown) {
-          hideIsLoading();
-          if(data.responseJSON.desc){
-            fnOpenErrorDialog(data.responseJSON.desc);
-          }
-          else{
-            fnOpenErrorDialog(errorThrown);
-          }
-          
-        });
+    $.ajax({
+      type: "POST",
+      url: "/inactiveProyect/<%= data[0].id_proyectos%>",
+      async:true,
+      beforeSend: function(){ //se muestra una imagen mientras el ajax se ejecuta
+        showIsLoading("Procesando...");
+      }
+    }).done(function (data, textStatus) {              
+      hideIsLoading();
+      $('#inactivarProyecto').modal('hide');
+      if (textStatus == 'success') {
+        cleanForm();
+        setTimeout(function() { location.reload(); }, 1000);
+      }
+    }).fail(function (data, textStatus, errorThrown) {
+      hideIsLoading();
+      $('#inactivarProyecto').modal('hide');
+      if(data.responseJSON.desc){
+        $("#textErrorMessage").html(data.responseJSON.desc);  
+        $('#errorMessageModal').modal('show');
+      }
+      else{
+        $("#textErrorMessage").html(data.responseJSON.desc);  
+        $('#errorMessageModal').modal('show');
+      }
+      
     });
   }
 
+  function CallConfirmInactivarProyecto(name){
+    message='¿Está seguro que desea inactivar el proyecto '+name+'?';
+    $("#textInactive").html(message);  
+    $('#inactivarProyecto').modal('show'); 
+  }
+
+  function CallConfirmActivarProyecto(name){
+    message='¿Desea activar el proyecto '+name+'?';
+    $("#textActive").html(message);  
+    $('#activarProyecto').modal('show'); 
+  }
+
   function ActivarProyecto(){
-    fnOpenConfirmDialog('¿Desea activar el proyecto?');
-    $('#pp_confirm_accept_btn').on("click", function(){
-      $.ajax({
-          type: "POST",
-          url: "/activeProyect/<%= data[0].id_proyectos%>",
-          async:true,
-          beforeSend: function(){ //se muestra una imagen mientras el ajax se ejecuta
-            showIsLoading("Procesando...");
-          }
-        }).done(function (data, textStatus) {              
-          hideIsLoading();
-          if (textStatus != 'success') {
-            fnOpenErrorDialog(data.desc);
-          }
-          if (textStatus == 'success') {
-            cleanForm();
-            setTimeout(function() { location.reload(); }, 1000);
-          }
-        }).fail(function (data, textStatus, errorThrown) {
-          hideIsLoading();
-          if(data.responseJSON.desc){
-            fnOpenErrorDialog(data.responseJSON.desc);
-          }
-          else{
-            fnOpenErrorDialog(errorThrown);
-          }
-          
-        });
+    $.ajax({
+      type: "POST",
+      url: "/activeProyect/<%= data[0].id_proyectos%>",
+      async:true,
+      beforeSend: function(){ //se muestra una imagen mientras el ajax se ejecuta
+        showIsLoading("Procesando...");
+      }
+    }).done(function (data, textStatus) {              
+      hideIsLoading();
+      $('#activarProyecto').modal('hide');
+      if (textStatus == 'success') {
+        cleanForm();
+        setTimeout(function() { location.reload(); }, 1000);
+      }
+    }).fail(function (data, textStatus, errorThrown) {
+      hideIsLoading();
+      $('#activarProyecto').modal('hide');
+      if(data.responseJSON.desc){
+        $("#textErrorMessage").html(data.responseJSON.desc);  
+        $('#errorMessageModal').modal('show');
+      }
+      else{
+        $("#textErrorMessage").html(data.responseJSON.desc);  
+        $('#errorMessageModal').modal('show');
+      }
+      
     });
   }
+
 </script>
  <% } %>
  <% include partials/_footer %>

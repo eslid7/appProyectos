@@ -236,7 +236,7 @@ controller.insertTareas = (req, res) => {
 controller.insertTarea = (req, res) => {
   let idProyecto = req.params.idProyecto;
   let idCategoria = req.body.id_categori_selected;
-  let horas = req.body.hours;
+  let horas = req.body.hoursTasks;
 
   const query = 'INSERT INTO tareas (id_usuario,id_proyectos,id_categoria,horas) VALUES ('+global.User.id+", "+idProyecto+"," + idCategoria + "," + horas +" )";
   sequelize.query(query).spread((results, metadata) => {
@@ -537,7 +537,7 @@ controller.inactiveProyect = (req, res) => {
     }
     else{
        res.status(500).json({
-        desc: "El proyecto no se puede inactivar, porque no es el administrador del proyecto."
+        desc: "No se puede inactivar el proyecto. Solo el creador del proyecto puede inactivarlo."
       })
     }    
   }).catch(function (err) {
@@ -573,7 +573,7 @@ controller.activeProyect = (req, res) => {
     }
     else{
        res.status(500).json({
-        desc: "El proyecto no se puede activar, porque no es el administrador del proyecto."
+        desc: "No se puede activar el proyecto. Solo el creador del proyecto puede activarlo."
       })
     }    
   }).catch(function (err) {
