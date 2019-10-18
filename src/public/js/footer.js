@@ -4,7 +4,7 @@ var footer_functions = function () {
 		init: function () {
 			$( ".error_dialog" ).dialog({
 				autoOpen: false,
-				dialogClass: 'ui-dialog-red',
+				dialogClass: ' ui-blue-format',
 				show: {
 					effect: "blind",
 					duration: 500
@@ -17,7 +17,7 @@ var footer_functions = function () {
 
 			$( ".warning_dialog" ).dialog({ //Listener que muestra los popUp de advertencia
 				autoOpen: false,
-				dialogClass: 'ui-dialog-yellow',
+				dialogClass: '',
 				show: {
 					effect: "blind",
 					duration: 500
@@ -30,7 +30,7 @@ var footer_functions = function () {
 
 			$( ".correct_dialog" ).dialog({ //Listener que muestra los popUp de Correcto
 				autoOpen: false,
-				dialogClass: 'ui-dialog-green',
+				dialogClass: 'ui-blue-format',
 				show: {
 					effect: "blind",
 					duration: 500
@@ -42,14 +42,14 @@ var footer_functions = function () {
 			});
 
 			$(".confirm_dialog" ).dialog({ //muestra un dialog de confirmacion
-				dialogClass: 'ui-dialog-yellow bringToFront',
+				dialogClass: ' ui-blue-format bringToFront',
 				autoOpen: false,
 				resizable: false,
 				height: 'auto',
 				modal: true,
 				buttons: [
 					{
-						'class' : 'btn',
+						'class' : 'btnCancel',
 						"text" : "Cancelar",
 						'id' : 'pp_confirm_cancel_btn',
 						click: function() {
@@ -57,7 +57,7 @@ var footer_functions = function () {
 						}
 					},
 					{
-						'class' : 'btn blue',
+						'class' : 'btnNormal',
 						"text" : "Aceptar",
 						'id' : 'pp_confirm_accept_btn',
 						click: function() {
@@ -85,8 +85,10 @@ function fnOpenCorrectDialog(msn) {
 	$(".correct_dialog").dialog("open"); //si se actualiza correctamente muestra un mensaje
 }
 
-function fnOpenConfirmDialog(msn) {
+function fnOpenConfirmDialog(title, msn, aceptarNameButton) {
+	$("#ui-id-4").html(title)
 	$("#confirm_message").html(msn);
+	$('#pp_confirm_accept_btn').text(aceptarNameButton)
 	$(".confirm_dialog").dialog("open");//llama a un modal de confirm
 }
 

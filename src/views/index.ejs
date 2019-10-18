@@ -52,7 +52,7 @@
                       </div>
   </div>
   <div class="d-sm-flex align-items-center justify-content-between mb-4" style="margin-top:85px;">
-    <h1 class="h3 mb-0 text-color">Proyectos</h1>            
+    <h1 class="title-proyects">Proyectos</h1>            
      <button class="btnNormal" style="margin-top:20px; min-width: 230px;" data-toggle="modal" data-target="#myModalProject">
       <img src="images/Add.png" ><span style="padding-left: 10px;">Crear nuevo proyecto</span>
      </button>
@@ -91,9 +91,8 @@
       <div class="modal-content" >
       
         <!-- Modal Header -->
-        <div class="modal-header">
-         <label class="lblTittle">Crear nuevo proyecto</label>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <div class="form-row">
+         <label class="lblTittle">Crear nuevo proyecto</label>         
         </div>
         
         <!-- Modal body -->
@@ -102,25 +101,25 @@
              <div class="form-row">
               <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <label for="projectClient" class="lblForm">Cliente</label>
-                <input type="text" class="form-control formulario" id="projectClient" name="projectClient" required>
+                <input type="text" class="form-control formulario" id="projectClient" name="projectClient" required placeholder="Ingrese el nombre del cliente">
               </div>
             </div>
             <div class="form-row paddingTop">
               <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                <label for="projectCode" class="lblForm">Código del Proyecto</label>
-                <input type="text" class="form-control formulario" id="projectCode" name="projectCode" required>
+                <label for="projectCode" class="lblForm">Código del proyecto</label>
+                <input type="text" class="form-control formulario" id="projectCode" name="projectCode" required placeholder="Ingrese el código del proyecto">
               </div>
             </div>
             <div class="form-row paddingTop">
               <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <label for="projectName" class="lblForm">Nombre del proyecto</label>
-                <input type="text" class="form-control formulario" id="projectName" name="projectName" required>
+                <input type="text" class="form-control formulario" id="projectName" name="projectName" required placeholder="Ingrese un nombre para este proyecto">
               </div>
             </div>
             <div class="form-row paddingTop">
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <label for="projectCollaborator" class="lblForm">Colaboradores</label>
-                <select class="chosen formulario " multiple="true" style="width: 100%" name="projectCollaborator" id="projectCollaborator" required>
+                <select class="chosen form-control formulario " multiple="true" style="width: 100%" name="projectCollaborator" id="projectCollaborator" required>
                     <% if (typeof(usersAll) !== "undefined") { %>
                       <% for(var j = 0; j < usersAll.length; j++) { %>
                           <option><%= usersAll[j].email %></option>
@@ -131,8 +130,8 @@
             </div>
             <div class="form-row paddingTop">
               <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                <label for="projectCategory" class="lblForm">Categorias</label>
-                <select class="formulario select2" style="width: 100%" name="projectCategory" id="projectCategory" required>                  
+                <label for="projectCategory" class="lblForm">Categoría</label>
+                <select class="formulario select2" style="width: 100%; border:0px; padding: 10px;" name="projectCategory" id="projectCategory" required placeholder="Seleccione la cateforía">                  
                 </select>
               </div>
             </div>

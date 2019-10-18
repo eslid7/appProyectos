@@ -11,20 +11,8 @@
     <script  src="https://cdn.rawgit.com/clarketm/FileSaver.js/master/FileSaver.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.2/xlsx.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/TableExport/5.2.0/js/tableexport.min.js"></script>
-
-    <script type="text/javascript">
-    $(document).ready(function(){
-        $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
-            localStorage.setItem('activeTab', $(e.target).attr('href'));
-        });
-        var activeTab = localStorage.getItem('activeTab');
-        if(activeTab){
-            $('#myTab a[href="' + activeTab + '"]').tab('show');
-        }
-    });
-    </script>
   </head>
-  <body>
+<body>
 <style>
   .col-md-12{
     padding-top: 1%;
@@ -95,16 +83,9 @@
                 <div class="col-md-6" style="margin-top: 3% !important;">
                 <a href="/" class=""><b>Prefiero iniciar sesión</b></a>
                 </div>
-                <div class="col-md-6">
-                  <button class="button" type="submit">Registrarse</button>
+                <div class="col-md-5 content-home-right">
                 </div>
             </div>
-          </form>
         </div>
-      </div>
-      <div class="col-md-6 background">
-      </div>
-  </div>
-</div>
-
-<% include partials/_footer %>
+</body>
+</html>

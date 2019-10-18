@@ -236,13 +236,13 @@ controller.insertTareas = (req, res) => {
 controller.insertTarea = (req, res) => {
   let idProyecto = req.params.idProyecto;
   let idCategoria = req.body.id_categori_selected;
-  let horas = req.body.hours;
+  let horas = req.body.hoursTasks;
 
   const query = 'INSERT INTO tareas (id_usuario,id_proyectos,id_categoria,horas) VALUES ('+global.User.id+", "+idProyecto+"," + idCategoria + "," + horas +" )";
   sequelize.query(query).spread((results, metadata) => {
     console.log(results)
     res.status(200).json({
-      desc: 'Se ha agregado exitosamente.'
+      desc: 'La nueva estimación de horas fue añadida exitosamente.'
     })
   }).catch(function (err) {
     // en caso de error se devuelve el error
@@ -485,7 +485,6 @@ controller.deleteTarea = (req, res) => {
   const query1 = 'DELETE FROM tareas WHERE id = '+idTarea;
   const consult = 'SELECT pr.id_proyectos FROM proyectos pr INNER JOIN tareas tar ON tar.id_proyectos = pr.id_proyectos WHERE tar.id ='+idTarea+' AND ( pr.creador ='+ global.User.id +' OR tar.id_usuario ='+ global.User.id +') ';
   sequelize.query(consult).then(resultsData => {
-      console.log(resultsData[1].rows[0])
     if(resultsData[1].rows[0]){
       sequelize.query(query1).spread((results, metadata) => {     //borro recursos asociados al proyecto
         res.status(200).json({
@@ -514,6 +513,92 @@ controller.deleteTarea = (req, res) => {
   })
 };
 
+/*****************************************************************************************************************************************************************
+                                                                Inactivar Proyecto
+/*****************************************************************************************************************************************************************/
+controller.inactiveProyect = (req, res) => {
+  const  idProyecto  = req.params.id;
+  // const  soyCreadorProyecto  = req.params.idTarea;
+  const query = 'UPDATE proyectos SET estado = false WHERE id_proyectos = '+idProyecto;
+  const consult = 'SELECT id_proyectos FROM proyectos WHERE id_proyectos = '+idProyecto+' AND creador ='+ global.User.id ;
+  sequelize.query(consult).then(resultsData => {
+    if(resultsData[1].rows[0]){
+      sequelize.query(query).spread((results, metadata) => {     //borro recursos asociados al proyecto
+        res.status(200).json({
+          desc: 'Se ha inactivado exitosamente.'
+        })
+      }).catch(function (err) {
+        // en caso de error se devuelve el error
+        console.log('ERROR: ' + err)
+        res.status(500).json({
+          desc: err
+        })
+      })
+    }
+    else{
+       res.status(500).json({
+        desc: "No se puede inactivar el proyecto. Solo el creador del proyecto puede inactivarlo."
+      })
+    }    
+  }).catch(function (err) {
+    // en caso de error se devuelve el error
+    console.log('ERROR: ' + err)
+    res.status(500).json({
+      desc: err
+    })
+  })
+}
+
+/*****************************************************************************************************************************************************************
+                                                                Inactivar Proyecto
+/*****************************************************************************************************************************************************************/
+controller.activeProyect = (req, res) => {
+  const  idProyecto  = req.params.id;
+  // const  soyCreadorProyecto  = req.params.idTarea;
+  const query = 'UPDATE proyectos SET estado = true WHERE id_proyectos = '+idProyecto;
+  const consult = 'SELECT id_proyectos FROM proyectos WHERE id_proyectos = '+idProyecto+' AND creador ='+ global.User.id ;
+  sequelize.query(consult).then(resultsData => {
+    if(resultsData[1].rows[0]){
+      sequelize.query(query).spread((results, metadata) => {     //borro recursos asociados al proyecto
+        res.status(200).json({
+          desc: 'Se ha activado exitosamente.'
+        })
+      }).catch(function (err) {
+        // en caso de error se devuelve el error
+        console.log('ERROR: ' + err)
+        res.status(500).json({
+          desc: err
+        })
+      })
+    }
+    else{
+       res.status(500).json({
+        desc: "No se puede activar el proyecto. Solo el creador del proyecto puede activarlo."
+      })
+    }    
+  }).catch(function (err) {
+    // en caso de error se devuelve el error
+    console.log('ERROR: ' + err)
+    res.status(500).json({
+      desc: err
+    })
+  })
+}
+/*****************************************************************************************************************************************************************
+                                                                        Update Colaboraores
+/*****************************************************************************************************************************************************************/
+controller.updateCollaborator = (req, res) => {
+  let idP  = req.params.id;
+  let colaboradores = req.body.projectCollaborator;
+  
+  const query = 'UPDATE proyectos set  colaboradores=' + "'"+ colaboradores +"'"+' where id_proyectos =' + idP;
+  //habria que realizar el delete de las tareas
+  sequelize.query(query).spread((results, metadata) => {
+    res.status(200).json({
+      desc: 'Los cambios se han guardado exitosamente.'
+    })
+  });
+};
 /*
 controller.report = (req, res) => {
   req.getConnection((err, conn) => {
@@ -578,8 +663,10 @@ controller.getCategoriesFromFile = (req, res) => {
 }
 
 controller.createExcelFile = (req, res) =>{
+  fields ='[{"Analisis"},{""},{""}]';
   const json2csvParser = new Json2csvParser({ fields })
   const csvData = json2csvParser.parse(rows)
+
   res.setHeader('Content-Type', 'application/vnd.ms-excel')
   res.setHeader(
     'Content-Disposition',
@@ -587,15 +674,15 @@ controller.createExcelFile = (req, res) =>{
   )
   res.end(csvData, 'binary')
 
-  let query = ''
-  Object.keys(dataToSend).forEach((item, index) => {
-    query += index > 0 && dataToSend[item] ? '&' : ''
-    query += dataToSend[item] ? `${item}=${dataToSend[item]}` : ''
-  })
-  query += `&lng=${currentLanguage[0]}`
-  window.location.href = `${PATH}/api/v1/reports/${reporType}?${encodeURI(
-    query
-  )}`
+  // let query = ''
+  // Object.keys(dataToSend).forEach((item, index) => {
+  //   query += index > 0 && dataToSend[item] ? '&' : ''
+  //   query += dataToSend[item] ? `${item}=${dataToSend[item]}` : ''
+  // })
+  // query += `&lng=${currentLanguage[0]}`
+  // window.location.href = `${PATH}/api/v1/reports/${reporType}?${encodeURI(
+  //   query
+  // )}`
 }
 
 module.exports = controller;
