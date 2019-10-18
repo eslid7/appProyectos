@@ -12061,7 +12061,7 @@ $.widget( "ui.dialog", {
 
 		this._addClass( "ui-dialog-content", "ui-widget-content" );
 
-		this._createTitlebar();
+		////this._createTitlebar();
 		this._createButtonPane();
 
 		if ( this.options.draggable && $.fn.draggable ) {

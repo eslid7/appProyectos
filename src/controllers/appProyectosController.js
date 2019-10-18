@@ -242,7 +242,7 @@ controller.insertTarea = (req, res) => {
   sequelize.query(query).spread((results, metadata) => {
     console.log(results)
     res.status(200).json({
-      desc: 'Se ha agregado exitosamente.'
+      desc: 'La nueva estimación de horas fue añadida exitosamente.'
     })
   }).catch(function (err) {
     // en caso de error se devuelve el error
@@ -584,7 +584,21 @@ controller.activeProyect = (req, res) => {
     })
   })
 }
-
+/*****************************************************************************************************************************************************************
+                                                                        Update Colaboraores
+/*****************************************************************************************************************************************************************/
+controller.updateCollaborator = (req, res) => {
+  let idP  = req.params.id;
+  let colaboradores = req.body.projectCollaborator;
+  
+  const query = 'UPDATE proyectos set  colaboradores=' + "'"+ colaboradores +"'"+' where id_proyectos =' + idP;
+  //habria que realizar el delete de las tareas
+  sequelize.query(query).spread((results, metadata) => {
+    res.status(200).json({
+      desc: 'Los cambios se han guardado exitosamente.'
+    })
+  });
+};
 /*
 controller.report = (req, res) => {
   req.getConnection((err, conn) => {

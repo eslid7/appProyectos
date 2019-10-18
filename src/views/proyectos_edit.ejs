@@ -240,10 +240,10 @@
         focusInvalid: false, // do not focus the last invalid input
         ignore: "",
         rules: {
-          hoursTasks: { required: true } 
+          hoursTasks: { required: true, number:true } 
         },
         messages: { // en caso de error estos son los mensajes que se muestran            
-          hoursTasks: { required: message }
+          hoursTasks: { required: message , number:'Favor digitar números'}
         },
         highlight: function (element) { // hightlight error inputs
           $(element).closest('.control-group').addClass('error'); // set error class to the control group
@@ -412,8 +412,36 @@
       else{
         $("#textErrorMessage").html(data.responseJSON.desc);  
         $('#errorMessageModal').modal('show');
+      }      
+    });
+  }
+
+  function saveColaboradores(){
+    $.ajax({
+      type: "POST",
+      url: "/updateCollaborator/<%= data[0].id_proyectos%>",
+      async:true,
+      data: $('#formColaboradores').serialize() ,
+      beforeSend: function(){ //se muestra una imagen mientras el ajax se ejecuta
+        showIsLoading("Procesando...");
       }
-      
+    }).done(function (data, textStatus) {              
+      hideIsLoading();
+      $('#modalColaboradores').modal('hide');
+      if (textStatus == 'success') {       
+        setTimeout(function() { location.reload(); }, 1000);
+      }
+    }).fail(function (data, textStatus, errorThrown) {
+      hideIsLoading();
+      $('#modalColaboradores').modal('hide');
+      if(data.responseJSON.desc){
+        $("#textErrorMessage").html(data.responseJSON.desc);  
+        $('#errorMessageModal').modal('show');
+      }
+      else{
+        $("#textErrorMessage").html(data.responseJSON.desc);  
+        $('#errorMessageModal').modal('show');
+      }      
     });
   }
 

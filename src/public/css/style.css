@@ -118,9 +118,7 @@ label{
 h3{
   color: var(--primaryColor);
 }
-p{
-  color: var(--primaryColor);
-}
+
 a{
   color: var(--secundaryColor);
 }
@@ -758,4 +756,12 @@ select:-moz-placeholder{
   font-size: 18px;
   line-height: 27px;
   color: #333333;
+}
+.ui-blue-format{
+  background-color: #2B35EC !important;
+  color: #FFFFFF !important;
+}
+
+#correct_message{
+  color: white;
 }

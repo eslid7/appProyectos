@@ -17,6 +17,8 @@ router.get('/deleteP/:id', appProyectosController.deleteP);
 router.post('/insertP/', appProyectosController.insertP);
 router.post('/inactiveProyect/:id',appProyectosController.inactiveProyect);
 router.post('/activeProyect/:id',appProyectosController.activeProyect);
+router.post('/updateCollaborator/:id',appProyectosController.updateCollaborator);
+
 /*****************************************************************************************************************************************************************
                                                                       Rutas de categorias
 ******************************************************************************************************************************************************************/
