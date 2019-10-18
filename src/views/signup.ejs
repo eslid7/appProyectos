@@ -12,78 +12,76 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.2/xlsx.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/TableExport/5.2.0/js/tableexport.min.js"></script>
   </head>
-  <body class="body-login" >
-    <img src="images/taskrcrcl.png" class="class-taskrcrcl">
-    <img src="images/login_triangulo.png" class="class-triangulo">
-    <div class="loginContainer" style="margin-top: 60px;" >             
-            <div class="row content-home" >
-                <div class="col-md-5 content-home-left">
-                  <div class="col-md-12">
-                      <div class="form-group">
-                        <img src="images/TaskrLogo.png" class="logo">
-                      </div>
-                  </div>
-                  <div class="col-md-12">
-                      <h3 style="margin-bottom: 5%;" class="titleSingup">Registrarse</h3>
-                  </div>
-                    <form method="POST" action="/signup" class="form-signin">
-                      <% if ( errorMessage.length > 0 ) { console.log(errorMessage); %>
-                        <div class="alert alert-warning">
-                            <p> <%= errorMessage[0] %> </p>
-                        </div>
-                      <% } %>
-                        <div class="row">
-                             <div class="col-md-6">
-                              <label class="labelSignup" for="txtNombre">Nombre</label>
-                              <input type="text" id="txtNombre" name="txtNombre" class="form-control inputSingup" maxlength="45" required autofocus placeholder="Ingrese el nombre">
-                            </div>
-                            <div class="col-md-6">
-                              <label class="labelSignup" for="txtApellido">Apellidos</label>
-                              <input type="text" id="txtApellido" name="txtApellido" class="form-control inputSingup" maxlength="45" required placeholder="Ingrese sus apellidos">
-                            </div>
-                        </div>
-                         <div class="row">
-                          <div class="col-md-6">
-                            <label class="labelSignup" for="txtNombre">Departamento</label>
-                            <select id="departamento" name="departamento" class="form-control" required >
-                              <option value="Dev-SOIN Labs">Dev-SOIN Labs</option>
-                              <option value="DevOps-SOIN Labs">DevOps-SOIN Labs</option>
-                              <option value="Android-SOIN Labs">Android-SOIN Labs</option>
-                              <option value="Diseño-SOIN Labs">Diseño-SOIN Labs</option>
-                              <option value="IOS-SOIN Labs">IOS-SOIN Labs</option>
-                            </select>
-                          </div>
-                            <div class="col-md-6">
-                            <label class="labelSignup" for="inputEmail">Correo electrónico</label>
-                            <input type="email" pattern="[A-Za-z0-9._%+-]{3,}@[a-zA-Z]{3,}([.]{1}[a-zA-Z]{2,}|[.]{1}[a-zA-Z]{2,}[.]{1}[a-zA-Z]{2,})" id="inputEmail" name="userEmail" class="form-control inputSingup" maxlength="90" required placeholder="Digite su correo electrónico">
-                          </div>
-                        </div>
-                        <div class="col-md-12">
-                          <div class="form-group">
-                            <label class="labelSignup" for="password">Contraseña</label>
-                            <input type="password"  name="password" class="form-control inputSingup"  maxlength="50" placeholder="Ingrese la contraseña" required>
-                          </div>
-                        </div>
-                        <div class="col-md-12">
-                          <div class="form-group">
-                            <label class="labelSignup" for="password">Repetir contraseña</label>
-                            <input type="password"  name="password2" class="form-control inputSingup"  maxlength="50" placeholder="Confirme su contraseña" required>
-                          </div>
-                        </div>
-                        <div class="col-md-12">
-                          <div class="form-group">
-                           <span class="textSingup">Debe utilizar al menos una mayúscula y un número o símbolo.</span>
-                          </div>
-                        </div>
-                        <div class="row" style="margin-top:4%; padding-bottom: 27px;">
-                            <div class="col-md-6" style="margin-top: 3% !important;">
-                            <a href="/" class="textSingup2"><b>Prefiero iniciar sesión</b></a>
-                            </div>
-                            <div class="col-md-6">
-                              <button class="btnAzul" type="submit">Registrarse</button>
-                            </div>
-                        </div>
-                    </form>
+<body>
+<style>
+  .col-md-12{
+    padding-top: 1%;
+  }
+</style>
+<div class="Container">
+  <div class="row">
+      <div class="col-md-6">
+        <div class="col-md-12">
+            <div class="form-group">
+              <img src="images/TaskrLogo.png" style="margin-bottom: 10%; margin-top: 5%;  ">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <h3 style="margin-bottom: 8%;">Registrarse</h3>
+        </div>
+        <div class="col-md-12">
+          <form method="POST" action="/signup" class="form-signin">
+           <%  if ( errorMessage.length > 0 ) { console.log(errorMessage); %>
+              <div class="alert alert-danger">
+                <p> <%= errorMessage[0] %> </p>
+              </div>
+          <% } %>
+            <div class="row">
+                <div class="col-md-6">
+                  <label for="txtNombre">Nombre</label>
+                  <input type="text" id="txtNombre" name="txtNombre" class="form-control" maxlength="45" required autofocus>
+                </div>
+                <div class="col-md-6">
+                  <label for="txtApellido">Apellidos</label>
+                  <input type="text" id="txtApellido" name="txtApellido" class="form-control" maxlength="45" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                  <label for="txtNombre">Departamento</label>
+                  <select id="departamento" name="departamento" class="form-control" required >
+                    <option value="Dev-SOIN Labs">Dev-SOIN Labs</option>
+                    <option value="DevOps-SOIN Labs">DevOps-SOIN Labs</option>
+                    <option value="Android-SOIN Labs">Android-SOIN Labs</option>
+                    <option value="Diseño-SOIN Labs">Diseño-SOIN Labs</option>
+                    <option value="IOS-SOIN Labs">IOS-SOIN Labs</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <label for="inputEmail">Correo electrónico</label>
+                <input type="email" pattern="[A-Za-z0-9._%+-]{3,}@[a-zA-Z]{3,}([.]{1}[a-zA-Z]{2,}|[.]{1}[a-zA-Z]{2,}[.]{1}[a-zA-Z]{2,})" id="inputEmail" name="userEmail" class="form-control" maxlength="90" required>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <label for="inputPassword">Contraseña</label>
+                <input type="password" id="inputPassword" name="password" class="form-control" maxlength="50" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{6,}$"  required>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <label for="inputPassword">Repetir contraseña</label>
+                <input type="password" id="inputPassword2" name="password2" class="form-control" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{6,}$"  maxlength="50" required>
+                <p>Debes usar al menos 6 caracteres, una mayúscula y un número o símbolo</p>
+              </div>
+            </div>
+            <div class="row" style="margin-top:4%;">
+                <div class="col-md-6" style="margin-top: 3% !important;">
+                <a href="/" class=""><b>Prefiero iniciar sesión</b></a>
                 </div>
                 <div class="col-md-5 content-home-right">
                 </div>
