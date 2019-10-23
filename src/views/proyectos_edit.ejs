@@ -506,9 +506,9 @@
   }
 
   function exportProject(){
-    var wb = XLSX.utils.table_to_book(document.getElementById('tableData'), {sheet:"Sheet JS"});
+    var wb = XLSX.utils.table_to_book(document.getElementById('tableData'), {sheet:"Estimación por Áreas"});
     var wbout = XLSX.write(wb, {bookType:'xlsx',  type: 'binary'});
-    saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), 'test.xlsx');
+    saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), 'Proyecto <%= data[0].nombre%>.xlsx');
   }
 
 </script>
