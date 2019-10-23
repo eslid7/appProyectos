@@ -52,6 +52,57 @@
             </div>
      </div>
   </div>
+
+<table id="tableData" style="display:none">
+
+    <% for(var i = 0; i < categoriesSelected.length;i++){ %>
+      <tr></tr>
+      <tr>
+          <th><%= categoriesSelected[i].nombre %></th>
+      </tr>
+      
+            <% 
+            categoriaTieneHoras =false;
+            for(var b = 0; b < tareas.length;b++){
+              if(categoriesSelected[i].id_categoria == tareas[b].id_categoria){ 
+                categoriaTieneHoras =true;
+              }
+            }
+            if(categoriaTieneHoras) {%>
+              <tr>
+                  <th>Departamento</th>
+                  <th>Colaborador</th>
+                  <th>Horas estimadas</th>
+              </tr>
+
+              <% for(var a = 0; a < tareas.length;a++){ %>
+                <% if(categoriesSelected[i].id_categoria == tareas[a].id_categoria && data[0].estado){ %>
+                  <tr>
+                      <th><%= tareas[a].departamento %></th>
+                      <th><%= tareas[a].firstname %> <%= tareas[a].lastname %></th>
+                      <th><%= tareas[a].horas %></th>
+                  </tr>
+                  
+                <% } else if (categoriesSelected[i].id_categoria == tareas[a].id_categoria && !data[0].estado){ %>
+                  <tr>
+                      <th><%= tareas[a].departamento %></th>
+                      <th><%= tareas[a].firstname %> <%= tareas[a].lastname %></th>
+                      <th><%= tareas[a].horas %></th>
+                  </tr>
+                <% } %>
+              <% } %>
+            <% } else{ %>
+              <tr>
+                  <th>Aún no se ha iniciado la estimación de horas.</th>
+              </tr>
+            <% } %>
+          </div>
+        </div>
+      </div>    
+     <% } %>
+
+</table>
+
   <% for(var i = 0; i < categoriesSelected.length;i++){ %>
     <div class="row" style="margin-top:10px;">
       <div class="col-md-10 offset-md-1 lblForm" style="background-color: #FFFFFF; border-radius:9px; padding: 15px;box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.24), 0px 0px 2px rgba(0, 0, 0, 0.12);">
@@ -266,6 +317,8 @@
       $('#projectCollaborator').val(colaboradoresArray);
       $('#projectCollaborator').trigger("chosen:updated");
 
+      
+
   });
   function agregarEstimacion(id_categoria){
     cleanForm();
@@ -443,6 +496,19 @@
         $('#errorMessageModal').modal('show');
       }      
     });
+  }
+
+  function s2ab(s) { 
+      var buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
+      var view = new Uint8Array(buf);  //create uint8array as viewer
+      for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; //convert to octet
+      return buf;    
+  }
+
+  function exportProject(){
+    var wb = XLSX.utils.table_to_book(document.getElementById('tableData'), {sheet:"Sheet JS"});
+    var wbout = XLSX.write(wb, {bookType:'xlsx',  type: 'binary'});
+    saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), 'test.xlsx');
   }
 
 </script>
