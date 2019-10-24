@@ -60,7 +60,7 @@
     const projects = listP.getElementsByClassName('card-title');
     Array.from(projects).forEach((project) => {
       const title = project.textContent;
-      if(title.toLowerCase().indexOf(e.target.value) != -1){
+      if(title.toLowerCase().indexOf(term) != -1){
         project.parentElement.parentElement.style.display = 'block';
       } else {
         project.parentElement.parentElement.style.display = 'none';
